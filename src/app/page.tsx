@@ -1,5 +1,6 @@
 import { UsageExampleSection } from "@/components/page-sections/usage-example/usage-example-section";
 import { ExampleSection } from "@/components/page-sections/example-section";
+import { InstallationSection } from "@/components/page-sections/installation-section";
 
 export default function Home() {
   return (
@@ -13,7 +14,7 @@ export default function Home() {
       </section>
 
       <ExampleSection />
-
+      <InstallationSection />
       <UsageExampleSection />
     </main>
   );
