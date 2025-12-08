@@ -5,7 +5,7 @@ import {
   ChatEventBody,
   ChatEventContent,
   ChatEventDescription,
-} from "../chat-event";
+} from "../chat/chat-event";
 
 export function AdditionalMessage({
   content,

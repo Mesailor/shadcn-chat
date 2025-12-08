@@ -9,7 +9,7 @@ import {
   ChatEventTitle,
 } from "@/components/chat/chat-event";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DateItem } from "@/components/chat/message-items/date-item";
+import { DateItem } from "@/components/message-items/date-item";
 
 const PRIMARY_MSG = MESSAGES[1];
 const ADDITIONAL_MSG = MESSAGES[0];

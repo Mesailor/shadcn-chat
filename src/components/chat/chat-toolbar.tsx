@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
 
 export function ChatToolbar({
   children,

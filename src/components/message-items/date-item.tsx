@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { ChatEvent } from "../chat-event";
+import { ChatEvent } from "@/components/chat/chat-event";
 
 export function DateItem({
   timestamp,

@@ -1,9 +1,9 @@
 "use client";
 
-import { ChatExampleComponent } from "@/components/chat/examples/chat-example-component";
+import { ChatExampleComponent } from "@/components/examples/chat-example-component";
 import { ReactNode, useState } from "react";
-import { ButtonGroup } from "../ui/button-group";
-import { Button } from "../ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { Button } from "@/components/ui/button";
 import {
   CodeIcon,
   MessageCircleIcon,

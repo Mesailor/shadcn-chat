@@ -16,24 +16,24 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { Button } from "@/components/ui/button";
-import { Chat } from "../chat";
+import { Chat } from "@/components/chat/chat";
 import {
   ChatHeader,
   ChatHeaderMain,
   ChatHeaderEnd,
   ChatHeaderStart,
-} from "../chat-header";
+} from "@/components/chat/chat-header";
 import {
   ChatToolbar,
   ChatToolbarAddonEnd,
   ChatToolbarAddonStart,
   ChatToolbarTextarea,
-} from "../chat-toolbar";
-import { ChatMessages } from "../chat-messages";
+} from "@/components/chat/chat-toolbar";
+import { ChatMessages } from "@/components/chat/chat-messages";
 import { MESSAGES } from "@/data/messages";
-import { PrimaryMessage } from "../message-items/primary-message";
-import { DateItem } from "../message-items/date-item";
-import { AdditionalMessage } from "../message-items/additional-message";
+import { PrimaryMessage } from "@/components/message-items/primary-message";
+import { DateItem } from "@/components/message-items/date-item";
+import { AdditionalMessage } from "@/components/message-items/additional-message";
 
 export function ChatExampleComponent() {
   return (
