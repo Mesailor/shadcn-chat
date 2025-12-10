@@ -48,7 +48,11 @@ export function EventUsageExample() {
           </ChatEventContent>
         </ChatEventBody>
       </ChatEvent>
-      <CodeBlock codeString={primaryMessageCodeString} />
+      <CodeBlock
+        language="jsx"
+        code={primaryMessageCodeString}
+        showLineNumbers
+      />
 
       <h4 className="font-semibold mt-4">Additional Message</h4>
       <ChatEvent className="hover:bg-accent group py-2 border-y">
@@ -66,11 +70,15 @@ export function EventUsageExample() {
           </ChatEventContent>
         </ChatEventBody>
       </ChatEvent>
-      <CodeBlock codeString={additionalMessageCodeString} />
+      <CodeBlock
+        language="jsx"
+        code={additionalMessageCodeString}
+        showLineNumbers
+      />
 
       <h4 className="font-semibold mt-4">Date Item</h4>
       <DateItem timestamp={PRIMARY_MSG.timestamp} className="py-3" />
-      <CodeBlock codeString={dateItemCodeString} />
+      <CodeBlock language="jsx" code={dateItemCodeString} showLineNumbers />
     </div>
   );
 }

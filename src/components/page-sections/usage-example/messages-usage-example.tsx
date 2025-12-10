@@ -4,7 +4,7 @@ export function MessagesUsageExample() {
   return (
     <div className="space-y-2">
       <h3 className="text-lg font-semibold">Chat Messages</h3>
-      <CodeBlock codeString={codeString} />
+      <CodeBlock language="jsx" code={codeString} showLineNumbers />
     </div>
   );
 }

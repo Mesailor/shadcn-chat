@@ -58,7 +58,7 @@ export function HeaderUsageExample() {
         </ChatHeaderEnd>
       </ChatHeader>
 
-      <CodeBlock codeString={codeString} />
+      <CodeBlock language="jsx" code={codeString} showLineNumbers />
     </div>
   );
 }

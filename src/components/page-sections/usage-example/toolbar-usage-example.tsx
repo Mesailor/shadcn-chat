@@ -38,7 +38,7 @@ export function ToolbarUsageExample() {
         </ChatToolbarAddonEnd>
       </ChatToolbar>
 
-      <CodeBlock codeString={codeString} />
+      <CodeBlock language="jsx" code={codeString} showLineNumbers />
     </div>
   );
 }
