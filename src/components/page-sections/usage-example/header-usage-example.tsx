@@ -17,7 +17,7 @@ import {
   SearchIcon,
   VideoIcon,
 } from "lucide-react";
-import { CodeBlock } from "./code-block";
+import { CodeBlock } from "@/components/common/code-block";
 import { Anchor } from "@/components/common/anchor";
 
 export function HeaderUsageExample() {

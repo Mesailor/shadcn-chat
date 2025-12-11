@@ -4,7 +4,7 @@ import {
   ChatToolbarAddonStart,
   ChatToolbarTextarea,
 } from "@/components/chat/chat-toolbar";
-import { CodeBlock } from "./code-block";
+import { CodeBlock } from "@/components/common/code-block";
 import { Button } from "@/components/ui/button";
 import {
   CalendarDaysIcon,

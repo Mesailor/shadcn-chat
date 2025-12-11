@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CodeBlock } from "./usage-example/code-block";
+import { CodeBlock } from "../common/code-block";
 import { Anchor } from "@/components/common/anchor";
 
 export function InstallationSection() {

@@ -1,5 +1,5 @@
 import { Anchor } from "@/components/common/anchor";
-import { CodeBlock } from "./code-block";
+import { CodeBlock } from "@/components/common/code-block";
 
 export function MessagesUsageExample() {
   return (

@@ -1,4 +1,4 @@
-import { CodeBlock } from "./code-block";
+import { CodeBlock } from "@/components/common/code-block";
 import { MESSAGES } from "@/data/messages";
 import {
   ChatEvent,
