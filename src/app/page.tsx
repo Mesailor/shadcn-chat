@@ -1,5 +1,5 @@
 import { UsageExampleSection } from "@/components/page-sections/usage-example/usage-example-section";
-import { ExampleSection } from "@/components/page-sections/example-section";
+import { ComponentDemoSection } from "@/components/page-sections/component-demo-section";
 import { InstallationSection } from "@/components/page-sections/installation-section";
 
 export default function Home() {
@@ -13,7 +13,7 @@ export default function Home() {
         </p>
       </section>
 
-      <ExampleSection />
+      <ComponentDemoSection />
       <InstallationSection />
       <UsageExampleSection />
     </main>

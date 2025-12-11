@@ -27,7 +27,7 @@ const BUTTONS: { icon: ReactNode; size: keyof typeof SCREEN_SIZES }[] = [
   { icon: <MessageCircleIcon />, size: "chatbox" },
 ];
 
-export function ExampleSection() {
+export function ComponentDemoSection() {
   const [screenSize, setScreenSize] =
     useState<keyof typeof SCREEN_SIZES>("desktop");
 
