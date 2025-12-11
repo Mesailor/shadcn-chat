@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { CodeBlock } from "./usage-example/code-block";
+import { Anchor } from "@/components/common/anchor";
 
 export function InstallationSection() {
   return (
     <section className="py-8 w-full max-w-4xl px-6 space-y-6">
-      <h2 className="text-2xl font-semibold border-b pb-2">Installation</h2>
+      <Anchor id="installation" className="border-b pb-2">
+        <h2 className="text-2xl font-semibold">Installation</h2>
+      </Anchor>
       <div className="space-y-4">
         <div className="bg-accent/50 p-4 rounded-lg">
           <p className="font-medium">Prerequisites</p>

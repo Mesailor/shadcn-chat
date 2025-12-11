@@ -18,11 +18,14 @@ import {
   VideoIcon,
 } from "lucide-react";
 import { CodeBlock } from "./code-block";
+import { Anchor } from "@/components/common/anchor";
 
 export function HeaderUsageExample() {
   return (
     <div className="space-y-2">
-      <h3 className="text-lg font-semibold">Chat Header</h3>
+      <Anchor id="chat-header">
+        <h3 className="text-lg font-semibold">Chat Header</h3>
+      </Anchor>
 
       <ChatHeader className="border rounded-sm static mb-4">
         <ChatHeaderStart>

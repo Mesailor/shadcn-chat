@@ -1,9 +1,12 @@
+import { Anchor } from "@/components/common/anchor";
 import { CodeBlock } from "./code-block";
 
 export function MessagesUsageExample() {
   return (
     <div className="space-y-2">
-      <h3 className="text-lg font-semibold">Chat Messages</h3>
+      <Anchor id="chat-messages">
+        <h3 className="text-lg font-semibold">Chat Messages</h3>
+      </Anchor>
       <CodeBlock language="jsx" code={codeString} showLineNumbers />
     </div>
   );

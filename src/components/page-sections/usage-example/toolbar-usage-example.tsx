@@ -12,11 +12,14 @@ import {
   PlusIcon,
   SquareChevronRightIcon,
 } from "lucide-react";
+import { Anchor } from "@/components/common/anchor";
 
 export function ToolbarUsageExample() {
   return (
     <div className="space-y-2">
-      <h3 className="text-lg font-semibold">Chat Toolbar</h3>
+      <Anchor id="chat-toolbar">
+        <h3 className="text-lg font-semibold">Chat Toolbar</h3>
+      </Anchor>
 
       <ChatToolbar>
         <ChatToolbarAddonStart>

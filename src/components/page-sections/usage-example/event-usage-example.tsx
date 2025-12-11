@@ -10,6 +10,7 @@ import {
 } from "@/components/chat/chat-event";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DateItem } from "@/components/message-items/date-item";
+import { Anchor } from "@/components/common/anchor";
 
 const PRIMARY_MSG = MESSAGES[1];
 const ADDITIONAL_MSG = MESSAGES[0];
@@ -17,7 +18,9 @@ const ADDITIONAL_MSG = MESSAGES[0];
 export function EventUsageExample() {
   return (
     <div className="space-y-2">
-      <h3 className="text-lg font-semibold">Chat Event</h3>
+      <Anchor id="chat-event">
+        <h3 className="text-lg font-semibold">Chat Event</h3>
+      </Anchor>
 
       <h4 className="font-semibold">Primary Message</h4>
       <ChatEvent className="hover:bg-accent py-2 border-y">
