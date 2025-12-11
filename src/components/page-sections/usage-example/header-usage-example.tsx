@@ -23,9 +23,15 @@ import { Anchor } from "@/components/common/anchor";
 export function HeaderUsageExample() {
   return (
     <div className="space-y-2">
-      <Anchor id="chat-header">
-        <h3 className="text-lg font-semibold">Chat Header</h3>
-      </Anchor>
+      <div>
+        <Anchor id="chat-header">
+          <h3 className="text-lg font-semibold">Chat Header</h3>
+        </Anchor>
+        <p className="text-sm text-muted-foreground">
+          A sticky header component with three sections (Start, Main, End) for
+          displaying chat participant info, status, search, and action buttons.
+        </p>
+      </div>
 
       <ChatHeader className="border rounded-sm static mb-4">
         <ChatHeaderStart>

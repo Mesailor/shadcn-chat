@@ -18,9 +18,15 @@ const ADDITIONAL_MSG = MESSAGES[0];
 export function EventUsageExample() {
   return (
     <div className="space-y-2">
-      <Anchor id="chat-event">
-        <h3 className="text-lg font-semibold">Chat Event</h3>
-      </Anchor>
+      <div>
+        <Anchor id="chat-event">
+          <h3 className="text-lg font-semibold">Chat Event</h3>
+        </Anchor>
+        <p className="text-sm text-muted-foreground">
+          A flexible message row component with Addon (for avatar/timestamp) and
+          Body sections, supporting any message or event in the chat.
+        </p>
+      </div>
 
       <h4 className="font-semibold">Primary Message</h4>
       <ChatEvent className="hover:bg-accent py-2 border-y">

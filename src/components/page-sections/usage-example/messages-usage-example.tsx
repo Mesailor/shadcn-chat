@@ -4,9 +4,16 @@ import { CodeBlock } from "@/components/common/code-block";
 export function MessagesUsageExample() {
   return (
     <div className="space-y-2">
-      <Anchor id="chat-messages">
-        <h3 className="text-lg font-semibold">Chat Messages</h3>
-      </Anchor>
+      <div>
+        <Anchor id="chat-messages">
+          <h3 className="text-lg font-semibold">Chat Messages</h3>
+        </Anchor>
+        <p className="text-sm text-muted-foreground">
+          A scrollable flex container with reverse column direction that
+          displays chat messages from bottom to top, automatically handling
+          overflow.
+        </p>
+      </div>
       <CodeBlock language="jsx" code={codeString} showLineNumbers />
     </div>
   );

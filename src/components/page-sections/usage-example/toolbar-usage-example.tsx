@@ -17,9 +17,16 @@ import { Anchor } from "@/components/common/anchor";
 export function ToolbarUsageExample() {
   return (
     <div className="space-y-2">
-      <Anchor id="chat-toolbar">
-        <h3 className="text-lg font-semibold">Chat Toolbar</h3>
-      </Anchor>
+      <div>
+        <Anchor id="chat-toolbar">
+          <h3 className="text-lg font-semibold">Chat Toolbar</h3>
+        </Anchor>
+        <p className="text-sm text-muted-foreground">
+          A sticky bottom input area with a three-column grid layout
+          (AddonStart, Textarea, AddonEnd) for message composition with optional
+          action buttons on both sides.
+        </p>
+      </div>
 
       <ChatToolbar>
         <ChatToolbarAddonStart>
