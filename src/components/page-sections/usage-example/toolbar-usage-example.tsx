@@ -46,33 +46,23 @@ export function ToolbarUsageExample() {
   );
 }
 
-const codeString = `    <Chat>
-      <ChatHeader>
-        ...
-      </ChatHeader>
-
-      <ChatMessages>
-        ...
-      </ChatMessages>
-
-      <ChatToolbar>
-        <ChatToolbarAddonStart>
-          <Button variant="ghost" className="size-8 @md/chat:size-9">
-            <PlusIcon className="size-5 @md/chat:size-6 stroke-[1.7px]" />
-          </Button>
-        </ChatToolbarAddonStart>
-        <ChatToolbarTextarea />
-        <ChatToolbarAddonEnd>
-          <Button variant="ghost" className="size-8 @md/chat:size-9">
-            <GiftIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
-          </Button>
-          <Button variant="ghost" className="size-8 @md/chat:size-9">
-            <CalendarDaysIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
-          </Button>
-          <Button variant="ghost" className="size-8 @md/chat:size-9">
-            <SquareChevronRightIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
-          </Button>
-        </ChatToolbarAddonEnd>
-      </ChatToolbar>
-    </Chat>
+const codeString = `<ChatToolbar>
+  <ChatToolbarAddonStart>
+    <Button variant="ghost" className="size-8 @md/chat:size-9">
+      <PlusIcon className="size-5 @md/chat:size-6 stroke-[1.7px]" />
+    </Button>
+  </ChatToolbarAddonStart>
+  <ChatToolbarTextarea />
+  <ChatToolbarAddonEnd>
+    <Button variant="ghost" className="size-8 @md/chat:size-9">
+      <GiftIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
+    </Button>
+    <Button variant="ghost" className="size-8 @md/chat:size-9">
+      <CalendarDaysIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
+    </Button>
+    <Button variant="ghost" className="size-8 @md/chat:size-9">
+      <SquareChevronRightIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
+    </Button>
+  </ChatToolbarAddonEnd>
+</ChatToolbar>
 `;

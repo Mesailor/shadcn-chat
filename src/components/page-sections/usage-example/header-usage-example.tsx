@@ -66,53 +66,34 @@ export function HeaderUsageExample() {
   );
 }
 
-const codeString = `   <Chat>
-      <ChatHeader className="border-b">
-        <ChatHeaderStart>
-          <Avatar className="rounded-full size-6">
-            <AvatarImage
-              src="https://github.com/evilrabbit.png"
-              alt="@evilrabbit"
-            />
-            <AvatarFallback>ER</AvatarFallback>
-          </Avatar>
-          <span className="font-medium">Evil Rabbit</span>
-        </ChatHeaderStart>
-        <ChatHeaderMain>
-          <span className="text-sm font-semibold">AKA</span>
-          <span className="text-sm font-medium">Chocolate Bunny</span>
-        </ChatHeaderMain>
-        <ChatHeaderEnd>
-          <InputGroup className="@2xl/chat:flex hidden">
-            <InputGroupInput placeholder="Search..." />
-            <InputGroupAddon>
-              <SearchIcon />
-            </InputGroupAddon>
-          </InputGroup>
-          <Button
-            variant="ghost"
-            className="size-8 @2xl/chat:inline-flex hidden"
-          >
-            <PhoneIcon />
-          </Button>
-          <Button
-            variant="ghost"
-            className="size-8 @2xl/chat:inline-flex hidden"
-          >
-            <VideoIcon />
-          </Button>
-          <Button variant="ghost" className="size-8">
-            <MoreHorizontalIcon />
-          </Button>
-        </ChatHeaderEnd>
-      </ChatHeader>
-
-      <ChatMessages>
-        ...
-      </ChatMessages>
-
-      <ChatToolbar>
-        ...
-      </ChatToolbar>
-    </Chat>
+const codeString = `<ChatHeader className="border-b">
+  <ChatHeaderStart>
+    <Avatar className="rounded-full size-6">
+      <AvatarImage src="https://github.com/evilrabbit.png" alt="@evilrabbit" />
+      <AvatarFallback>ER</AvatarFallback>
+    </Avatar>
+    <span className="font-medium">Evil Rabbit</span>
+  </ChatHeaderStart>
+  <ChatHeaderMain>
+    <span className="text-sm font-semibold">AKA</span>
+    <span className="text-sm font-medium">Chocolate Bunny</span>
+  </ChatHeaderMain>
+  <ChatHeaderEnd>
+    <InputGroup className="@2xl/chat:flex hidden">
+      <InputGroupInput placeholder="Search..." />
+      <InputGroupAddon>
+        <SearchIcon />
+      </InputGroupAddon>
+    </InputGroup>
+    <Button variant="ghost" className="size-8 @2xl/chat:inline-flex hidden">
+      <PhoneIcon />
+    </Button>
+    <Button variant="ghost" className="size-8 @2xl/chat:inline-flex hidden">
+      <VideoIcon />
+    </Button>
+    <Button variant="ghost" className="size-8">
+      <MoreHorizontalIcon />
+    </Button>
+  </ChatHeaderEnd>
+</ChatHeader>
     `;

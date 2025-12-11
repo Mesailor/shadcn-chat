@@ -3,6 +3,7 @@ import { EventUsageExample } from "./event-usage-example";
 import { HeaderUsageExample } from "./header-usage-example";
 import { MessagesUsageExample } from "./messages-usage-example";
 import { ToolbarUsageExample } from "./toolbar-usage-example";
+import { ChatUsageExample } from "./chat-usage-example";
 
 export function UsageExampleSection() {
   return (
@@ -11,6 +12,7 @@ export function UsageExampleSection() {
         <h2 className="text-2xl font-semibold">Usage Example</h2>
       </Anchor>
 
+      <ChatUsageExample />
       <HeaderUsageExample />
       <MessagesUsageExample />
       <EventUsageExample />
