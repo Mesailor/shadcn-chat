@@ -2,15 +2,19 @@ import { UsageExampleSection } from "@/components/page-sections/usage-example/us
 import { ComponentDemoSection } from "@/components/page-sections/component-demo-section";
 import { InstallationSection } from "@/components/page-sections/installation-section";
 import { CTASection } from "@/components/page-sections/cta-section";
+import { AppHeader } from "@/components/page-sections/app-header";
 
 export default function Home() {
   return (
-    <main className="py-32 flex flex-col items-center">
-      <CTASection />
+    <>
+      <AppHeader />
+      <main className="py-32 flex flex-col items-center">
+        <CTASection />
 
-      <ComponentDemoSection />
-      <InstallationSection />
-      <UsageExampleSection />
-    </main>
+        <ComponentDemoSection />
+        <InstallationSection />
+        <UsageExampleSection />
+      </main>
+    </>
   );
 }

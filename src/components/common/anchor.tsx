@@ -13,7 +13,7 @@ export function Anchor({
 }) {
   return (
     <div
-      className={cn("group flex items-baseline gap-3 scroll-m-6", className)}
+      className={cn("group flex items-baseline gap-3 scroll-m-16", className)}
       id={id}
     >
       {children}
