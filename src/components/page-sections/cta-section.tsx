@@ -12,7 +12,7 @@ export function CTASection() {
 
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
         <Button
-          className="h-12 px-6! bg-linear-to-br from-sky-900 to-sky-600 hover:opacity-90 text-white"
+          className="h-12 w-full sm:w-auto px-6! bg-linear-to-br from-sky-900 to-sky-600 hover:opacity-90 text-white"
           asChild
         >
           <a href="#installation">
@@ -20,7 +20,11 @@ export function CTASection() {
             Quick Start
           </a>
         </Button>
-        <Button className="h-12 px-8" variant="outline" asChild>
+        <Button
+          className="h-12 w-full sm:w-auto px-8"
+          variant="outline"
+          asChild
+        >
           <a
             href="https://github.com/Mesailor/shadcn-chat"
             target="_blank"

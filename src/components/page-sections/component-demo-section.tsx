@@ -1,7 +1,7 @@
 "use client";
 
 import { ChatExampleComponent } from "@/components/examples/chat-example-component";
-import { ReactNode, useState } from "react";
+import { CSSProperties, ReactNode, useRef, useState } from "react";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,11 +11,11 @@ import {
   TabletIcon,
 } from "lucide-react";
 
-const SCREEN_SIZES = {
-  desktop: { width: "100%", height: 667 },
-  tablet: { width: 768, height: 667 },
-  smartphone: { width: 375, height: 667 },
-  chatbox: { width: 344, height: 344 },
+const SCREEN_SIZES: { [key: string]: CSSProperties } = {
+  desktop: { width: "100%", maxWidth: 1280, height: "85vh" },
+  tablet: { width: "100%", maxWidth: 768, height: "85vh" },
+  smartphone: { width: "100%", maxWidth: 375, height: 667 },
+  chatbox: { width: "100%", maxWidth: 344, height: 344 },
 };
 
 const BUTTONS: { icon: ReactNode; size: keyof typeof SCREEN_SIZES }[] = [
@@ -28,11 +28,18 @@ const BUTTONS: { icon: ReactNode; size: keyof typeof SCREEN_SIZES }[] = [
 export function ComponentDemoSection() {
   const [screenSize, setScreenSize] =
     useState<keyof typeof SCREEN_SIZES>("desktop");
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const handleSetScreenSize = (size: keyof typeof SCREEN_SIZES) => {
+    setScreenSize(size);
+    sectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <section
+      ref={sectionRef}
       id="demo"
-      className="h-[800px] py-8 w-full px-6 space-y-4 flex flex-col items-center"
+      className="min-h-[800px] w-full py-8 md:px-4 space-y-4 flex flex-col items-center scroll-m-12"
     >
       <ButtonGroup>
         {BUTTONS.map((button) => (
@@ -40,17 +47,18 @@ export function ComponentDemoSection() {
             key={button.size}
             size="icon-sm"
             variant={screenSize === button.size ? "default" : "outline"}
-            onClick={() => setScreenSize(button.size)}
+            onClick={() => handleSetScreenSize(button.size)}
           >
             {button.icon}
           </Button>
         ))}
       </ButtonGroup>
       <div
-        className="border rounded-lg overflow-hidden transition-all duration-500"
+        className="border rounded-lg overflow-hidden transition-all duration-500 max-h-[1080px]"
         style={{
           width: SCREEN_SIZES[screenSize].width,
           height: SCREEN_SIZES[screenSize].height,
+          maxWidth: SCREEN_SIZES[screenSize].maxWidth,
         }}
       >
         <ChatExampleComponent />

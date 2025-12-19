@@ -78,7 +78,7 @@ export function ChatExampleComponent() {
         </ChatHeaderEnd>
       </ChatHeader>
 
-      <ChatMessages>
+      <ChatMessages className="scrollbar-hidden">
         {MESSAGES.map((msg, i, msgs) => {
           // If date changed, show date item
           if (

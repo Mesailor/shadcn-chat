@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <AppHeader />
-      <main className="py-32 flex flex-col items-center">
+      <main className="py-16 sm:py-32 flex flex-col items-center">
         <CTASection />
 
         <ComponentDemoSection />
