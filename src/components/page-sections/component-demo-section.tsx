@@ -39,7 +39,7 @@ export function ComponentDemoSection() {
     <section
       ref={sectionRef}
       id="demo"
-      className="min-h-[800px] w-full py-8 md:px-4 space-y-4 flex flex-col items-center scroll-m-12"
+      className="min-h-[600px] w-full py-8 md:px-4 space-y-4 flex flex-col items-center scroll-m-12"
     >
       <ButtonGroup>
         {BUTTONS.map((button) => (
