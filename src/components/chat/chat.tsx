@@ -1,6 +1,18 @@
-export function Chat({ children }: { children: React.ReactNode }) {
+import { cn } from "@/lib/utils";
+
+export function Chat({
+  children,
+  className,
+}: {
+  children?: React.ReactNode;
+} & React.ComponentProps<"div">) {
   return (
-    <div className="h-full overflow-hidden flex flex-col @container/chat">
+    <div
+      className={cn(
+        "h-full overflow-hidden flex flex-col @container/chat",
+        className
+      )}
+    >
       {children}
     </div>
   );
