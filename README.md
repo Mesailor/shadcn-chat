@@ -1,6 +1,6 @@
 # Shadcn Chat Component
 
-A customizable chat window component built with Shadcn UI and React.
+A customizable chat component built with shadcn/ui and React.
 
 ## Demo
 
