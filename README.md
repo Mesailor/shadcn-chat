@@ -2,6 +2,10 @@
 
 A customizable chat window component built with Shadcn UI and React.
 
+## Demo
+
+Checkout a [live demo](https://shadcn-chat.vercel.app)
+
 ## Installation
 
 ### Prerequisites
