@@ -10,7 +10,7 @@ export const MESSAGES = [
     },
     timestamp: 1234878110123,
     content:
-      "But could you also provide me with the updated documentation? I want to make sure I have all the latest information before proceeding.",
+      "Oh, and could you also share those user feedback notes? I want to make sure we're really nailing what they need before we ship this.",
   },
   {
     id: 15,
@@ -23,7 +23,7 @@ export const MESSAGES = [
     },
     timestamp: 1234878100123,
     content:
-      "I've reviewed the changes, and everything looks perfect! You did a fantastic job implementing the new feature.",
+      "Just tested the new checkout flow - it's so smooth! The loading states you added make such a difference. Customers are gonna love this! 🚀",
   },
   {
     id: 14,
@@ -36,7 +36,7 @@ export const MESSAGES = [
     },
     timestamp: 1234678090123,
     content:
-      "Great! I'll take a look at it and get back to you with my feedback shortly. Thanks for the update!",
+      "Sweet! I'll check it out on mobile too and let you know. Thanks for keeping accessibility in mind - that's real value right there!",
   },
   {
     id: 13,
@@ -49,7 +49,7 @@ export const MESSAGES = [
     },
     timestamp: 1234678080123,
     content:
-      "But before that, could you please review the changes I've made and let me know if everything looks good?",
+      "But first, could you give the responsive design a quick look? I want to make sure it feels great on all devices before we show it to users.",
   },
   {
     id: 12,
@@ -62,7 +62,7 @@ export const MESSAGES = [
     },
     timestamp: 1234678070123,
     content:
-      "Hey! Just wanted to let you know that I've finished the task. It's ready for review.",
+      "Hey! Just wrapped up the dashboard redesign. Focused on making the key metrics super easy to find - think our users will really appreciate it!",
   },
   {
     id: 11,
@@ -75,7 +75,7 @@ export const MESSAGES = [
     },
     timestamp: 1234677970123,
     content:
-      "And how is the project going? Are there any blockers or things I can help with?",
+      "Also, how's the performance optimization going? Any wins on those load times we discussed?",
   },
   {
     id: 10,
@@ -88,7 +88,7 @@ export const MESSAGES = [
     },
     timestamp: 1234677910123,
     content:
-      "Hey! How are you? Did you get all the information you needed to proceed with the implementation?",
+      "Hey! How's it going? Did you get a chance to look at those user journey mockups? Want to make sure we're solving the right problems for them.",
   },
   {
     id: 9,
@@ -100,7 +100,7 @@ export const MESSAGES = [
       username: "@annsmith",
     },
     timestamp: 1234567919123,
-    content: "Once I'm done, I'll notify you in this chat",
+    content: "I'll ping you here once it's ready for a demo!",
   },
   {
     id: 8,
@@ -112,7 +112,7 @@ export const MESSAGES = [
       username: "@annsmith",
     },
     timestamp: 1234567917123,
-    content: "Now I can start working",
+    content: "Perfect! Time to build something awesome ✨",
   },
   {
     id: 7,
@@ -125,7 +125,7 @@ export const MESSAGES = [
     },
     timestamp: 1234567913123,
     content:
-      "Awesome! Thank you very much! That clarifies everything! It's a bit tricky, but I think I got it now. And I can proceed with the implementation.",
+      "Awesome, thanks! That totally makes sense now. I love how we're thinking about the end user experience here. Can't wait to see their reaction when this goes live!",
   },
   {
     id: 6,
@@ -138,7 +138,7 @@ export const MESSAGES = [
     },
     timestamp: 1234567910123,
     content:
-      "Additional details - details are very additional, but if you want to add it, you have detalized it first. Otherwise the addition could fail. In case detalization fails, you probably won't be able to add the details",
+      "So basically - keep the interactions snappy, add subtle animations for feedback, and make sure error states are super clear. When users feel confident using the interface, they stick around. That's the value we're delivering! 😊",
   },
   {
     id: 5,
@@ -150,7 +150,7 @@ export const MESSAGES = [
       username: "@joshdoe",
     },
     timestamp: 1234567910123,
-    content: "Here you go:",
+    content: "Here's what I'm thinking:",
   },
   {
     id: 4,
@@ -162,7 +162,7 @@ export const MESSAGES = [
       username: "@joshdoe",
     },
     timestamp: 1234567899123,
-    content: "Of course! Let me find it first",
+    content: "Absolutely! Let me pull up my notes from the customer interviews",
   },
   {
     id: 3,
@@ -174,7 +174,7 @@ export const MESSAGES = [
       username: "@joshdoe",
     },
     timestamp: 1234567895123,
-    content: "Hey! I'm good, thank you!",
+    content: "Hey! Doing great, thanks for asking!",
   },
   {
     id: 2,
@@ -186,7 +186,8 @@ export const MESSAGES = [
       username: "@annsmith",
     },
     timestamp: 1234567892123,
-    content: "Could you provide me with some additional details?",
+    content:
+      "Could you share your thoughts on the UX flow? Want to make sure we're creating real value for our users.",
   },
   {
     id: 1,
@@ -198,6 +199,6 @@ export const MESSAGES = [
       username: "@annsmith",
     },
     timestamp: 1234567890123,
-    content: "Hello, how are you?",
+    content: "Hey there! How's your day going?",
   },
 ];
