@@ -37,16 +37,20 @@ export function HeaderUsageExample() {
         <ChatHeaderStart>
           <Avatar className="rounded-full size-6">
             <AvatarImage
-              src="https://github.com/evilrabbit.png"
-              alt="@evilrabbit"
+              src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png"
+              alt="@annsmith"
             />
-            <AvatarFallback>ER</AvatarFallback>
+            <AvatarFallback>AS</AvatarFallback>
           </Avatar>
-          <span className="font-medium">Evil Rabbit</span>
+          <span className="font-medium">Ann Smith</span>
         </ChatHeaderStart>
         <ChatHeaderMain>
           <span className="text-sm font-semibold">AKA</span>
-          <span className="text-sm font-medium">Chocolate Bunny</span>
+          <span className="flex-1 grid">
+            <span className="text-sm font-medium truncate">
+              Front-end developer
+            </span>
+          </span>
         </ChatHeaderMain>
         <ChatHeaderEnd>
           <InputGroup className="md:flex hidden">

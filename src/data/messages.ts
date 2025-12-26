@@ -2,10 +2,11 @@ export const MESSAGES = [
   {
     id: 16,
     sender: {
-      id: "evilrabbit-user-id",
-      name: "Evil Rabbit",
-      avatarUrl: "https://github.com/evilrabbit.png",
-      username: "@evilrabbit",
+      id: "joshdoe-user-id",
+      name: "John Doe",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
+      username: "@joshdoe",
     },
     timestamp: 1234878110123,
     content:
@@ -14,10 +15,11 @@ export const MESSAGES = [
   {
     id: 15,
     sender: {
-      id: "evilrabbit-user-id",
-      name: "Evil Rabbit",
-      avatarUrl: "https://github.com/evilrabbit.png",
-      username: "@evilrabbit",
+      id: "joshdoe-user-id",
+      name: "John Doe",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
+      username: "@joshdoe",
     },
     timestamp: 1234878100123,
     content:
@@ -26,10 +28,11 @@ export const MESSAGES = [
   {
     id: 14,
     sender: {
-      id: "evilrabbit-user-id",
-      name: "Evil Rabbit",
-      avatarUrl: "https://github.com/evilrabbit.png",
-      username: "@evilrabbit",
+      id: "joshdoe-user-id",
+      name: "John Doe",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
+      username: "@joshdoe",
     },
     timestamp: 1234678090123,
     content:
@@ -38,10 +41,11 @@ export const MESSAGES = [
   {
     id: 13,
     sender: {
-      id: "shadcn-user-id",
-      name: "Shadcn",
-      avatarUrl: "https://github.com/shadcn.png",
-      username: "@shadcn",
+      id: "annsmith-user-id",
+      name: "Ann Smith",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+      username: "@annsmith",
     },
     timestamp: 1234678080123,
     content:
@@ -50,10 +54,11 @@ export const MESSAGES = [
   {
     id: 12,
     sender: {
-      id: "shadcn-user-id",
-      name: "Shadcn",
-      avatarUrl: "https://github.com/shadcn.png",
-      username: "@shadcn",
+      id: "annsmith-user-id",
+      name: "Ann Smith",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+      username: "@annsmith",
     },
     timestamp: 1234678070123,
     content:
@@ -62,10 +67,11 @@ export const MESSAGES = [
   {
     id: 11,
     sender: {
-      id: "evilrabbit-user-id",
-      name: "Evil Rabbit",
-      avatarUrl: "https://github.com/evilrabbit.png",
-      username: "@evilrabbit",
+      id: "joshdoe-user-id",
+      name: "John Doe",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
+      username: "@joshdoe",
     },
     timestamp: 1234677970123,
     content:
@@ -74,10 +80,11 @@ export const MESSAGES = [
   {
     id: 10,
     sender: {
-      id: "evilrabbit-user-id",
-      name: "Evil Rabbit",
-      avatarUrl: "https://github.com/evilrabbit.png",
-      username: "@evilrabbit",
+      id: "joshdoe-user-id",
+      name: "John Doe",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
+      username: "@joshdoe",
     },
     timestamp: 1234677910123,
     content:
@@ -86,10 +93,11 @@ export const MESSAGES = [
   {
     id: 9,
     sender: {
-      id: "shadcn-user-id",
-      name: "Shadcn",
-      avatarUrl: "https://github.com/shadcn.png",
-      username: "@shadcn",
+      id: "annsmith-user-id",
+      name: "Ann Smith",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+      username: "@annsmith",
     },
     timestamp: 1234567919123,
     content: "Once I'm done, I'll notify you in this chat",
@@ -97,10 +105,11 @@ export const MESSAGES = [
   {
     id: 8,
     sender: {
-      id: "shadcn-user-id",
-      name: "Shadcn",
-      avatarUrl: "https://github.com/shadcn.png",
-      username: "@shadcn",
+      id: "annsmith-user-id",
+      name: "Ann Smith",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+      username: "@annsmith",
     },
     timestamp: 1234567917123,
     content: "Now I can start working",
@@ -108,10 +117,11 @@ export const MESSAGES = [
   {
     id: 7,
     sender: {
-      id: "shadcn-user-id",
-      name: "Shadcn",
-      avatarUrl: "https://github.com/shadcn.png",
-      username: "@shadcn",
+      id: "annsmith-user-id",
+      name: "Ann Smith",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+      username: "@annsmith",
     },
     timestamp: 1234567913123,
     content:
@@ -120,10 +130,11 @@ export const MESSAGES = [
   {
     id: 6,
     sender: {
-      id: "evilrabbit-user-id",
-      name: "Evil Rabbit",
-      avatarUrl: "https://github.com/evilrabbit.png",
-      username: "@evilrabbit",
+      id: "joshdoe-user-id",
+      name: "John Doe",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
+      username: "@joshdoe",
     },
     timestamp: 1234567910123,
     content:
@@ -132,10 +143,11 @@ export const MESSAGES = [
   {
     id: 5,
     sender: {
-      id: "evilrabbit-user-id",
-      name: "Evil Rabbit",
-      avatarUrl: "https://github.com/evilrabbit.png",
-      username: "@evilrabbit",
+      id: "joshdoe-user-id",
+      name: "John Doe",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
+      username: "@joshdoe",
     },
     timestamp: 1234567910123,
     content: "Here you go:",
@@ -143,10 +155,11 @@ export const MESSAGES = [
   {
     id: 4,
     sender: {
-      id: "evilrabbit-user-id",
-      name: "Evil Rabbit",
-      avatarUrl: "https://github.com/evilrabbit.png",
-      username: "@evilrabbit",
+      id: "joshdoe-user-id",
+      name: "John Doe",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
+      username: "@joshdoe",
     },
     timestamp: 1234567899123,
     content: "Of course! Let me find it first",
@@ -154,10 +167,11 @@ export const MESSAGES = [
   {
     id: 3,
     sender: {
-      id: "evilrabbit-user-id",
-      name: "Evil Rabbit",
-      avatarUrl: "https://github.com/evilrabbit.png",
-      username: "@evilrabbit",
+      id: "joshdoe-user-id",
+      name: "John Doe",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
+      username: "@joshdoe",
     },
     timestamp: 1234567895123,
     content: "Hey! I'm good, thank you!",
@@ -165,10 +179,11 @@ export const MESSAGES = [
   {
     id: 2,
     sender: {
-      id: "shadcn-user-id",
-      name: "Shadcn",
-      avatarUrl: "https://github.com/shadcn.png",
-      username: "@shadcn",
+      id: "annsmith-user-id",
+      name: "Ann Smith",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+      username: "@annsmith",
     },
     timestamp: 1234567892123,
     content: "Could you provide me with some additional details?",
@@ -176,10 +191,11 @@ export const MESSAGES = [
   {
     id: 1,
     sender: {
-      id: "shadcn-user-id",
-      name: "Shadcn",
-      avatarUrl: "https://github.com/shadcn.png",
-      username: "@shadcn",
+      id: "annsmith-user-id",
+      name: "Ann Smith",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+      username: "@annsmith",
     },
     timestamp: 1234567890123,
     content: "Hello, how are you?",
