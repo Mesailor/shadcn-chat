@@ -12,7 +12,7 @@ export default function Page() {
       }
     >
       <AppSidebar />
-      <SidebarInset className="max-h-screen">
+      <SidebarInset className="max-h-dvh">
         <ChatExampleComponent />
       </SidebarInset>
     </SidebarProvider>
