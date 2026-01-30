@@ -9,7 +9,6 @@ import {
   SquareChevronRightIcon,
   VideoIcon,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   InputGroup,
   InputGroupAddon,
@@ -19,9 +18,10 @@ import { Button } from "@/components/ui/button";
 import { Chat } from "@/components/chat/chat";
 import {
   ChatHeader,
+  ChatHeaderAddon,
+  ChatHeaderAvatar,
+  ChatHeaderButton,
   ChatHeaderMain,
-  ChatHeaderEnd,
-  ChatHeaderStart,
 } from "@/components/chat/chat-header";
 import {
   ChatToolbar,
@@ -39,17 +39,15 @@ export function ChatExampleComponent() {
   return (
     <Chat>
       <ChatHeader className="border-b">
-        <ChatHeaderStart>
-          <Avatar className="rounded-full size-6">
-            <AvatarImage
-              src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png"
-              alt="@annsmith"
-            />
-            <AvatarFallback>AS</AvatarFallback>
-          </Avatar>
-          <span className="font-medium">Ann Smith</span>
-        </ChatHeaderStart>
+        <ChatHeaderAddon>
+          <ChatHeaderAvatar
+            src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png"
+            alt="@annsmith"
+            fallback="AS"
+          />
+        </ChatHeaderAddon>
         <ChatHeaderMain>
+          <span className="font-medium">Ann Smith</span>
           <span className="text-sm font-semibold">AKA</span>
           <span className="flex-1 grid">
             <span className="text-sm font-medium truncate">
@@ -57,29 +55,23 @@ export function ChatExampleComponent() {
             </span>
           </span>
         </ChatHeaderMain>
-        <ChatHeaderEnd>
+        <ChatHeaderAddon>
           <InputGroup className="@2xl/chat:flex hidden">
             <InputGroupInput placeholder="Search..." />
             <InputGroupAddon>
               <SearchIcon />
             </InputGroupAddon>
           </InputGroup>
-          <Button
-            variant="ghost"
-            className="size-8 @2xl/chat:inline-flex hidden"
-          >
+          <ChatHeaderButton className=" @2xl/chat:inline-flex hidden">
             <PhoneIcon />
-          </Button>
-          <Button
-            variant="ghost"
-            className="size-8 @2xl/chat:inline-flex hidden"
-          >
+          </ChatHeaderButton>
+          <ChatHeaderButton className=" @2xl/chat:inline-flex hidden">
             <VideoIcon />
-          </Button>
-          <Button variant="ghost" className="size-8">
+          </ChatHeaderButton>
+          <ChatHeaderButton>
             <MoreHorizontalIcon />
-          </Button>
-        </ChatHeaderEnd>
+          </ChatHeaderButton>
+        </ChatHeaderAddon>
       </ChatHeader>
 
       <ChatMessages className="scrollbar-hidden">

@@ -1,11 +1,10 @@
 import {
   ChatHeader,
-  ChatHeaderEnd,
+  ChatHeaderAddon,
+  ChatHeaderAvatar,
+  ChatHeaderButton,
   ChatHeaderMain,
-  ChatHeaderStart,
 } from "@/components/chat/chat-header";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   InputGroup,
   InputGroupAddon,
@@ -19,6 +18,7 @@ import {
 } from "lucide-react";
 import { CodeBlock } from "@/components/common/code-block";
 import { Anchor } from "@/components/common/anchor";
+import { HighlightedComponent } from "@/components/ui/typography";
 
 export function HeaderUsageExample() {
   return (
@@ -28,23 +28,28 @@ export function HeaderUsageExample() {
           <h3 className="text-lg font-semibold">Chat Header</h3>
         </Anchor>
         <p className="text-sm text-muted-foreground">
-          A sticky header component with three sections (Start, Main, End) for
-          displaying chat participant info, status, search, and action buttons.
+          A sticky header component with flexible layout. Use{" "}
+          <HighlightedComponent>ChatHeaderMain</HighlightedComponent> for the
+          primary content area (takes remaining space) and{" "}
+          <HighlightedComponent>ChatHeaderAddon</HighlightedComponent> for
+          grouping items on either side. Includes{" "}
+          <HighlightedComponent>ChatHeaderAvatar</HighlightedComponent> for
+          profile images and{" "}
+          <HighlightedComponent>ChatHeaderButton</HighlightedComponent> for
+          action buttons.
         </p>
       </div>
 
       <ChatHeader className="border rounded-sm static mb-4">
-        <ChatHeaderStart>
-          <Avatar className="rounded-full size-6">
-            <AvatarImage
-              src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png"
-              alt="@annsmith"
-            />
-            <AvatarFallback>AS</AvatarFallback>
-          </Avatar>
-          <span className="font-medium">Ann Smith</span>
-        </ChatHeaderStart>
+        <ChatHeaderAddon>
+          <ChatHeaderAvatar
+            src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png"
+            alt="@annsmith"
+            fallback="AS"
+          />
+        </ChatHeaderAddon>
         <ChatHeaderMain>
+          <span className="font-medium">Ann Smith</span>
           <span className="text-sm font-semibold">AKA</span>
           <span className="flex-1 grid">
             <span className="text-sm font-medium truncate">
@@ -52,23 +57,23 @@ export function HeaderUsageExample() {
             </span>
           </span>
         </ChatHeaderMain>
-        <ChatHeaderEnd>
+        <ChatHeaderAddon>
           <InputGroup className="md:flex hidden">
             <InputGroupInput placeholder="Search..." />
             <InputGroupAddon>
               <SearchIcon />
             </InputGroupAddon>
           </InputGroup>
-          <Button variant="ghost" className="size-8 md:inline-flex hidden">
+          <ChatHeaderButton className="md:inline-flex hidden">
             <PhoneIcon />
-          </Button>
-          <Button variant="ghost" className="size-8 md:inline-flex hidden">
+          </ChatHeaderButton>
+          <ChatHeaderButton className="md:inline-flex hidden">
             <VideoIcon />
-          </Button>
-          <Button variant="ghost" className="size-8">
+          </ChatHeaderButton>
+          <ChatHeaderButton>
             <MoreHorizontalIcon />
-          </Button>
-        </ChatHeaderEnd>
+          </ChatHeaderButton>
+        </ChatHeaderAddon>
       </ChatHeader>
 
       <CodeBlock language="jsx" code={codeString} showLineNumbers />
@@ -77,33 +82,41 @@ export function HeaderUsageExample() {
 }
 
 const codeString = `<ChatHeader className="border-b">
-  <ChatHeaderStart>
-    <Avatar className="rounded-full size-6">
-      <AvatarImage src="https://github.com/evilrabbit.png" alt="@evilrabbit" />
-      <AvatarFallback>ER</AvatarFallback>
-    </Avatar>
-    <span className="font-medium">Evil Rabbit</span>
-  </ChatHeaderStart>
+  <ChatHeaderAddon>
+    <ChatHeaderAvatar
+      src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png"
+      alt="@annsmith"
+      fallback="AS"
+    />
+  </ChatHeaderAddon>
+
   <ChatHeaderMain>
+    <span className="font-medium">Ann Smith</span>
     <span className="text-sm font-semibold">AKA</span>
-    <span className="text-sm font-medium">Chocolate Bunny</span>
+    <span className="flex-1 grid">
+      <span className="text-sm font-medium truncate">
+        Front-end developer
+      </span>
+    </span>
   </ChatHeaderMain>
-  <ChatHeaderEnd>
+
+  <ChatHeaderAddon>
     <InputGroup className="@2xl/chat:flex hidden">
       <InputGroupInput placeholder="Search..." />
       <InputGroupAddon>
         <SearchIcon />
       </InputGroupAddon>
     </InputGroup>
-    <Button variant="ghost" className="size-8 @2xl/chat:inline-flex hidden">
+    <ChatHeaderButton className="@2xl/chat:inline-flex hidden">
       <PhoneIcon />
-    </Button>
-    <Button variant="ghost" className="size-8 @2xl/chat:inline-flex hidden">
+    </ChatHeaderButton>
+    <ChatHeaderButton className="@2xl/chat:inline-flex hidden">
       <VideoIcon />
-    </Button>
-    <Button variant="ghost" className="size-8">
+    </ChatHeaderButton>
+    <ChatHeaderButton>
       <MoreHorizontalIcon />
-    </Button>
-  </ChatHeaderEnd>
+    </ChatHeaderButton>
+  </ChatHeaderAddon>
+  </ChatHeader>
 </ChatHeader>
     `;
