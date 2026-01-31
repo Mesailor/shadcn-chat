@@ -11,6 +11,7 @@ import {
 } from "@/components/chat/chat-event";
 import { DateItem } from "@/components/message-items/date-item";
 import { Anchor } from "@/components/common/anchor";
+import { HighlightedComponent } from "@/components/ui/typography";
 
 const PRIMARY_MSG = MESSAGES[1];
 const ADDITIONAL_MSG = MESSAGES[0];
@@ -23,8 +24,20 @@ export function EventUsageExample() {
           <h3 className="text-lg font-semibold">Chat Event</h3>
         </Anchor>
         <p className="text-sm text-muted-foreground">
-          A flexible message row component with Addon (for avatar/timestamp) and
-          Body sections, supporting any message or event in the chat.
+          A flexible message row component for displaying any message or event
+          in the chat. Use{" "}
+          <HighlightedComponent>ChatEventAddon</HighlightedComponent> for side
+          content like avatars or timestamps, and{" "}
+          <HighlightedComponent>ChatEventBody</HighlightedComponent> for the
+          main content area. Inside the body, use{" "}
+          <HighlightedComponent>ChatEventTitle</HighlightedComponent> for sender
+          name and metadata, and{" "}
+          <HighlightedComponent>ChatEventContent</HighlightedComponent> for the
+          message text. Use{" "}
+          <HighlightedComponent>ChatEventAvatar</HighlightedComponent> for
+          profile images and{" "}
+          <HighlightedComponent>ChatEventTime</HighlightedComponent> for
+          localized timestamp formatting with preset formats.
         </p>
       </div>
 

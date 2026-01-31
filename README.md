@@ -144,7 +144,7 @@ A scrollable flex container with reverse column direction that displays chat mes
 
 ### Chat Event
 
-A flexible message row component with Addon (for avatar/timestamp) and Body sections, supporting any message or event in the chat. Use `ChatEventTitle` as a header section to display the sender name and metadata (like timestamps) above the content.
+A flexible message row component for displaying any message or event in the chat. Use `ChatEventAddon` for side content like avatars or timestamps, and `ChatEventBody` for the main content area. Inside the body, use `ChatEventTitle` for sender name and metadata, and `ChatEventContent` for the message text. Use `ChatEventAvatar` for profile images and `ChatEventTime` for localized timestamp formatting with preset formats.
 
 #### Primary Message
 
