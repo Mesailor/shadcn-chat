@@ -29,7 +29,7 @@ export function HighlightedComponent({
   return (
     <TypographyInlineCode
       className={cn(
-        "px-0 py-0 font-normal text-primary bg-primary-foreground",
+        "px-0 py-0 font-normal text-primary bg-transparent",
         className,
       )}
     >
