@@ -12,7 +12,7 @@ Checkout a [live demo](https://shadcn-chat.vercel.app)
 
 The chat component is compatible with any environment that supports [React](https://react.dev/learn) and has [shadcn/ui](https://ui.shadcn.com/docs) configured.
 
-This guide assumes you are already familiar with both of these technologies. If you are not, please review their documentation first.
+This guide assumes you are already familiar with both of these technologies. If you are not, you can review their documentations first.
 
 ### Quick Start
 

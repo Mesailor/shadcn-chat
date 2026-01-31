@@ -175,8 +175,6 @@ export function ChatEventTime({
   const resolvedLocale =
     locale ?? (typeof navigator !== "undefined" ? navigator.language : "en-US");
 
-  console.log("Resolved Locale:", resolvedLocale);
-
   const formattedTime = useMemo(() => {
     if (format === "relative") {
       return getRelativeTimeString(date, resolvedLocale);

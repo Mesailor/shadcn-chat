@@ -18,8 +18,8 @@ export function InstallationSection() {
           </p>
           <p className="text-muted-foreground">
             This guide assumes you are already familiar with both of these
-            technologies. If you are not, please review their documentation
-            first.
+            technologies. If you are not, you can review their documentation
+            here.
           </p>
           <ul className="list-disc list-inside mt-2 space-y-1 text-muted-foreground">
             <li>
