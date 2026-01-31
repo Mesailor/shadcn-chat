@@ -157,6 +157,7 @@ import {
   ChatEventAvatar,
   ChatEventBody,
   ChatEventContent,
+  ChatEventTime,
   ChatEventTitle,
 } from "@/components/ui/chat-event";
 
@@ -189,12 +190,7 @@ export function PrimaryMessage({
       <ChatEventBody>
         <ChatEventTitle>
           <span className="font-medium">{senderName}</span>
-          <span className="text-xs text-muted-foreground">
-            {new Intl.DateTimeFormat("en-US", {
-              dateStyle: "medium",
-              timeStyle: "short",
-            }).format(timestamp)}
-          </span>
+          <ChatEventTime timestamp={timestamp} />
         </ChatEventTitle>
         <ChatEventContent>{content}</ChatEventContent>
       </ChatEventBody>
@@ -212,6 +208,7 @@ import {
   ChatEventAddon,
   ChatEventBody,
   ChatEventContent,
+  ChatEventTime,
 } from "@/components/ui/chat-event";
 
 export function AdditionalMessage({
@@ -224,11 +221,11 @@ export function AdditionalMessage({
   return (
     <ChatEvent className="hover:bg-accent group">
       <ChatEventAddon>
-        <span className="text-right text-[8px] @md/chat:text-[10px] text-muted-foreground group-hover:visible invisible">
-          {new Intl.DateTimeFormat("en-US", {
-            timeStyle: "short",
-          }).format(timestamp)}
-        </span>
+        <ChatEventTime
+          timestamp={timestamp}
+          format="time"
+          className="text-right text-[8px] @md/chat:text-[10px] group-hover:visible invisible"
+        />
       </ChatEventAddon>
       <ChatEventBody>
         <ChatEventContent>{content}</ChatEventContent>
@@ -243,7 +240,7 @@ export function AdditionalMessage({
 ```tsx
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { ChatEvent } from "@/components/ui/chat-event";
+import { ChatEvent, ChatEventTime } from "@/components/ui/chat-event";
 
 export function DateItem({
   timestamp,
@@ -255,11 +252,11 @@ export function DateItem({
   return (
     <ChatEvent className={cn("items-center gap-1", className)}>
       <Separator className="flex-1" />
-      <span className="text-muted-foreground text-xs font-semibold min-w-max">
-        {new Intl.DateTimeFormat("en-US", {
-          dateStyle: "long",
-        }).format(timestamp)}
-      </span>
+      <ChatEventTime
+        timestamp={timestamp}
+        format="longDate"
+        className="font-semibold min-w-max"
+      />
       <Separator className="flex-1" />
     </ChatEvent>
   );

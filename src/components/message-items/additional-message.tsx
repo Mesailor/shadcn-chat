@@ -4,6 +4,7 @@ import {
   ChatEventAddon,
   ChatEventBody,
   ChatEventContent,
+  ChatEventTime,
 } from "../chat/chat-event";
 
 export function AdditionalMessage({
@@ -16,11 +17,11 @@ export function AdditionalMessage({
   return (
     <ChatEvent className="hover:bg-accent group">
       <ChatEventAddon>
-        <span className="text-right text-[8px] @md/chat:text-[10px] text-muted-foreground group-hover:visible invisible">
-          {new Intl.DateTimeFormat("en-US", {
-            timeStyle: "short",
-          }).format(timestamp)}
-        </span>
+        <ChatEventTime
+          timestamp={timestamp}
+          format="time"
+          className="text-right text-[8px] @md/chat:text-[10px] group-hover:visible invisible"
+        />
       </ChatEventAddon>
       <ChatEventBody>
         <ChatEventContent>{content}</ChatEventContent>

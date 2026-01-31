@@ -6,6 +6,7 @@ import {
   ChatEventAvatar,
   ChatEventBody,
   ChatEventContent,
+  ChatEventTime,
   ChatEventTitle,
 } from "../chat/chat-event";
 
@@ -40,12 +41,7 @@ export function PrimaryMessage({
       <ChatEventBody>
         <ChatEventTitle>
           <span className="font-medium">{senderName}</span>
-          <span className="text-xs text-muted-foreground">
-            {new Intl.DateTimeFormat("en-US", {
-              dateStyle: "medium",
-              timeStyle: "short",
-            }).format(timestamp)}
-          </span>
+          <ChatEventTime timestamp={timestamp} />
         </ChatEventTitle>
         <ChatEventContent>{content}</ChatEventContent>
       </ChatEventBody>
