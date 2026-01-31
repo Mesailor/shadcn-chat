@@ -3,12 +3,11 @@ import { MESSAGES } from "@/data/messages";
 import {
   ChatEvent,
   ChatEventAddon,
+  ChatEventAvatar,
   ChatEventBody,
   ChatEventContent,
-  ChatEventDescription,
   ChatEventTitle,
 } from "@/components/chat/chat-event";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DateItem } from "@/components/message-items/date-item";
 import { Anchor } from "@/components/common/anchor";
 
@@ -31,27 +30,22 @@ export function EventUsageExample() {
       <h4 className="font-semibold">Primary Message</h4>
       <ChatEvent className="hover:bg-accent py-2 border-y">
         <ChatEventAddon>
-          <Avatar className="rounded-full size-8 @md/chat:size-10 mx-auto">
-            <AvatarImage
-              src={PRIMARY_MSG.sender.avatarUrl}
-              alt={PRIMARY_MSG.sender.name}
-            />
-            <AvatarFallback>
-              {PRIMARY_MSG.sender.name.slice(0, 2)}
-            </AvatarFallback>
-          </Avatar>
+          <ChatEventAvatar
+            src={PRIMARY_MSG.sender.avatarUrl}
+            alt={PRIMARY_MSG.sender.name}
+            fallback={PRIMARY_MSG.sender.name.slice(0, 2)}
+          />
         </ChatEventAddon>
         <ChatEventBody>
-          <div className="flex items-baseline gap-2">
-            <ChatEventTitle>{PRIMARY_MSG.sender.name}</ChatEventTitle>
-            <ChatEventDescription>
-              {/* 07.09.2020, 16:28 */}
+          <ChatEventTitle>
+            <span className="font-medium">{PRIMARY_MSG.sender.name}</span>
+            <span className="text-xs text-muted-foreground">
               {new Intl.DateTimeFormat("en-US", {
                 dateStyle: "medium",
                 timeStyle: "short",
               }).format(PRIMARY_MSG.timestamp)}
-            </ChatEventDescription>
-          </div>
+            </span>
+          </ChatEventTitle>
           <ChatEventContent className="text-sm md:text-base">
             {PRIMARY_MSG.content}
           </ChatEventContent>
@@ -66,12 +60,11 @@ export function EventUsageExample() {
       <h4 className="font-semibold mt-4">Additional Message</h4>
       <ChatEvent className="hover:bg-accent group py-2 border-y">
         <ChatEventAddon>
-          <ChatEventDescription className="text-right text-[8px] md:text-[10px] group-hover:visible invisible">
-            {/* 16:08 */}
+          <span className="text-right text-[8px] md:text-[10px] text-muted-foreground group-hover:visible invisible">
             {new Intl.DateTimeFormat("en-US", {
               timeStyle: "short",
             }).format(ADDITIONAL_MSG.timestamp)}
-          </ChatEventDescription>
+          </span>
         </ChatEventAddon>
         <ChatEventBody>
           <ChatEventContent className="text-sm md:text-base">
@@ -93,14 +86,13 @@ export function EventUsageExample() {
 }
 
 const primaryMessageCodeString = `import { ReactNode } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import {
   ChatEvent,
   ChatEventAddon,
+  ChatEventAvatar,
   ChatEventBody,
   ChatEventContent,
-  ChatEventDescription,
   ChatEventTitle,
 } from "@/components/ui/chat-event";
 
@@ -124,27 +116,28 @@ export function PrimaryMessage({
   return (
     <ChatEvent className={cn("hover:bg-accent", className)}>
       <ChatEventAddon>
-        <Avatar className="rounded-full size-8 @md/chat:size-10 mx-auto">
-          <AvatarImage src={avatarSrc} alt={avatarAlt} />
-          <AvatarFallback>{avatarFallback}</AvatarFallback>
-        </Avatar>
+        <ChatEventAvatar
+          src={avatarSrc}
+          alt={avatarAlt}
+          fallback={avatarFallback}
+        />
       </ChatEventAddon>
       <ChatEventBody>
-        <div className="flex items-baseline gap-2">
-          <ChatEventTitle>{senderName}</ChatEventTitle>
-          <ChatEventDescription>
+        <ChatEventTitle>
+          <span className="font-medium">{senderName}</span>
+          <span className="text-xs text-muted-foreground">
             {new Intl.DateTimeFormat("en-US", {
               dateStyle: "medium",
               timeStyle: "short",
             }).format(timestamp)}
-          </ChatEventDescription>
-        </div>
+          </span>
+        </ChatEventTitle>
         <ChatEventContent>{content}</ChatEventContent>
       </ChatEventBody>
     </ChatEvent>
   );
 }
-  `;
+`;
 
 const additionalMessageCodeString = `import { ReactNode } from "react";
 import {
@@ -152,7 +145,6 @@ import {
   ChatEventAddon,
   ChatEventBody,
   ChatEventContent,
-  ChatEventDescription,
 } from "@/components/ui/chat-event";
 
 export function AdditionalMessage({
@@ -165,11 +157,11 @@ export function AdditionalMessage({
   return (
     <ChatEvent className="hover:bg-accent group">
       <ChatEventAddon>
-        <ChatEventDescription className="text-right text-[8px] @md/chat:text-[10px] group-hover:visible invisible">
+        <span className="text-right text-[8px] @md/chat:text-[10px] text-muted-foreground group-hover:visible invisible">
           {new Intl.DateTimeFormat("en-US", {
             timeStyle: "short",
           }).format(timestamp)}
-        </ChatEventDescription>
+        </span>
       </ChatEventAddon>
       <ChatEventBody>
         <ChatEventContent>{content}</ChatEventContent>

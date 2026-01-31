@@ -1,4 +1,10 @@
 import { cn } from "@/lib/utils";
+import {
+  AvatarFallbackProps,
+  AvatarImageProps,
+  AvatarProps,
+} from "@radix-ui/react-avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function ChatEvent({
   children,
@@ -19,7 +25,10 @@ export function ChatEventAddon({
 }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("w-10 @md/chat:w-12 mt-1 shrink-0", className)}
+      className={cn(
+        "w-10 @md/chat:w-12 h-full flex justify-center pt-1 shrink-0",
+        className,
+      )}
       {...props}
     >
       {children}
@@ -58,7 +67,7 @@ export function ChatEventTitle({
 }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("font-medium text-sm @md/chat:text-base", className)}
+      className={cn("flex items-center gap-2 text-sm", className)}
       {...props}
     >
       {children}
@@ -66,14 +75,31 @@ export function ChatEventTitle({
   );
 }
 
-export function ChatEventDescription({
-  children,
+export function ChatEventAvatar({
   className,
+  src,
+  alt,
+  fallback,
+  imageProps,
+  fallbackProps,
   ...props
-}: React.ComponentProps<"div">) {
+}: {
+  className?: string;
+  src?: AvatarImageProps["src"];
+  alt?: string;
+  fallback?: React.ReactNode;
+  imageProps?: AvatarImageProps;
+  fallbackProps?: AvatarFallbackProps;
+} & AvatarProps) {
   return (
-    <div className={cn("text-xs text-muted-foreground", className)} {...props}>
-      {children}
-    </div>
+    <Avatar
+      className={cn("rounded-full size-8 @md/chat:size-10", className)}
+      {...props}
+    >
+      <AvatarImage src={src} alt={alt} {...imageProps} />
+      {fallback && (
+        <AvatarFallback {...fallbackProps}>{fallback}</AvatarFallback>
+      )}
+    </Avatar>
   );
 }

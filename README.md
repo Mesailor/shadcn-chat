@@ -144,20 +144,19 @@ A scrollable flex container with reverse column direction that displays chat mes
 
 ### Chat Event
 
-A flexible message row component with Addon (for avatar/timestamp) and Body sections, supporting any message or event in the chat.
+A flexible message row component with Addon (for avatar/timestamp) and Body sections, supporting any message or event in the chat. Use `ChatEventTitle` as a header section to display the sender name and metadata (like timestamps) above the content.
 
 #### Primary Message
 
 ```tsx
 import { ReactNode } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import {
   ChatEvent,
   ChatEventAddon,
+  ChatEventAvatar,
   ChatEventBody,
   ChatEventContent,
-  ChatEventDescription,
   ChatEventTitle,
 } from "@/components/ui/chat-event";
 
@@ -181,21 +180,22 @@ export function PrimaryMessage({
   return (
     <ChatEvent className={cn("hover:bg-accent", className)}>
       <ChatEventAddon>
-        <Avatar className="rounded-full size-8 @md/chat:size-10 mx-auto">
-          <AvatarImage src={avatarSrc} alt={avatarAlt} />
-          <AvatarFallback>{avatarFallback}</AvatarFallback>
-        </Avatar>
+        <ChatEventAvatar
+          src={avatarSrc}
+          alt={avatarAlt}
+          fallback={avatarFallback}
+        />
       </ChatEventAddon>
       <ChatEventBody>
-        <div className="flex items-baseline gap-2">
-          <ChatEventTitle>{senderName}</ChatEventTitle>
-          <ChatEventDescription>
+        <ChatEventTitle>
+          <span className="font-medium">{senderName}</span>
+          <span className="text-xs text-muted-foreground">
             {new Intl.DateTimeFormat("en-US", {
               dateStyle: "medium",
               timeStyle: "short",
             }).format(timestamp)}
-          </ChatEventDescription>
-        </div>
+          </span>
+        </ChatEventTitle>
         <ChatEventContent>{content}</ChatEventContent>
       </ChatEventBody>
     </ChatEvent>
@@ -212,7 +212,6 @@ import {
   ChatEventAddon,
   ChatEventBody,
   ChatEventContent,
-  ChatEventDescription,
 } from "@/components/ui/chat-event";
 
 export function AdditionalMessage({
@@ -225,11 +224,11 @@ export function AdditionalMessage({
   return (
     <ChatEvent className="hover:bg-accent group">
       <ChatEventAddon>
-        <ChatEventDescription className="text-right text-[8px] @md/chat:text-[10px] group-hover:visible invisible">
+        <span className="text-right text-[8px] @md/chat:text-[10px] text-muted-foreground group-hover:visible invisible">
           {new Intl.DateTimeFormat("en-US", {
             timeStyle: "short",
           }).format(timestamp)}
-        </ChatEventDescription>
+        </span>
       </ChatEventAddon>
       <ChatEventBody>
         <ChatEventContent>{content}</ChatEventContent>
