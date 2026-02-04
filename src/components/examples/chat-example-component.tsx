@@ -14,7 +14,6 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Button } from "@/components/ui/button";
 import { Chat } from "@/components/chat/chat";
 import {
   ChatHeader,
@@ -27,6 +26,7 @@ import {
   ChatToolbar,
   ChatToolbarAddonEnd,
   ChatToolbarAddonStart,
+  ChatToolbarButton,
   ChatToolbarTextarea,
 } from "@/components/chat/chat-toolbar";
 import { ChatMessages } from "@/components/chat/chat-messages";
@@ -126,21 +126,21 @@ export function ChatExampleComponent() {
 
       <ChatToolbar>
         <ChatToolbarAddonStart>
-          <Button variant="ghost" className="size-8 @md/chat:size-9">
-            <PlusIcon className="size-5 @md/chat:size-6 stroke-[1.7px]" />
-          </Button>
+          <ChatToolbarButton>
+            <PlusIcon />
+          </ChatToolbarButton>
         </ChatToolbarAddonStart>
         <ChatToolbarTextarea />
         <ChatToolbarAddonEnd>
-          <Button variant="ghost" className="size-8 @md/chat:size-9">
-            <GiftIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
-          </Button>
-          <Button variant="ghost" className="size-8 @md/chat:size-9">
-            <CalendarDaysIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
-          </Button>
-          <Button variant="ghost" className="size-8 @md/chat:size-9">
-            <SquareChevronRightIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
-          </Button>
+          <ChatToolbarButton>
+            <GiftIcon />
+          </ChatToolbarButton>
+          <ChatToolbarButton>
+            <CalendarDaysIcon />
+          </ChatToolbarButton>
+          <ChatToolbarButton>
+            <SquareChevronRightIcon />
+          </ChatToolbarButton>
         </ChatToolbarAddonEnd>
       </ChatToolbar>
     </Chat>

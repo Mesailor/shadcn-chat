@@ -2,10 +2,10 @@ import {
   ChatToolbar,
   ChatToolbarAddonEnd,
   ChatToolbarAddonStart,
+  ChatToolbarButton,
   ChatToolbarTextarea,
 } from "@/components/chat/chat-toolbar";
 import { CodeBlock } from "@/components/common/code-block";
-import { Button } from "@/components/ui/button";
 import {
   CalendarDaysIcon,
   GiftIcon,
@@ -30,21 +30,21 @@ export function ToolbarUsageExample() {
 
       <ChatToolbar>
         <ChatToolbarAddonStart>
-          <Button variant="ghost" className="size-8 md:size-9">
-            <PlusIcon className="size-5 md:size-6 stroke-[1.7px]" />
-          </Button>
+          <ChatToolbarButton>
+            <PlusIcon />
+          </ChatToolbarButton>
         </ChatToolbarAddonStart>
         <ChatToolbarTextarea className="md:text-base" />
         <ChatToolbarAddonEnd>
-          <Button variant="ghost" className="size-8 md:size-9">
-            <GiftIcon className="size-4 md:size-5 stroke-[1.7px]" />
-          </Button>
-          <Button variant="ghost" className="size-8 md:size-9">
-            <CalendarDaysIcon className="size-4 md:size-5 stroke-[1.7px]" />
-          </Button>
-          <Button variant="ghost" className="size-8 md:size-9">
-            <SquareChevronRightIcon className="size-4 md:size-5 stroke-[1.7px]" />
-          </Button>
+          <ChatToolbarButton>
+            <GiftIcon />
+          </ChatToolbarButton>
+          <ChatToolbarButton>
+            <CalendarDaysIcon />
+          </ChatToolbarButton>
+          <ChatToolbarButton>
+            <SquareChevronRightIcon />
+          </ChatToolbarButton>
         </ChatToolbarAddonEnd>
       </ChatToolbar>
 

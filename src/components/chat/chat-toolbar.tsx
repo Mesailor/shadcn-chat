@@ -3,6 +3,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 export function ChatToolbar({
   children,
@@ -86,5 +87,24 @@ export function ChatToolbarAddonEnd({
     >
       {children}
     </div>
+  );
+}
+
+export function ChatToolbarButton({
+  children,
+  className,
+  ...props
+}: { children?: React.ReactNode } & React.ComponentProps<typeof Button>) {
+  return (
+    <Button
+      variant="ghost"
+      className={cn(
+        "size-8 @md/chat:size-9 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='size-'])]:@md/chat:size-5 [&_svg]:stroke-[1.7px]",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </Button>
   );
 }
