@@ -29,10 +29,25 @@ export function ChatToolbar({
   );
 }
 
+/** Modifier key that allows inserting a new line instead of submitting */
+const NEWLINE_MODIFIER_KEY = "shiftKey" as const;
+
 export function ChatToolbarTextarea({
   className,
+  onSubmit,
+  onKeyDown,
   ...props
-}: React.ComponentProps<typeof Textarea>) {
+}: {
+  onSubmit?: () => void;
+} & React.ComponentProps<typeof Textarea>) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e[NEWLINE_MODIFIER_KEY]) {
+      e.preventDefault();
+      onSubmit?.();
+    }
+    onKeyDown?.(e);
+  };
+
   return (
     <div className="flex-1 min-w-0 order-2 grid">
       <Textarea
@@ -44,6 +59,7 @@ export function ChatToolbarTextarea({
           className,
         )}
         rows={1}
+        onKeyDown={handleKeyDown}
         {...props}
       />
     </div>
