@@ -20,31 +20,11 @@ export function ChatToolbar({
       <div
         className={cn(
           "border rounded-md py-2 px-3",
-          "grid grid-cols-[max-content_auto_max-content] gap-x-2"
+          "flex flex-wrap items-start gap-x-2",
         )}
       >
         {children}
       </div>
-    </div>
-  );
-}
-
-export function ChatToolbarAddonStart({
-  children,
-  className,
-  ...props
-}: {
-  children?: React.ReactNode;
-} & React.ComponentProps<"div">) {
-  return (
-    <div
-      className={cn(
-        "h-10 row-start-1 col-start-1 flex items-center gap-1.5",
-        className
-      )}
-      {...props}
-    >
-      {children}
     </div>
   );
 }
@@ -54,14 +34,14 @@ export function ChatToolbarTextarea({
   ...props
 }: React.ComponentProps<typeof Textarea>) {
   return (
-    <div className="row-span-2 flex-1 grid">
+    <div className="flex-1 min-w-0 order-2 grid">
       <Textarea
         id="toolbar-input"
         placeholder="Type your message..."
         className={cn(
           "h-fit min-h-10 max-h-30 px-1 @md/chat:text-base",
           "border-none shadow-none focus-visible:border-none focus-visible:ring-0 placeholder:whitespace-nowrap resize-none",
-          className
+          className,
         )}
         rows={1}
         {...props}
@@ -70,18 +50,28 @@ export function ChatToolbarTextarea({
   );
 }
 
-export function ChatToolbarAddonEnd({
+const chatToolbarAddonAlignStyles = {
+  "inline-start": "order-1",
+  "inline-end": "order-3",
+  "block-start": "order-0 w-full",
+  "block-end": "order-4 w-full",
+};
+
+export function ChatToolbarAddon({
   children,
   className,
+  align = "inline-start",
   ...props
 }: {
   children?: React.ReactNode;
+  align?: "inline-start" | "inline-end" | "block-start" | "block-end";
 } & React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        "h-10 row-start-1 col-start-3 flex items-center gap-1 @md/chat:gap-1.5",
-        className
+        "h-10 flex items-center gap-1.5",
+        chatToolbarAddonAlignStyles[align],
+        className,
       )}
       {...props}
     >

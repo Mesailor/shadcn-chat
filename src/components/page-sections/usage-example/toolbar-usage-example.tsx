@@ -1,7 +1,6 @@
 import {
   ChatToolbar,
-  ChatToolbarAddonEnd,
-  ChatToolbarAddonStart,
+  ChatToolbarAddon,
   ChatToolbarButton,
   ChatToolbarTextarea,
 } from "@/components/chat/chat-toolbar";
@@ -28,14 +27,14 @@ export function ToolbarUsageExample() {
         </p>
       </div>
 
-      <ChatToolbar>
-        <ChatToolbarAddonStart>
+      <ChatToolbar className="static">
+        <ChatToolbarAddon align="inline-start">
           <ChatToolbarButton>
             <PlusIcon />
           </ChatToolbarButton>
-        </ChatToolbarAddonStart>
+        </ChatToolbarAddon>
         <ChatToolbarTextarea className="md:text-base" />
-        <ChatToolbarAddonEnd>
+        <ChatToolbarAddon align="inline-end">
           <ChatToolbarButton>
             <GiftIcon />
           </ChatToolbarButton>
@@ -45,7 +44,7 @@ export function ToolbarUsageExample() {
           <ChatToolbarButton>
             <SquareChevronRightIcon />
           </ChatToolbarButton>
-        </ChatToolbarAddonEnd>
+        </ChatToolbarAddon>
       </ChatToolbar>
 
       <CodeBlock language="jsx" code={codeString} showLineNumbers />

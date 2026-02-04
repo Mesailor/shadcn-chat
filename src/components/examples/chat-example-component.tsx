@@ -24,8 +24,7 @@ import {
 } from "@/components/chat/chat-header";
 import {
   ChatToolbar,
-  ChatToolbarAddonEnd,
-  ChatToolbarAddonStart,
+  ChatToolbarAddon,
   ChatToolbarButton,
   ChatToolbarTextarea,
 } from "@/components/chat/chat-toolbar";
@@ -125,13 +124,13 @@ export function ChatExampleComponent() {
       </ChatMessages>
 
       <ChatToolbar>
-        <ChatToolbarAddonStart>
+        <ChatToolbarAddon align="inline-start">
           <ChatToolbarButton>
             <PlusIcon />
           </ChatToolbarButton>
-        </ChatToolbarAddonStart>
+        </ChatToolbarAddon>
         <ChatToolbarTextarea />
-        <ChatToolbarAddonEnd>
+        <ChatToolbarAddon align="inline-end">
           <ChatToolbarButton>
             <GiftIcon />
           </ChatToolbarButton>
@@ -141,7 +140,7 @@ export function ChatExampleComponent() {
           <ChatToolbarButton>
             <SquareChevronRightIcon />
           </ChatToolbarButton>
-        </ChatToolbarAddonEnd>
+        </ChatToolbarAddon>
       </ChatToolbar>
     </Chat>
   );
