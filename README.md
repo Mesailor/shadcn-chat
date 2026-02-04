@@ -265,27 +265,33 @@ export function DateItem({
 
 ### Chat Toolbar
 
-A sticky bottom input area with a three-column grid layout (AddonStart, Textarea, AddonEnd) for message composition with optional action buttons on both sides.
+A sticky bottom input area for message composition. Use `ChatToolbar` as the container, `ChatToolbarTextarea` for the input field with built-in submit handling (Enter to submit, Shift+Enter for new line), and `ChatToolbarAddon` to position action buttons using the `align` prop ("inline-start", "inline-end", "block-start", "block-end"). Use `ChatToolbarButton` for consistent icon button styling.
 
 ```tsx
 <ChatToolbar>
-  <ChatToolbarAddonStart>
-    <Button variant="ghost" className="size-8 @md/chat:size-9">
-      <PlusIcon className="size-5 @md/chat:size-6 stroke-[1.7px]" />
-    </Button>
-  </ChatToolbarAddonStart>
-  <ChatToolbarTextarea />
-  <ChatToolbarAddonEnd>
-    <Button variant="ghost" className="size-8 @md/chat:size-9">
-      <GiftIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
-    </Button>
-    <Button variant="ghost" className="size-8 @md/chat:size-9">
-      <CalendarDaysIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
-    </Button>
-    <Button variant="ghost" className="size-8 @md/chat:size-9">
-      <SquareChevronRightIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
-    </Button>
-  </ChatToolbarAddonEnd>
+  <ChatToolbarAddon align="inline-start">
+    <ChatToolbarButton>
+      <PlusIcon />
+    </ChatToolbarButton>
+  </ChatToolbarAddon>
+
+  <ChatToolbarTextarea
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+    onSubmit={() => handleSendMessage()}
+  />
+
+  <ChatToolbarAddon align="inline-end">
+    <ChatToolbarButton>
+      <GiftIcon />
+    </ChatToolbarButton>
+    <ChatToolbarButton>
+      <CalendarDaysIcon />
+    </ChatToolbarButton>
+    <ChatToolbarButton>
+      <SquareChevronRightIcon />
+    </ChatToolbarButton>
+  </ChatToolbarAddon>
 </ChatToolbar>
 ```
 
