@@ -34,8 +34,14 @@ pnpm dlx shadcn@latest add textarea
 
 The root container component that establishes the chat layout structure with container queries and flex column layout for header, messages, and toolbar sections.
 
+#### Responsiveness
+
+The `Chat` component uses container queries (ex. [`@2xl/chat:`](https://tailwindcss.com/docs/responsive-design#named-containers)) to adapt its layout based on the available width, ensuring an optimal user experience across different device sizes.
+
+Make sure that the `Chat` component is given a **defined height or max-height** (ex. via CSS or parent container) to enable proper scrolling behavior for the messages section.
+
 ```tsx
-<Chat>
+<Chat className="h-screen">
   <ChatHeader>{/* Header Content */}</ChatHeader>
 
   <ChatMessages>{/* Messages Content */}</ChatMessages>
