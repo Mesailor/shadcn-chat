@@ -8,7 +8,7 @@ import {
   ChatEventContent,
   ChatEventTime,
   ChatEventTitle,
-} from "@/components/chat/chat-event";
+} from "@/registry/new-york/chat/chat-event";
 import { DateItem } from "@/components/message-items/date-item";
 import { Anchor } from "@/components/common/anchor";
 import { HighlightedComponent } from "@/components/ui/typography";

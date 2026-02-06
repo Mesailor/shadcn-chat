@@ -7,8 +7,12 @@ import {
   AvatarImageProps,
   AvatarProps,
 } from "@radix-ui/react-avatar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/registry/new-york/ui/avatar";
+import { Button } from "@/registry/new-york/ui/button";
 
 export function ChatHeader({
   children,

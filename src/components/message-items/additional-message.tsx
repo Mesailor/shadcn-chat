@@ -5,7 +5,7 @@ import {
   ChatEventBody,
   ChatEventContent,
   ChatEventTime,
-} from "../chat/chat-event";
+} from "@/registry/new-york/chat/chat-event";
 
 export function AdditionalMessage({
   content,

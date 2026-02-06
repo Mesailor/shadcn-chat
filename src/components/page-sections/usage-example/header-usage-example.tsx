@@ -4,7 +4,7 @@ import {
   ChatHeaderAvatar,
   ChatHeaderButton,
   ChatHeaderMain,
-} from "@/components/chat/chat-header";
+} from "@/registry/new-york/chat/chat-header";
 import {
   InputGroup,
   InputGroupAddon,

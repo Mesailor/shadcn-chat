@@ -14,21 +14,21 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Chat } from "@/components/chat/chat";
+import { Chat } from "@/registry/new-york/chat/chat";
 import {
   ChatHeader,
   ChatHeaderAddon,
   ChatHeaderAvatar,
   ChatHeaderButton,
   ChatHeaderMain,
-} from "@/components/chat/chat-header";
+} from "@/registry/new-york/chat/chat-header";
 import {
   ChatToolbar,
   ChatToolbarAddon,
   ChatToolbarButton,
   ChatToolbarTextarea,
-} from "@/components/chat/chat-toolbar";
-import { ChatMessages } from "@/components/chat/chat-messages";
+} from "@/registry/new-york/chat/chat-toolbar";
+import { ChatMessages } from "@/registry/new-york/chat/chat-messages";
 import { MESSAGES } from "@/data/messages";
 import { PrimaryMessage } from "@/components/message-items/primary-message";
 import { DateItem } from "@/components/message-items/date-item";

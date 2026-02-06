@@ -3,7 +3,7 @@ import {
   ChatToolbarAddon,
   ChatToolbarButton,
   ChatToolbarTextarea,
-} from "@/components/chat/chat-toolbar";
+} from "@/registry/new-york/chat/chat-toolbar";
 import { CodeBlock } from "@/components/common/code-block";
 import {
   CalendarDaysIcon,

@@ -11,7 +11,7 @@ export function ChatMessages({
     <div
       className={cn(
         "flex-1 flex flex-col-reverse overflow-auto py-2",
-        className,
+        className
       )}
       {...props}
     >

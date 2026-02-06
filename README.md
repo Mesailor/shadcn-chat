@@ -14,17 +14,33 @@ The chat component is compatible with any environment that supports [React](http
 
 This guide assumes you are already familiar with both of these technologies. If you are not, you can review their documentations first.
 
-### Quick Start
+### Command
+
+```bash
+# pnpm
+pnpm dlx shadcn@latest add https://shadcn-chat.vercel.app/r/chat.json
+
+# npm
+npx shadcn@latest add https://shadcn-chat.vercel.app/r/chat.json
+
+# yarn
+yarn dlx shadcn@latest add https://shadcn-chat.vercel.app/r/chat.json
+
+# bun
+bunx --bun shadcn@latest add https://shadcn-chat.vercel.app/r/chat.json
+```
+
+### Manual
 
 1. **Install shadcn/ui:** If you haven't already, initialize shadcn/ui in your project by following the [official installation guide](https://ui.shadcn.com/docs/installation).
 
 2. **Install Dependencies:** Ensure you have the necessary primitives installed.
 
 ```bash
-pnpm dlx shadcn@latest add textarea
+pnpm dlx shadcn@latest add avatar button textarea
 ```
 
-3. **Copy the Chat Component:** Copy the chat component files from the [repository](https://github.com/Mesailor/shadcn-chat/tree/main/src/components/chat) into your project's components directory (e.g., `@/components/chat`).
+3. **Copy the Chat Component:** Copy the chat component files from the [repository](https://github.com/Mesailor/shadcn-chat/tree/main/registry/new-york/chat) into your project's components directory (e.g., `@/components/chat`).
 
 4. **Import and Use:** Import the component into your page and use it as needed.
 

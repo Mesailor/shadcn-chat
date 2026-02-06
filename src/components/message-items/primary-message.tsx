@@ -8,7 +8,7 @@ import {
   ChatEventContent,
   ChatEventTime,
   ChatEventTitle,
-} from "../chat/chat-event";
+} from "@/registry/new-york/chat/chat-event";
 
 export function PrimaryMessage({
   avatarSrc,
