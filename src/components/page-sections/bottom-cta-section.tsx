@@ -1,5 +1,4 @@
 import { Button } from "../ui/button";
-import { GitHubInvertocatIcon } from "../icons/git-hub-invertocat-icon";
 import { MessageCircleIcon, StarIcon } from "lucide-react";
 
 export function BottomCTASection() {
