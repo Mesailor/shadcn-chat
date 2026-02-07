@@ -171,18 +171,6 @@ A flexible message row component for displaying any message or event in the chat
 #### Primary Message
 
 ```tsx
-import { ReactNode } from "react";
-import { cn } from "@/lib/utils";
-import {
-  ChatEvent,
-  ChatEventAddon,
-  ChatEventAvatar,
-  ChatEventBody,
-  ChatEventContent,
-  ChatEventTime,
-  ChatEventTitle,
-} from "@/components/ui/chat-event";
-
 export function PrimaryMessage({
   avatarSrc,
   avatarAlt,
@@ -224,15 +212,6 @@ export function PrimaryMessage({
 #### Additional Message
 
 ```tsx
-import { ReactNode } from "react";
-import {
-  ChatEvent,
-  ChatEventAddon,
-  ChatEventBody,
-  ChatEventContent,
-  ChatEventTime,
-} from "@/components/ui/chat-event";
-
 export function AdditionalMessage({
   content,
   timestamp,
@@ -260,10 +239,6 @@ export function AdditionalMessage({
 #### Date Item
 
 ```tsx
-import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-import { ChatEvent, ChatEventTime } from "@/components/ui/chat-event";
-
 export function DateItem({
   timestamp,
   className,

@@ -94,19 +94,7 @@ export function EventUsageExample() {
   );
 }
 
-const primaryMessageCodeString = `import { ReactNode } from "react";
-import { cn } from "@/lib/utils";
-import {
-  ChatEvent,
-  ChatEventAddon,
-  ChatEventAvatar,
-  ChatEventBody,
-  ChatEventContent,
-  ChatEventTime,
-  ChatEventTitle,
-} from "@/components/ui/chat-event";
-
-export function PrimaryMessage({
+const primaryMessageCodeString = `export function PrimaryMessage({
   avatarSrc,
   avatarAlt,
   avatarFallback,
@@ -144,16 +132,7 @@ export function PrimaryMessage({
 }
 `;
 
-const additionalMessageCodeString = `import { ReactNode } from "react";
-import {
-  ChatEvent,
-  ChatEventAddon,
-  ChatEventBody,
-  ChatEventContent,
-  ChatEventTime,
-} from "@/components/ui/chat-event";
-
-export function AdditionalMessage({
+const additionalMessageCodeString = `export function AdditionalMessage({
   content,
   timestamp,
 }: {
@@ -177,11 +156,7 @@ export function AdditionalMessage({
 }
 `;
 
-const dateItemCodeString = `import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-import { ChatEvent, ChatEventTime } from "@/components/ui/chat-event";
-
-export function DateItem({
+const dateItemCodeString = `export function DateItem({
   timestamp,
   className,
 }: {
