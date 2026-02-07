@@ -1,0 +1,161 @@
+# Shadcn Chat Component
+
+> A set of composable, headless chat UI components built on shadcn/ui and Radix UI primitives. All components are presentational (no built-in state management) and use Tailwind CSS container queries for responsive sizing.
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://shadcn-chat.vercel.app/r/chat.json
+```
+
+Prerequisites: React, Tailwind CSS 4.x, and shadcn/ui configured (avatar, button, textarea primitives).
+
+## Files
+
+- `chat.tsx`: Root container — `Chat`
+- `chat-header.tsx`: Header — `ChatHeader`, `ChatHeaderMain`, `ChatHeaderAddon`, `ChatHeaderAvatar`, `ChatHeaderButton`
+- `chat-messages.tsx`: Message area — `ChatMessages`
+- `chat-event.tsx`: Message row — `ChatEvent`, `ChatEventAddon`, `ChatEventBody`, `ChatEventTitle`, `ChatEventContent`, `ChatEventAvatar`, `ChatEventTime`
+- `chat-toolbar.tsx`: Input area — `ChatToolbar`, `ChatToolbarTextarea`, `ChatToolbarAddon`, `ChatToolbarButton`
+
+## Component Hierarchy
+
+```
+Chat (root — give it a height, e.g. className="h-screen")
+├── ChatHeader (sticky top)
+│   ├── ChatHeaderAddon        ← left items
+│   │   └── ChatHeaderAvatar
+│   ├── ChatHeaderMain         ← center (flex-1, takes remaining space)
+│   └── ChatHeaderAddon        ← right items
+│       └── ChatHeaderButton (×N)
+│
+├── ChatMessages (scrollable, flex-col-reverse — newest at bottom)
+│   └── ChatEvent (repeated for each message/event)
+│       ├── ChatEventAddon     ← side column (avatar or hover timestamp)
+│       │   ├── ChatEventAvatar (primary messages)
+│       │   └── ChatEventTime  (follow-up messages, visible on hover)
+│       └── ChatEventBody      ← main content (flex-1)
+│           ├── ChatEventTitle
+│           │   ├── sender name
+│           │   └── ChatEventTime
+│           └── ChatEventContent
+│
+└── ChatToolbar (sticky bottom)
+    ├── ChatToolbarAddon (align="inline-start") ← left buttons
+    │   └── ChatToolbarButton
+    ├── ChatToolbarTextarea                      ← Enter to submit, Shift+Enter for newline
+    └── ChatToolbarAddon (align="inline-end")    ← right buttons
+        └── ChatToolbarButton (×N)
+```
+
+## Key Behaviors
+
+- **Container queries**: `Chat` creates `@container/chat`. Children use `@md/chat:` and `@2xl/chat:` breakpoints to adapt to container width (not viewport).
+- **ChatMessages uses `flex-col-reverse`**: The first DOM child appears at the bottom. New messages should be prepended or the array should be ordered newest-first.
+- **ChatToolbarTextarea submit**: Enter fires `onSubmit()`, Shift+Enter inserts a newline. It is a controlled component — pass `value` and `onChange`.
+- **ChatToolbarAddon `align` prop**: `"inline-start"` (left), `"inline-end"` (right), `"block-start"` (above), `"block-end"` (below) — positions buttons relative to the textarea via CSS `order`.
+- **ChatEventTime formats**: `"time"`, `"date"`, `"dateTime"` (default), `"longDate"`, `"relative"` — locale-aware via `Intl.DateTimeFormat`.
+- **All components are presentational**: State (messages, input value, etc.) must be managed by the parent.
+
+## Common Patterns
+
+### Full chat layout
+
+```tsx
+<Chat className="h-screen">
+  <ChatHeader>
+    <ChatHeaderAddon>
+      <ChatHeaderAvatar src="/avatar.png" alt="@user" fallback="AS" />
+    </ChatHeaderAddon>
+    <ChatHeaderMain>
+      <span className="font-medium">Ann Smith</span>
+    </ChatHeaderMain>
+    <ChatHeaderAddon>
+      <ChatHeaderButton><MoreHorizontalIcon /></ChatHeaderButton>
+    </ChatHeaderAddon>
+  </ChatHeader>
+
+  <ChatMessages>
+    {messages.map((msg) => (
+      <ChatEvent key={msg.id} className="hover:bg-accent">
+        <ChatEventAddon>
+          <ChatEventAvatar src={msg.avatarUrl} fallback={msg.initials} />
+        </ChatEventAddon>
+        <ChatEventBody>
+          <ChatEventTitle>
+            <span className="font-medium">{msg.senderName}</span>
+            <ChatEventTime timestamp={msg.timestamp} />
+          </ChatEventTitle>
+          <ChatEventContent>{msg.content}</ChatEventContent>
+        </ChatEventBody>
+      </ChatEvent>
+    ))}
+  </ChatMessages>
+
+  <ChatToolbar>
+    <ChatToolbarAddon align="inline-start">
+      <ChatToolbarButton><PlusIcon /></ChatToolbarButton>
+    </ChatToolbarAddon>
+    <ChatToolbarTextarea
+      value={message}
+      onChange={(e) => setMessage(e.target.value)}
+      onSubmit={() => handleSend()}
+    />
+    <ChatToolbarAddon align="inline-end">
+      <ChatToolbarButton><SendIcon /></ChatToolbarButton>
+    </ChatToolbarAddon>
+  </ChatToolbar>
+</Chat>
+```
+
+### Primary message (with avatar)
+
+```tsx
+<ChatEvent className="hover:bg-accent">
+  <ChatEventAddon>
+    <ChatEventAvatar src={avatarSrc} alt={username} fallback={initials} />
+  </ChatEventAddon>
+  <ChatEventBody>
+    <ChatEventTitle>
+      <span className="font-medium">{senderName}</span>
+      <ChatEventTime timestamp={timestamp} />
+    </ChatEventTitle>
+    <ChatEventContent>{content}</ChatEventContent>
+  </ChatEventBody>
+</ChatEvent>
+```
+
+### Follow-up message (same sender, no avatar)
+
+```tsx
+<ChatEvent className="hover:bg-accent group">
+  <ChatEventAddon>
+    <ChatEventTime
+      timestamp={timestamp}
+      format="time"
+      className="text-right text-[8px] @md/chat:text-[10px] group-hover:visible invisible"
+    />
+  </ChatEventAddon>
+  <ChatEventBody>
+    <ChatEventContent>{content}</ChatEventContent>
+  </ChatEventBody>
+</ChatEvent>
+```
+
+### Date separator
+
+```tsx
+<ChatEvent className="items-center gap-1 my-4">
+  <Separator className="flex-1" />
+  <ChatEventTime timestamp={timestamp} format="longDate" className="font-semibold min-w-max" />
+  <Separator className="flex-1" />
+</ChatEvent>
+```
+
+## Exported Types
+
+From `chat.tsx`: `ChatProps`
+From `chat-header.tsx`: `ChatHeaderProps`, `ChatHeaderMainProps`, `ChatHeaderAddonProps`, `ChatHeaderAvatarProps`, `ChatHeaderButtonProps`
+From `chat-messages.tsx`: `ChatMessagesProps`
+From `chat-event.tsx`: `ChatEventProps`, `ChatEventAddonProps`, `ChatEventBodyProps`, `ChatEventTitleProps`, `ChatEventContentProps`, `ChatEventAvatarProps`, `ChatEventTimeProps`, `ChatEventTimeFormat`
+From `chat-toolbar.tsx`: `ChatToolbarProps`, `ChatToolbarTextareaProps`, `ChatToolbarAddonProps`, `ChatToolbarButtonProps`

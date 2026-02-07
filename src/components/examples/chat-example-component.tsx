@@ -9,27 +9,26 @@ import {
   SquareChevronRightIcon,
   VideoIcon,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Button } from "@/components/ui/button";
-import { Chat } from "@/components/chat/chat";
+import { Chat } from "@/registry/new-york/chat/chat";
 import {
   ChatHeader,
+  ChatHeaderAddon,
+  ChatHeaderAvatar,
+  ChatHeaderButton,
   ChatHeaderMain,
-  ChatHeaderEnd,
-  ChatHeaderStart,
-} from "@/components/chat/chat-header";
+} from "@/registry/new-york/chat/chat-header";
 import {
   ChatToolbar,
-  ChatToolbarAddonEnd,
-  ChatToolbarAddonStart,
+  ChatToolbarAddon,
+  ChatToolbarButton,
   ChatToolbarTextarea,
-} from "@/components/chat/chat-toolbar";
-import { ChatMessages } from "@/components/chat/chat-messages";
+} from "@/registry/new-york/chat/chat-toolbar";
+import { ChatMessages } from "@/registry/new-york/chat/chat-messages";
 import { MESSAGES } from "@/data/messages";
 import { PrimaryMessage } from "@/components/message-items/primary-message";
 import { DateItem } from "@/components/message-items/date-item";
@@ -39,17 +38,15 @@ export function ChatExampleComponent() {
   return (
     <Chat>
       <ChatHeader className="border-b">
-        <ChatHeaderStart>
-          <Avatar className="rounded-full size-6">
-            <AvatarImage
-              src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png"
-              alt="@annsmith"
-            />
-            <AvatarFallback>AS</AvatarFallback>
-          </Avatar>
-          <span className="font-medium">Ann Smith</span>
-        </ChatHeaderStart>
+        <ChatHeaderAddon>
+          <ChatHeaderAvatar
+            src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png"
+            alt="@annsmith"
+            fallback="AS"
+          />
+        </ChatHeaderAddon>
         <ChatHeaderMain>
+          <span className="font-medium">Ann Smith</span>
           <span className="text-sm font-semibold">AKA</span>
           <span className="flex-1 grid">
             <span className="text-sm font-medium truncate">
@@ -57,29 +54,23 @@ export function ChatExampleComponent() {
             </span>
           </span>
         </ChatHeaderMain>
-        <ChatHeaderEnd>
+        <ChatHeaderAddon>
           <InputGroup className="@2xl/chat:flex hidden">
             <InputGroupInput placeholder="Search..." />
             <InputGroupAddon>
               <SearchIcon />
             </InputGroupAddon>
           </InputGroup>
-          <Button
-            variant="ghost"
-            className="size-8 @2xl/chat:inline-flex hidden"
-          >
+          <ChatHeaderButton className=" @2xl/chat:inline-flex hidden">
             <PhoneIcon />
-          </Button>
-          <Button
-            variant="ghost"
-            className="size-8 @2xl/chat:inline-flex hidden"
-          >
+          </ChatHeaderButton>
+          <ChatHeaderButton className=" @2xl/chat:inline-flex hidden">
             <VideoIcon />
-          </Button>
-          <Button variant="ghost" className="size-8">
+          </ChatHeaderButton>
+          <ChatHeaderButton>
             <MoreHorizontalIcon />
-          </Button>
-        </ChatHeaderEnd>
+          </ChatHeaderButton>
+        </ChatHeaderAddon>
       </ChatHeader>
 
       <ChatMessages className="scrollbar-hidden">
@@ -133,23 +124,23 @@ export function ChatExampleComponent() {
       </ChatMessages>
 
       <ChatToolbar>
-        <ChatToolbarAddonStart>
-          <Button variant="ghost" className="size-8 @md/chat:size-9">
-            <PlusIcon className="size-5 @md/chat:size-6 stroke-[1.7px]" />
-          </Button>
-        </ChatToolbarAddonStart>
+        <ChatToolbarAddon align="inline-start">
+          <ChatToolbarButton>
+            <PlusIcon />
+          </ChatToolbarButton>
+        </ChatToolbarAddon>
         <ChatToolbarTextarea />
-        <ChatToolbarAddonEnd>
-          <Button variant="ghost" className="size-8 @md/chat:size-9">
-            <GiftIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
-          </Button>
-          <Button variant="ghost" className="size-8 @md/chat:size-9">
-            <CalendarDaysIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
-          </Button>
-          <Button variant="ghost" className="size-8 @md/chat:size-9">
-            <SquareChevronRightIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
-          </Button>
-        </ChatToolbarAddonEnd>
+        <ChatToolbarAddon align="inline-end">
+          <ChatToolbarButton>
+            <GiftIcon />
+          </ChatToolbarButton>
+          <ChatToolbarButton>
+            <CalendarDaysIcon />
+          </ChatToolbarButton>
+          <ChatToolbarButton>
+            <SquareChevronRightIcon />
+          </ChatToolbarButton>
+        </ChatToolbarAddon>
       </ChatToolbar>
     </Chat>
   );

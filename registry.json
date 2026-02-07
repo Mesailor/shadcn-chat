@@ -1,0 +1,42 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "shadcn-chat",
+  "homepage": "https://shadcn-chat.vercel.app",
+  "items": [
+    {
+      "name": "chat",
+      "type": "registry:component",
+      "title": "Chat",
+      "description": "A set of composable chat UI components with container query support.",
+      "registryDependencies": ["avatar", "button", "textarea"],
+      "dependencies": ["@radix-ui/react-avatar"],
+      "files": [
+        {
+          "path": "registry/new-york/chat/chat.tsx",
+          "type": "registry:file",
+          "target": "components/chat/chat.tsx"
+        },
+        {
+          "path": "registry/new-york/chat/chat-header.tsx",
+          "type": "registry:file",
+          "target": "components/chat/chat-header.tsx"
+        },
+        {
+          "path": "registry/new-york/chat/chat-messages.tsx",
+          "type": "registry:file",
+          "target": "components/chat/chat-messages.tsx"
+        },
+        {
+          "path": "registry/new-york/chat/chat-toolbar.tsx",
+          "type": "registry:file",
+          "target": "components/chat/chat-toolbar.tsx"
+        },
+        {
+          "path": "registry/new-york/chat/chat-event.tsx",
+          "type": "registry:file",
+          "target": "components/chat/chat-event.tsx"
+        }
+      ]
+    }
+  ]
+}

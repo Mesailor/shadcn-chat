@@ -12,19 +12,35 @@ Checkout a [live demo](https://shadcn-chat.vercel.app)
 
 The chat component is compatible with any environment that supports [React](https://react.dev/learn) and has [shadcn/ui](https://ui.shadcn.com/docs) configured.
 
-This guide assumes you are already familiar with both of these technologies. If you are not, please review their documentation first.
+This guide assumes you are already familiar with both of these technologies. If you are not, you can review their documentations first.
 
-### Quick Start
+### Command
+
+```bash
+# pnpm
+pnpm dlx shadcn@latest add https://shadcn-chat.vercel.app/r/chat.json
+
+# npm
+npx shadcn@latest add https://shadcn-chat.vercel.app/r/chat.json
+
+# yarn
+yarn dlx shadcn@latest add https://shadcn-chat.vercel.app/r/chat.json
+
+# bun
+bunx --bun shadcn@latest add https://shadcn-chat.vercel.app/r/chat.json
+```
+
+### Manual
 
 1. **Install shadcn/ui:** If you haven't already, initialize shadcn/ui in your project by following the [official installation guide](https://ui.shadcn.com/docs/installation).
 
 2. **Install Dependencies:** Ensure you have the necessary primitives installed.
 
 ```bash
-pnpm dlx shadcn@latest add textarea
+pnpm dlx shadcn@latest add avatar button textarea
 ```
 
-3. **Copy the Chat Component:** Copy the chat component files from the [repository](https://github.com/Mesailor/shadcn-chat/tree/main/src/components/chat) into your project's components directory (e.g., `@/components/chat`).
+3. **Copy the Chat Component:** Copy the chat component files from the [repository](https://github.com/Mesailor/shadcn-chat/tree/main/registry/new-york/chat) into your project's components directory (e.g., `@/components/chat`).
 
 4. **Import and Use:** Import the component into your page and use it as needed.
 
@@ -34,8 +50,14 @@ pnpm dlx shadcn@latest add textarea
 
 The root container component that establishes the chat layout structure with container queries and flex column layout for header, messages, and toolbar sections.
 
+#### Responsiveness
+
+The `Chat` component uses container queries (ex. [`@2xl/chat:`](https://tailwindcss.com/docs/responsive-design#named-containers)) to adapt its layout based on the available width, ensuring an optimal user experience across different device sizes.
+
+Make sure that the `Chat` component is given a **defined height or max-height** (ex. via CSS or parent container) to enable proper scrolling behavior for the messages section.
+
 ```tsx
-<Chat>
+<Chat className="h-screen">
   <ChatHeader>{/* Header Content */}</ChatHeader>
 
   <ChatMessages>{/* Messages Content */}</ChatMessages>
@@ -46,38 +68,43 @@ The root container component that establishes the chat layout structure with con
 
 ### Chat Header
 
-A sticky header component with three sections (Start, Main, End) for displaying chat participant info, status, search, and action buttons.
+A sticky header component with flexible layout. Use `ChatHeaderMain` for the primary content area (takes remaining space) and `ChatHeaderAddon` for grouping items on either side. Includes `ChatHeaderAvatar` for profile images and `ChatHeaderButton` for action buttons.
 
 ```tsx
 <ChatHeader className="border-b">
-  <ChatHeaderStart>
-    <Avatar className="rounded-full size-6">
-      <AvatarImage src="https://github.com/evilrabbit.png" alt="@evilrabbit" />
-      <AvatarFallback>ER</AvatarFallback>
-    </Avatar>
-    <span className="font-medium">Evil Rabbit</span>
-  </ChatHeaderStart>
+  <ChatHeaderAddon>
+    <ChatHeaderAvatar
+      src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png"
+      alt="@annsmith"
+      fallback="AS"
+    />
+  </ChatHeaderAddon>
+
   <ChatHeaderMain>
+    <span className="font-medium">Ann Smith</span>
     <span className="text-sm font-semibold">AKA</span>
-    <span className="text-sm font-medium">Chocolate Bunny</span>
+    <span className="flex-1 grid">
+      <span className="text-sm font-medium truncate">Front-end developer</span>
+    </span>
   </ChatHeaderMain>
-  <ChatHeaderEnd>
+
+  <ChatHeaderAddon>
     <InputGroup className="@2xl/chat:flex hidden">
       <InputGroupInput placeholder="Search..." />
       <InputGroupAddon>
         <SearchIcon />
       </InputGroupAddon>
     </InputGroup>
-    <Button variant="ghost" className="size-8 @2xl/chat:inline-flex hidden">
+    <ChatHeaderButton className=" @2xl/chat:inline-flex hidden">
       <PhoneIcon />
-    </Button>
-    <Button variant="ghost" className="size-8 @2xl/chat:inline-flex hidden">
+    </ChatHeaderButton>
+    <ChatHeaderButton className=" @2xl/chat:inline-flex hidden">
       <VideoIcon />
-    </Button>
-    <Button variant="ghost" className="size-8">
+    </ChatHeaderButton>
+    <ChatHeaderButton>
       <MoreHorizontalIcon />
-    </Button>
-  </ChatHeaderEnd>
+    </ChatHeaderButton>
+  </ChatHeaderAddon>
 </ChatHeader>
 ```
 
@@ -139,23 +166,11 @@ A scrollable flex container with reverse column direction that displays chat mes
 
 ### Chat Event
 
-A flexible message row component with Addon (for avatar/timestamp) and Body sections, supporting any message or event in the chat.
+A flexible message row component for displaying any message or event in the chat. Use `ChatEventAddon` for side content like avatars or timestamps, and `ChatEventBody` for the main content area. Inside the body, use `ChatEventTitle` for sender name and metadata, and `ChatEventContent` for the message text. Use `ChatEventAvatar` for profile images and `ChatEventTime` for localized timestamp formatting with preset formats.
 
 #### Primary Message
 
 ```tsx
-import { ReactNode } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
-import {
-  ChatEvent,
-  ChatEventAddon,
-  ChatEventBody,
-  ChatEventContent,
-  ChatEventDescription,
-  ChatEventTitle,
-} from "@/components/ui/chat-event";
-
 export function PrimaryMessage({
   avatarSrc,
   avatarAlt,
@@ -176,21 +191,17 @@ export function PrimaryMessage({
   return (
     <ChatEvent className={cn("hover:bg-accent", className)}>
       <ChatEventAddon>
-        <Avatar className="rounded-full size-8 @md/chat:size-10 mx-auto">
-          <AvatarImage src={avatarSrc} alt={avatarAlt} />
-          <AvatarFallback>{avatarFallback}</AvatarFallback>
-        </Avatar>
+        <ChatEventAvatar
+          src={avatarSrc}
+          alt={avatarAlt}
+          fallback={avatarFallback}
+        />
       </ChatEventAddon>
       <ChatEventBody>
-        <div className="flex items-baseline gap-2">
-          <ChatEventTitle>{senderName}</ChatEventTitle>
-          <ChatEventDescription>
-            {new Intl.DateTimeFormat("en-US", {
-              dateStyle: "medium",
-              timeStyle: "short",
-            }).format(timestamp)}
-          </ChatEventDescription>
-        </div>
+        <ChatEventTitle>
+          <span className="font-medium">{senderName}</span>
+          <ChatEventTime timestamp={timestamp} />
+        </ChatEventTitle>
         <ChatEventContent>{content}</ChatEventContent>
       </ChatEventBody>
     </ChatEvent>
@@ -201,15 +212,6 @@ export function PrimaryMessage({
 #### Additional Message
 
 ```tsx
-import { ReactNode } from "react";
-import {
-  ChatEvent,
-  ChatEventAddon,
-  ChatEventBody,
-  ChatEventContent,
-  ChatEventDescription,
-} from "@/components/ui/chat-event";
-
 export function AdditionalMessage({
   content,
   timestamp,
@@ -220,11 +222,11 @@ export function AdditionalMessage({
   return (
     <ChatEvent className="hover:bg-accent group">
       <ChatEventAddon>
-        <ChatEventDescription className="text-right text-[8px] @md/chat:text-[10px] group-hover:visible invisible">
-          {new Intl.DateTimeFormat("en-US", {
-            timeStyle: "short",
-          }).format(timestamp)}
-        </ChatEventDescription>
+        <ChatEventTime
+          timestamp={timestamp}
+          format="time"
+          className="text-right text-[8px] @md/chat:text-[10px] group-hover:visible invisible"
+        />
       </ChatEventAddon>
       <ChatEventBody>
         <ChatEventContent>{content}</ChatEventContent>
@@ -237,10 +239,6 @@ export function AdditionalMessage({
 #### Date Item
 
 ```tsx
-import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-import { ChatEvent } from "@/components/ui/chat-event";
-
 export function DateItem({
   timestamp,
   className,
@@ -251,11 +249,11 @@ export function DateItem({
   return (
     <ChatEvent className={cn("items-center gap-1", className)}>
       <Separator className="flex-1" />
-      <span className="text-muted-foreground text-xs font-semibold min-w-max">
-        {new Intl.DateTimeFormat("en-US", {
-          dateStyle: "long",
-        }).format(timestamp)}
-      </span>
+      <ChatEventTime
+        timestamp={timestamp}
+        format="longDate"
+        className="font-semibold min-w-max"
+      />
       <Separator className="flex-1" />
     </ChatEvent>
   );
@@ -264,27 +262,33 @@ export function DateItem({
 
 ### Chat Toolbar
 
-A sticky bottom input area with a three-column grid layout (AddonStart, Textarea, AddonEnd) for message composition with optional action buttons on both sides.
+A sticky bottom input area for message composition. Use `ChatToolbar` as the container, `ChatToolbarTextarea` for the input field with built-in submit handling (Enter to submit, Shift+Enter for new line), and `ChatToolbarAddon` to position action buttons using the `align` prop ("inline-start", "inline-end", "block-start", "block-end"). Use `ChatToolbarButton` for consistent icon button styling.
 
 ```tsx
 <ChatToolbar>
-  <ChatToolbarAddonStart>
-    <Button variant="ghost" className="size-8 @md/chat:size-9">
-      <PlusIcon className="size-5 @md/chat:size-6 stroke-[1.7px]" />
-    </Button>
-  </ChatToolbarAddonStart>
-  <ChatToolbarTextarea />
-  <ChatToolbarAddonEnd>
-    <Button variant="ghost" className="size-8 @md/chat:size-9">
-      <GiftIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
-    </Button>
-    <Button variant="ghost" className="size-8 @md/chat:size-9">
-      <CalendarDaysIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
-    </Button>
-    <Button variant="ghost" className="size-8 @md/chat:size-9">
-      <SquareChevronRightIcon className="size-4 @md/chat:size-5 stroke-[1.7px]" />
-    </Button>
-  </ChatToolbarAddonEnd>
+  <ChatToolbarAddon align="inline-start">
+    <ChatToolbarButton>
+      <PlusIcon />
+    </ChatToolbarButton>
+  </ChatToolbarAddon>
+
+  <ChatToolbarTextarea
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+    onSubmit={() => handleSendMessage()}
+  />
+
+  <ChatToolbarAddon align="inline-end">
+    <ChatToolbarButton>
+      <GiftIcon />
+    </ChatToolbarButton>
+    <ChatToolbarButton>
+      <CalendarDaysIcon />
+    </ChatToolbarButton>
+    <ChatToolbarButton>
+      <SquareChevronRightIcon />
+    </ChatToolbarButton>
+  </ChatToolbarAddon>
 </ChatToolbar>
 ```
 
