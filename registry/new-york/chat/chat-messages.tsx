@@ -12,8 +12,6 @@
  * @see {@link ChatEvent} for rendering individual messages inside this container.
  */
 
-"use client";
-
 import { cn } from "@/lib/utils";
 
 export interface ChatMessagesProps extends React.ComponentProps<"div"> {}
