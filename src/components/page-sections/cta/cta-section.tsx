@@ -37,7 +37,7 @@ export function CTASection() {
             </a>
           </Button>
         </div>
-        <p className="text-muted-foreground hidden sm:block">
+        {/* <p className="text-muted-foreground hidden sm:block">
           ...or build with AI
         </p>
         <V0Button
@@ -47,7 +47,7 @@ export function CTASection() {
           }
         >
           Open in
-        </V0Button>
+        </V0Button> */}
       </div>
     </section>
   );
