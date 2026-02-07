@@ -1,3 +1,28 @@
+/**
+ * @module chat-toolbar
+ *
+ * Sticky bottom input area for message composition. Compose
+ * `ChatToolbarTextarea`, `ChatToolbarAddon`, and `ChatToolbarButton`
+ * inside a `ChatToolbar` container.
+ *
+ * Typical structure:
+ * ```
+ * ChatToolbar
+ * ├── ChatToolbarAddon (align="inline-start")  ← left button(s)
+ * │   └── ChatToolbarButton
+ * ├── ChatToolbarTextarea                       ← auto-growing input
+ * └── ChatToolbarAddon (align="inline-end")     ← right button(s)
+ *     └── ChatToolbarButton (×N)
+ * ```
+ *
+ * The `align` prop on `ChatToolbarAddon` controls position via CSS
+ * `order`:
+ * - `"inline-start"` → left of the textarea
+ * - `"inline-end"` → right of the textarea
+ * - `"block-start"` → full-width row above the textarea
+ * - `"block-end"` → full-width row below the textarea
+ */
+
 "use client";
 
 import * as React from "react";
@@ -5,13 +30,39 @@ import { cn } from "@/lib/utils";
 import { Textarea } from "@/registry/new-york/ui/textarea";
 import { Button } from "@/registry/new-york/ui/button";
 
+export interface ChatToolbarProps extends React.ComponentProps<"div"> {
+  children?: React.ReactNode;
+}
+
+/**
+ * Sticky bottom container for the message input and action buttons.
+ * Renders a bordered, rounded inner wrapper with flex-wrap layout.
+ *
+ * @example
+ * ```tsx
+ * <ChatToolbar>
+ *   <ChatToolbarAddon align="inline-start">
+ *     <ChatToolbarButton><PlusIcon /></ChatToolbarButton>
+ *   </ChatToolbarAddon>
+ *
+ *   <ChatToolbarTextarea
+ *     value={message}
+ *     onChange={(e) => setMessage(e.target.value)}
+ *     onSubmit={() => handleSendMessage()}
+ *   />
+ *
+ *   <ChatToolbarAddon align="inline-end">
+ *     <ChatToolbarButton><GiftIcon /></ChatToolbarButton>
+ *     <ChatToolbarButton><SendIcon /></ChatToolbarButton>
+ *   </ChatToolbarAddon>
+ * </ChatToolbar>
+ * ```
+ */
 export function ChatToolbar({
   children,
   className,
   ...props
-}: {
-  children?: React.ReactNode;
-} & React.ComponentProps<"div">) {
+}: ChatToolbarProps) {
   return (
     <div
       className={cn("sticky bottom-0 p-2 pt-0 bg-background", className)}
@@ -32,14 +83,42 @@ export function ChatToolbar({
 /** Modifier key that allows inserting a new line instead of submitting */
 const NEWLINE_MODIFIER_KEY = "shiftKey" as const;
 
+export interface ChatToolbarTextareaProps extends React.ComponentProps<
+  typeof Textarea
+> {
+  /** Called when the user presses Enter (without Shift). Use this to trigger message sending. */
+  onSubmit?: () => void;
+}
+
+/**
+ * Auto-growing textarea with built-in submit handling.
+ *
+ * - **Enter** → calls `onSubmit()`
+ * - **Shift+Enter** → inserts a new line
+ *
+ * Accepts all standard `<textarea>` / shadcn `Textarea` props
+ * (`value`, `onChange`, `placeholder`, etc.).
+ *
+ * @example
+ * ```tsx
+ * const [message, setMessage] = useState("");
+ *
+ * <ChatToolbarTextarea
+ *   value={message}
+ *   onChange={(e) => setMessage(e.target.value)}
+ *   onSubmit={() => {
+ *     sendMessage(message);
+ *     setMessage("");
+ *   }}
+ * />
+ * ```
+ */
 export function ChatToolbarTextarea({
   className,
   onSubmit,
   onKeyDown,
   ...props
-}: {
-  onSubmit?: () => void;
-} & React.ComponentProps<typeof Textarea>) {
+}: ChatToolbarTextareaProps) {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e[NEWLINE_MODIFIER_KEY]) {
       e.preventDefault();
@@ -73,15 +152,46 @@ const chatToolbarAddonAlignStyles = {
   "block-end": "order-4 w-full",
 };
 
+export interface ChatToolbarAddonProps extends React.ComponentProps<"div"> {
+  children?: React.ReactNode;
+  /**
+   * Position of this addon relative to the textarea.
+   * - `"inline-start"` — left of the textarea (default)
+   * - `"inline-end"` — right of the textarea
+   * - `"block-start"` — full-width row above the textarea
+   * - `"block-end"` — full-width row below the textarea
+   */
+  align?: "inline-start" | "inline-end" | "block-start" | "block-end";
+}
+
+/**
+ * Groups action buttons at a specific position within the toolbar.
+ * Use the `align` prop to control placement relative to the textarea.
+ *
+ * @example
+ * ```tsx
+ * // Left side
+ * <ChatToolbarAddon align="inline-start">
+ *   <ChatToolbarButton><PlusIcon /></ChatToolbarButton>
+ * </ChatToolbarAddon>
+ *
+ * // Right side
+ * <ChatToolbarAddon align="inline-end">
+ *   <ChatToolbarButton><SendIcon /></ChatToolbarButton>
+ * </ChatToolbarAddon>
+ *
+ * // Full-width row above
+ * <ChatToolbarAddon align="block-start">
+ *   <ChatToolbarButton><AttachIcon /></ChatToolbarButton>
+ * </ChatToolbarAddon>
+ * ```
+ */
 export function ChatToolbarAddon({
   children,
   className,
   align = "inline-start",
   ...props
-}: {
-  children?: React.ReactNode;
-  align?: "inline-start" | "inline-end" | "block-start" | "block-end";
-} & React.ComponentProps<"div">) {
+}: ChatToolbarAddonProps) {
   return (
     <div
       className={cn(
@@ -96,11 +206,28 @@ export function ChatToolbarAddon({
   );
 }
 
+export interface ChatToolbarButtonProps extends React.ComponentProps<
+  typeof Button
+> {
+  children?: React.ReactNode;
+}
+
+/**
+ * Pre-styled ghost icon button for toolbar actions. Responsive sizing
+ * via container queries. SVG icons inside are automatically sized.
+ *
+ * @example
+ * ```tsx
+ * <ChatToolbarButton>
+ *   <SendIcon />
+ * </ChatToolbarButton>
+ * ```
+ */
 export function ChatToolbarButton({
   children,
   className,
   ...props
-}: { children?: React.ReactNode } & React.ComponentProps<typeof Button>) {
+}: ChatToolbarButtonProps) {
   return (
     <Button
       variant="ghost"
