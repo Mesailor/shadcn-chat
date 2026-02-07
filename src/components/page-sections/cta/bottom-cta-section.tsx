@@ -1,5 +1,6 @@
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { MessageCircleIcon, StarIcon } from "lucide-react";
+import { V0Button } from "./v0-button";
 
 export function BottomCTASection() {
   return (
@@ -40,6 +41,12 @@ export function BottomCTASection() {
             Share Feedback
           </a>
         </Button>
+        <V0Button
+          className="h-12 w-full sm:w-auto px-8!"
+          url={"https://v0.app/ref/VDB14Q"}
+        >
+          Sign up to
+        </V0Button>
       </div>
     </section>
   );
