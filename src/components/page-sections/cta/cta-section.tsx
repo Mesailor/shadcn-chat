@@ -1,5 +1,5 @@
-import { Button } from "../../ui/button";
-import { GitHubInvertocatIcon } from "../../icons/git-hub-invertocat-icon";
+import { Button } from "@/components/ui/button";
+import { GitHubInvertocatIcon } from "@/components/icons/git-hub-invertocat-icon";
 import { RocketIcon } from "lucide-react";
 import { V0Button } from "./v0-button";
 
