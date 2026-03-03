@@ -17,7 +17,7 @@ export function CTASection() {
             className="h-12 w-full sm:w-auto sm:flex-1 px-6! bg-linear-to-br from-sky-900 to-sky-600 hover:opacity-90 text-white"
             asChild
           >
-            <a href="#installation">
+            <a href="#quick-start">
               <RocketIcon />
               Quick Start
             </a>
