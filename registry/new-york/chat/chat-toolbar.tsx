@@ -235,6 +235,7 @@ export function ChatToolbarButton({
         "size-8 @md/chat:size-9 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='size-'])]:@md/chat:size-5 [&_svg]:stroke-[1.7px]",
         className,
       )}
+      type="button"
       {...props}
     >
       {children}
