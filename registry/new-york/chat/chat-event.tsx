@@ -222,7 +222,7 @@ export function ChatEventContent({
   ...props
 }: ChatEventContentProps) {
   return (
-    <div className={cn("text-sm @md/chat:text-base", className)} {...props}>
+    <div className={cn("text-sm @md/chat:text-base whitespace-pre-wrap", className)} {...props}>
       {children}
     </div>
   );
