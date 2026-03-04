@@ -1,5 +1,5 @@
-import { Button } from "../../ui/button";
-import { GitHubInvertocatIcon } from "../../icons/git-hub-invertocat-icon";
+import { Button } from "@/components/ui/button";
+import { GitHubInvertocatIcon } from "@/components/icons/git-hub-invertocat-icon";
 import { RocketIcon } from "lucide-react";
 import { V0Button } from "./v0-button";
 
@@ -17,7 +17,7 @@ export function CTASection() {
             className="h-12 w-full sm:w-auto sm:flex-1 px-6! bg-linear-to-br from-sky-900 to-sky-600 hover:opacity-90 text-white"
             asChild
           >
-            <a href="#installation">
+            <a href="#quick-start">
               <RocketIcon />
               Quick Start
             </a>
@@ -37,17 +37,17 @@ export function CTASection() {
             </a>
           </Button>
         </div>
-        {/* <p className="text-muted-foreground hidden sm:block">
+        <p className="text-muted-foreground hidden sm:block">
           ...or build with AI
         </p>
         <V0Button
           className="h-12 w-full sm:w-auto"
           url={
-            "https://v0.dev/chat/api/open?url=https://shadcn-chat.vercel.app/r/chat.json"
+            "https://v0.dev/chat/api/open?url=https://shadcn-chat.vercel.app/r/open-in-v0-chat.json"
           }
         >
           Open in
-        </V0Button> */}
+        </V0Button>
       </div>
     </section>
   );

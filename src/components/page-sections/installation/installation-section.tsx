@@ -32,6 +32,7 @@ export function InstallationSection() {
       <Anchor id="installation" className="border-b pb-2">
         <h2 className="text-2xl font-semibold">Installation</h2>
       </Anchor>
+
       <div className="space-y-4">
         <div className="bg-accent/50 p-4 rounded-lg">
           <p className="font-medium">Prerequisites</p>
@@ -97,10 +98,10 @@ export function InstallationSection() {
 
           {tab === "command" ? (
             <>
-            <p className="text-muted-foreground mb-4">
-              This will install all the chat components and their dependencies
-              into your project.
-            </p>
+              <p className="text-muted-foreground mb-4">
+                This will install all the chat components and their dependencies
+                into your project.
+              </p>
               <PackageManagerCodeBlock
                 commands={INSTALL_COMMANDS}
                 pm={pm}

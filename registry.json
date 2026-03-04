@@ -37,6 +37,92 @@
           "target": "components/chat/chat-event.tsx"
         }
       ]
+    },
+    {
+      "name": "chat-basic",
+      "type": "registry:block",
+      "title": "Chat Basic",
+      "description": "A basic chat example block for bootstrapping the chat UI.",
+      "registryDependencies": [
+        "https://shadcn-chat.vercel.app/r/chat.json",
+        "separator",
+        "input-group"
+      ],
+      "dependencies": [
+        "@radix-ui/react-separator",
+        "@radix-ui/react-slot",
+        "class-variance-authority"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/blocks/chat-basic/page.tsx",
+          "type": "registry:page",
+          "target": "app/chat/page.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/primary-message.tsx",
+          "type": "registry:component",
+          "target": "components/examples/primary-message.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/additional-message.tsx",
+          "type": "registry:component",
+          "target": "components/examples/additional-message.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/date-item.tsx",
+          "type": "registry:component",
+          "target": "components/examples/date-item.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/data/messages.ts",
+          "type": "registry:file",
+          "target": "data/examples/messages.ts"
+        }
+      ]
+    },
+    {
+      "name": "open-in-v0-chat",
+      "type": "registry:block",
+      "title": "Chat Basic",
+      "description": "A basic chat example block for bootstrapping the chat UI.",
+      "registryDependencies": [
+        "https://shadcn-chat.vercel.app/r/chat.json",
+        "separator",
+        "input-group"
+      ],
+      "dependencies": [
+        "@radix-ui/react-separator",
+        "@radix-ui/react-slot",
+        "class-variance-authority"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/blocks/chat-basic/page.tsx",
+          "type": "registry:page",
+          "target": "app/page.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/primary-message.tsx",
+          "type": "registry:component",
+          "target": "components/examples/primary-message.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/additional-message.tsx",
+          "type": "registry:component",
+          "target": "components/examples/additional-message.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/date-item.tsx",
+          "type": "registry:component",
+          "target": "components/examples/date-item.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/data/messages.ts",
+          "type": "registry:file",
+          "target": "data/examples/messages.ts"
+        }
+      ]
     }
   ]
 }

@@ -1,6 +1,7 @@
 import { UsageExampleSection } from "@/components/page-sections/usage-example/usage-example-section";
 import { ComponentDemoSection } from "@/components/page-sections/component-demo-section";
 import { InstallationSection } from "@/components/page-sections/installation/installation-section";
+import { QuickStartSection } from "@/components/page-sections/quick-start/quick-start-section";
 import { CTASection } from "@/components/page-sections/cta/cta-section";
 import { BottomCTASection } from "@/components/page-sections/cta/bottom-cta-section";
 import { AppHeader } from "@/components/page-sections/app-header";
@@ -13,6 +14,7 @@ export default function Home() {
         <CTASection />
 
         <ComponentDemoSection />
+        <QuickStartSection />
         <InstallationSection />
         <UsageExampleSection />
         <BottomCTASection />

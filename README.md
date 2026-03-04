@@ -6,6 +6,26 @@ A customizable chat component built with shadcn/ui and React.
 
 Checkout a [live demo](https://shadcn-chat.vercel.app)
 
+## Quick Start
+
+Get a complete, ready-to-use chat page added to your project in one command. This installs a fully wired-up `app/chat/page.tsx` with sample data and message components.
+
+```bash
+# pnpm
+pnpm dlx shadcn@latest add https://shadcn-chat.vercel.app/r/chat-basic.json
+
+# npm
+npx shadcn@latest add https://shadcn-chat.vercel.app/r/chat-basic.json
+
+# yarn
+yarn dlx shadcn@latest add https://shadcn-chat.vercel.app/r/chat-basic.json
+
+# bun
+bunx --bun shadcn@latest add https://shadcn-chat.vercel.app/r/chat-basic.json
+```
+
+Then visit `/chat` in your browser to see the result.
+
 ## Installation
 
 ### Prerequisites
