@@ -1,12 +1,41 @@
-export const MESSAGES = [
+export interface Message {
+  id: number;
+  tempId?: number; // Temporary ID for optimistic UI updates
+  status: "sending" | "sent" | "failed";
+  sender: {
+    id: string;
+    name: string;
+    avatarUrl: string;
+    username: string;
+  };
+  timestamp: number;
+  content: string;
+}
+
+export const MESSAGES: Message[] = [
+  {
+    id: 17,
+    status: "sent",
+    sender: {
+      id: "annsmith-user-id",
+      name: "Ann Smith",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+      username: "@annsmith",
+    },
+    timestamp: 1234979120123,
+    content:
+      "Hey John, just wanted to say - the new dashboard design looks fantastic! The way you organized the metrics is super intuitive. I can already tell our users are going to love it. Great work on this! 🙌",
+  },
   {
     id: 16,
+    status: "sent",
     sender: {
-      id: "joshdoe-user-id",
+      id: "johndoe-user-id",
       name: "John Doe",
       avatarUrl:
         "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
-      username: "@joshdoe",
+      username: "@johndoe",
     },
     timestamp: 1234878110123,
     content:
@@ -14,12 +43,13 @@ export const MESSAGES = [
   },
   {
     id: 15,
+    status: "sent",
     sender: {
-      id: "joshdoe-user-id",
+      id: "johndoe-user-id",
       name: "John Doe",
       avatarUrl:
         "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
-      username: "@joshdoe",
+      username: "@johndoe",
     },
     timestamp: 1234878100123,
     content:
@@ -27,12 +57,13 @@ export const MESSAGES = [
   },
   {
     id: 14,
+    status: "sent",
     sender: {
-      id: "joshdoe-user-id",
+      id: "johndoe-user-id",
       name: "John Doe",
       avatarUrl:
         "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
-      username: "@joshdoe",
+      username: "@johndoe",
     },
     timestamp: 1234678090123,
     content:
@@ -40,6 +71,7 @@ export const MESSAGES = [
   },
   {
     id: 13,
+    status: "sent",
     sender: {
       id: "annsmith-user-id",
       name: "Ann Smith",
@@ -53,6 +85,7 @@ export const MESSAGES = [
   },
   {
     id: 12,
+    status: "sent",
     sender: {
       id: "annsmith-user-id",
       name: "Ann Smith",
@@ -66,12 +99,13 @@ export const MESSAGES = [
   },
   {
     id: 11,
+    status: "sent",
     sender: {
-      id: "joshdoe-user-id",
+      id: "johndoe-user-id",
       name: "John Doe",
       avatarUrl:
         "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
-      username: "@joshdoe",
+      username: "@johndoe",
     },
     timestamp: 1234677970123,
     content:
@@ -79,12 +113,13 @@ export const MESSAGES = [
   },
   {
     id: 10,
+    status: "sent",
     sender: {
-      id: "joshdoe-user-id",
+      id: "johndoe-user-id",
       name: "John Doe",
       avatarUrl:
         "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
-      username: "@joshdoe",
+      username: "@johndoe",
     },
     timestamp: 1234677910123,
     content:
@@ -92,6 +127,7 @@ export const MESSAGES = [
   },
   {
     id: 9,
+    status: "sent",
     sender: {
       id: "annsmith-user-id",
       name: "Ann Smith",
@@ -104,6 +140,7 @@ export const MESSAGES = [
   },
   {
     id: 8,
+    status: "sent",
     sender: {
       id: "annsmith-user-id",
       name: "Ann Smith",
@@ -116,6 +153,7 @@ export const MESSAGES = [
   },
   {
     id: 7,
+    status: "sent",
     sender: {
       id: "annsmith-user-id",
       name: "Ann Smith",
@@ -129,12 +167,13 @@ export const MESSAGES = [
   },
   {
     id: 6,
+    status: "sent",
     sender: {
-      id: "joshdoe-user-id",
+      id: "johndoe-user-id",
       name: "John Doe",
       avatarUrl:
         "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
-      username: "@joshdoe",
+      username: "@johndoe",
     },
     timestamp: 1234567910123,
     content:
@@ -142,42 +181,46 @@ export const MESSAGES = [
   },
   {
     id: 5,
+    status: "sent",
     sender: {
-      id: "joshdoe-user-id",
+      id: "johndoe-user-id",
       name: "John Doe",
       avatarUrl:
         "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
-      username: "@joshdoe",
+      username: "@johndoe",
     },
     timestamp: 1234567910123,
     content: "Here's what I'm thinking:",
   },
   {
     id: 4,
+    status: "sent",
     sender: {
-      id: "joshdoe-user-id",
+      id: "johndoe-user-id",
       name: "John Doe",
       avatarUrl:
         "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
-      username: "@joshdoe",
+      username: "@johndoe",
     },
     timestamp: 1234567899123,
     content: "Absolutely! Let me pull up my notes from the customer interviews",
   },
   {
     id: 3,
+    status: "sent",
     sender: {
-      id: "joshdoe-user-id",
+      id: "johndoe-user-id",
       name: "John Doe",
       avatarUrl:
         "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
-      username: "@joshdoe",
+      username: "@johndoe",
     },
     timestamp: 1234567895123,
     content: "Hey! Doing great, thanks for asking!",
   },
   {
     id: 2,
+    status: "sent",
     sender: {
       id: "annsmith-user-id",
       name: "Ann Smith",
@@ -191,6 +234,7 @@ export const MESSAGES = [
   },
   {
     id: 1,
+    status: "sent",
     sender: {
       id: "annsmith-user-id",
       name: "Ann Smith",
@@ -202,3 +246,35 @@ export const MESSAGES = [
     content: "Hey there! How's your day going?",
   },
 ];
+
+export const getMessages = () => {
+  // Simulate fetching messages from an API with a delay
+  return new Promise<typeof MESSAGES>((resolve) => {
+    setTimeout(() => {
+      resolve(MESSAGES);
+    }, 1000);
+  });
+};
+
+export const postMessage = (content: string): Promise<(typeof MESSAGES)[0]> => {
+  const newMessage: Message = {
+    id: Date.now(),
+    status: "sent",
+    sender: {
+      id: "johndoe-user-id",
+      name: "John Doe",
+      avatarUrl:
+        "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
+      username: "@johndoe",
+    },
+    timestamp: Date.now(),
+    content,
+  };
+  // Simulate posting a message to an API with a delay
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      MESSAGES.unshift(newMessage); // Add to the beginning since messages are in reverse order
+      resolve(newMessage);
+    }, 1000);
+  });
+};

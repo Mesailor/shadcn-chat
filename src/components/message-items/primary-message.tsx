@@ -17,6 +17,7 @@ export function PrimaryMessage({
   senderName,
   content,
   timestamp,
+  status,
 
   className,
 }: {
@@ -26,6 +27,7 @@ export function PrimaryMessage({
   senderName: string;
   content: ReactNode;
   timestamp: number;
+  status?: "sent" | "sending" | "failed";
 
   className?: string;
 }) {
@@ -43,7 +45,13 @@ export function PrimaryMessage({
           <span className="font-medium">{senderName}</span>
           <ChatEventTime timestamp={timestamp} />
         </ChatEventTitle>
-        <ChatEventContent>{content}</ChatEventContent>
+        <ChatEventContent
+          className={cn({
+            "opacity-70": status === "sending",
+          })}
+        >
+          {content}
+        </ChatEventContent>
       </ChatEventBody>
     </ChatEvent>
   );

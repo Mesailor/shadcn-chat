@@ -6,13 +6,16 @@ import {
   ChatEventContent,
   ChatEventTime,
 } from "@/registry/new-york/chat/chat-event";
+import { cn } from "@/lib/utils";
 
 export function AdditionalMessage({
   content,
   timestamp,
+  status,
 }: {
   content: ReactNode;
   timestamp: number;
+  status?: "sent" | "sending" | "failed";
 }) {
   return (
     <ChatEvent className="hover:bg-accent group">
@@ -24,7 +27,13 @@ export function AdditionalMessage({
         />
       </ChatEventAddon>
       <ChatEventBody>
-        <ChatEventContent>{content}</ChatEventContent>
+        <ChatEventContent
+          className={cn({
+            "opacity-70": status === "sending",
+          })}
+        >
+          {content}
+        </ChatEventContent>
       </ChatEventBody>
     </ChatEvent>
   );
