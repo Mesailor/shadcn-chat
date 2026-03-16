@@ -1,5 +1,5 @@
 import { CodeBlock } from "@/components/common/code-block";
-import { MESSAGES } from "@/data/messages";
+import { EVENTS } from "@/data/messages";
 import {
   ChatEvent,
   ChatEventAddon,
@@ -13,8 +13,8 @@ import { DateItem } from "@/components/message-items/date-item";
 import { Anchor } from "@/components/common/anchor";
 import { HighlightedComponent } from "@/components/ui/typography";
 
-const PRIMARY_MSG = MESSAGES[1];
-const ADDITIONAL_MSG = MESSAGES[0];
+const PRIMARY_MSG = EVENTS[1];
+const ADDITIONAL_MSG = EVENTS[0];
 
 export function EventUsageExample() {
   return (
@@ -56,7 +56,7 @@ export function EventUsageExample() {
             <ChatEventTime timestamp={PRIMARY_MSG.timestamp} />
           </ChatEventTitle>
           <ChatEventContent className="text-sm md:text-base">
-            {PRIMARY_MSG.content}
+            {PRIMARY_MSG.content.text}
           </ChatEventContent>
         </ChatEventBody>
       </ChatEvent>
@@ -77,7 +77,7 @@ export function EventUsageExample() {
         </ChatEventAddon>
         <ChatEventBody>
           <ChatEventContent className="text-sm md:text-base">
-            {ADDITIONAL_MSG.content}
+            {ADDITIONAL_MSG.content.text}
           </ChatEventContent>
         </ChatEventBody>
       </ChatEvent>

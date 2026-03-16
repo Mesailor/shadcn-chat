@@ -1,4 +1,15 @@
-export interface Message {
+export type EventType = "text" | "image" | "file" | "system";
+
+export interface EventContent {
+  type: EventType;
+  text?: string;
+  url?: string;
+  fileName?: string;
+  mimeType?: string;
+  alt?: string;
+}
+
+export interface Event {
   id: number;
   tempId?: number; // Temporary ID for optimistic UI updates
   status: "sending" | "sent" | "failed";
@@ -9,10 +20,10 @@ export interface Message {
     username: string;
   };
   timestamp: number;
-  content: string;
+  content: EventContent;
 }
 
-export const MESSAGES: Message[] = [
+export const EVENTS: Event[] = [
   {
     id: 17,
     status: "sent",
@@ -24,8 +35,10 @@ export const MESSAGES: Message[] = [
       username: "@annsmith",
     },
     timestamp: 1234979120123,
-    content:
-      "Hey John, just wanted to say - the new dashboard design looks fantastic! The way you organized the metrics is super intuitive. I can already tell our users are going to love it. Great work on this! 🙌",
+    content: {
+      type: "text",
+      text: "Hey John, just wanted to say - the new dashboard design looks fantastic! The way you organized the metrics is super intuitive. I can already tell our users are going to love it. Great work on this! 🙌",
+    },
   },
   {
     id: 16,
@@ -38,8 +51,10 @@ export const MESSAGES: Message[] = [
       username: "@johndoe",
     },
     timestamp: 1234878110123,
-    content:
-      "Oh, and could you also share those user feedback notes? I want to make sure we're really nailing what they need before we ship this.",
+    content: {
+      type: "text",
+      text: "Oh, and could you also share those user feedback notes? I want to make sure we're really nailing what they need before we ship this.",
+    },
   },
   {
     id: 15,
@@ -52,8 +67,10 @@ export const MESSAGES: Message[] = [
       username: "@johndoe",
     },
     timestamp: 1234878100123,
-    content:
-      "Just tested the new checkout flow - it's so smooth! The loading states you added make such a difference. Customers are gonna love this! 🚀",
+    content: {
+      type: "text",
+      text: "Just tested the new checkout flow - it's so smooth! The loading states you added make such a difference. Customers are gonna love this! 🚀",
+    },
   },
   {
     id: 14,
@@ -66,8 +83,10 @@ export const MESSAGES: Message[] = [
       username: "@johndoe",
     },
     timestamp: 1234678090123,
-    content:
-      "Sweet! I'll check it out on mobile too and let you know. Thanks for keeping accessibility in mind - that's real value right there!",
+    content: {
+      type: "text",
+      text: "Sweet! I'll check it out on mobile too and let you know. Thanks for keeping accessibility in mind - that's real value right there!",
+    },
   },
   {
     id: 13,
@@ -80,8 +99,10 @@ export const MESSAGES: Message[] = [
       username: "@annsmith",
     },
     timestamp: 1234678080123,
-    content:
-      "But first, could you give the responsive design a quick look? I want to make sure it feels great on all devices before we show it to users.",
+    content: {
+      type: "text",
+      text: "But first, could you give the responsive design a quick look? I want to make sure it feels great on all devices before we show it to users.",
+    },
   },
   {
     id: 12,
@@ -94,8 +115,10 @@ export const MESSAGES: Message[] = [
       username: "@annsmith",
     },
     timestamp: 1234678070123,
-    content:
-      "Hey! Just wrapped up the dashboard redesign. Focused on making the key metrics super easy to find - think our users will really appreciate it!",
+    content: {
+      type: "text",
+      text: "Hey! Just wrapped up the dashboard redesign. Focused on making the key metrics super easy to find - think our users will really appreciate it!",
+    },
   },
   {
     id: 11,
@@ -108,8 +131,10 @@ export const MESSAGES: Message[] = [
       username: "@johndoe",
     },
     timestamp: 1234677970123,
-    content:
-      "Also, how's the performance optimization going? Any wins on those load times we discussed?",
+    content: {
+      type: "text",
+      text: "Also, how's the performance optimization going? Any wins on those load times we discussed?",
+    },
   },
   {
     id: 10,
@@ -122,8 +147,10 @@ export const MESSAGES: Message[] = [
       username: "@johndoe",
     },
     timestamp: 1234677910123,
-    content:
-      "Hey! How's it going? Did you get a chance to look at those user journey mockups? Want to make sure we're solving the right problems for them.",
+    content: {
+      type: "text",
+      text: "Hey! How's it going? Did you get a chance to look at those user journey mockups? Want to make sure we're solving the right problems for them.",
+    },
   },
   {
     id: 9,
@@ -136,7 +163,7 @@ export const MESSAGES: Message[] = [
       username: "@annsmith",
     },
     timestamp: 1234567919123,
-    content: "I'll ping you here once it's ready for a demo!",
+    content: { type: "text", text: "I'll ping you here once it's ready for a demo!" },
   },
   {
     id: 8,
@@ -149,7 +176,7 @@ export const MESSAGES: Message[] = [
       username: "@annsmith",
     },
     timestamp: 1234567917123,
-    content: "Perfect! Time to build something awesome ✨",
+    content: { type: "text", text: "Perfect! Time to build something awesome ✨" },
   },
   {
     id: 7,
@@ -162,8 +189,10 @@ export const MESSAGES: Message[] = [
       username: "@annsmith",
     },
     timestamp: 1234567913123,
-    content:
-      "Awesome, thanks! That totally makes sense now. I love how we're thinking about the end user experience here. Can't wait to see their reaction when this goes live!",
+    content: {
+      type: "text",
+      text: "Awesome, thanks! That totally makes sense now. I love how we're thinking about the end user experience here. Can't wait to see their reaction when this goes live!",
+    },
   },
   {
     id: 6,
@@ -176,8 +205,10 @@ export const MESSAGES: Message[] = [
       username: "@johndoe",
     },
     timestamp: 1234567910123,
-    content:
-      "So basically - keep the interactions snappy, add subtle animations for feedback, and make sure error states are super clear. When users feel confident using the interface, they stick around. That's the value we're delivering! 😊",
+    content: {
+      type: "text",
+      text: "So basically - keep the interactions snappy, add subtle animations for feedback, and make sure error states are super clear. When users feel confident using the interface, they stick around. That's the value we're delivering! 😊",
+    },
   },
   {
     id: 5,
@@ -190,7 +221,7 @@ export const MESSAGES: Message[] = [
       username: "@johndoe",
     },
     timestamp: 1234567910123,
-    content: "Here's what I'm thinking:",
+    content: { type: "text", text: "Here's what I'm thinking:" },
   },
   {
     id: 4,
@@ -203,7 +234,10 @@ export const MESSAGES: Message[] = [
       username: "@johndoe",
     },
     timestamp: 1234567899123,
-    content: "Absolutely! Let me pull up my notes from the customer interviews",
+    content: {
+      type: "text",
+      text: "Absolutely! Let me pull up my notes from the customer interviews",
+    },
   },
   {
     id: 3,
@@ -216,7 +250,7 @@ export const MESSAGES: Message[] = [
       username: "@johndoe",
     },
     timestamp: 1234567895123,
-    content: "Hey! Doing great, thanks for asking!",
+    content: { type: "text", text: "Hey! Doing great, thanks for asking!" },
   },
   {
     id: 2,
@@ -229,8 +263,10 @@ export const MESSAGES: Message[] = [
       username: "@annsmith",
     },
     timestamp: 1234567892123,
-    content:
-      "Could you share your thoughts on the UX flow? Want to make sure we're creating real value for our users.",
+    content: {
+      type: "text",
+      text: "Could you share your thoughts on the UX flow? Want to make sure we're creating real value for our users.",
+    },
   },
   {
     id: 1,
@@ -243,21 +279,21 @@ export const MESSAGES: Message[] = [
       username: "@annsmith",
     },
     timestamp: 1234567890123,
-    content: "Hey there! How's your day going?",
+    content: { type: "text", text: "Hey there! How's your day going?" },
   },
 ];
 
-export const getMessages = () => {
-  // Simulate fetching messages from an API with a delay
-  return new Promise<typeof MESSAGES>((resolve) => {
+export const getEvents = () => {
+  // Simulate fetching events from an API with a delay
+  return new Promise<typeof EVENTS>((resolve) => {
     setTimeout(() => {
-      resolve(MESSAGES);
+      resolve(EVENTS);
     }, 1000);
   });
 };
 
-export const postMessage = (content: string): Promise<(typeof MESSAGES)[0]> => {
-  const newMessage: Message = {
+export const postEvent = (content: EventContent): Promise<(typeof EVENTS)[0]> => {
+  const newEvent: Event = {
     id: Date.now(),
     status: "sent",
     sender: {
@@ -270,11 +306,11 @@ export const postMessage = (content: string): Promise<(typeof MESSAGES)[0]> => {
     timestamp: Date.now(),
     content,
   };
-  // Simulate posting a message to an API with a delay
+  // Simulate posting an event to an API with a delay
   return new Promise((resolve) => {
     setTimeout(() => {
-      MESSAGES.unshift(newMessage); // Add to the beginning since messages are in reverse order
-      resolve(newMessage);
+      EVENTS.unshift(newEvent); // Add to the beginning since events are in reverse order
+      resolve(newEvent);
     }, 1000);
   });
 };

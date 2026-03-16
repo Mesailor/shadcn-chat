@@ -31,7 +31,7 @@ import {
   ChatToolbarTextarea,
 } from "@/registry/new-york/chat/chat-toolbar";
 import { ChatMessages } from "@/registry/new-york/chat/chat-messages";
-import { Message, getMessages, postMessage } from "@/data/messages";
+import { Event, getEvents, postEvent } from "@/data/messages";
 import { PrimaryMessage } from "@/components/message-items/primary-message";
 import { DateItem } from "@/components/message-items/date-item";
 import { AdditionalMessage } from "@/components/message-items/additional-message";
@@ -41,19 +41,19 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 export function ChatExampleComponent() {
   const [fetching, setFetching] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Event[]>([]);
   const [input, setInput] = useState("");
   const chatMessagesRef = useRef<HTMLDivElement>(null);
 
-  const usersHandleSendMessage = useCallback(async (content: string) => {
-    return await postMessage(content);
+  const usersHandleSendEvent = useCallback(async (content: string) => {
+    return postEvent({ type: "text", text: content });
   }, []);
 
   const handleSubmit = useCallback(async (content: string) => {
     const trimmedContent = content.trim();
     if (!trimmedContent) return; // Don't send empty messages
     const tempId = Date.now(); // Temporary ID for optimistic UI
-    const newMessage: Message = {
+    const newMessage: Event = {
       id: tempId,
       status: "sending",
       tempId: tempId,
@@ -65,7 +65,7 @@ export function ChatExampleComponent() {
         username: "@johndoe",
       },
       timestamp: Date.now(),
-      content: trimmedContent,
+      content: { type: "text", text: trimmedContent },
     };
     setMessages((prev) => [newMessage, ...prev]);
     setInput("");
@@ -73,7 +73,7 @@ export function ChatExampleComponent() {
     setTimeout(() => {
       chatMessagesRef.current?.scrollTo({ top: 0, behavior: "smooth" });
     });
-    const postedMessage = await usersHandleSendMessage(trimmedContent);
+    const postedMessage = await usersHandleSendEvent(trimmedContent);
     // Replace the temporary message with the posted message
     setMessages((prev) =>
       prev.map((msg) => (msg.tempId === tempId ? postedMessage : msg)),
@@ -83,7 +83,7 @@ export function ChatExampleComponent() {
   useEffect(() => {
     const fetchMessages = async () => {
       setFetching(true);
-      const fetchedMessages = await getMessages();
+      const fetchedMessages = await getEvents();
       setMessages(fetchedMessages);
       setFetching(false);
     };
@@ -156,7 +156,7 @@ export function ChatExampleComponent() {
                     avatarAlt={msg.sender.username}
                     avatarFallback={msg.sender.name.slice(0, 2)}
                     senderName={msg.sender.name}
-                    content={msg.content}
+                    content={msg.content.text}
                     timestamp={msg.timestamp}
                     status={msg.status}
                   />
@@ -170,7 +170,7 @@ export function ChatExampleComponent() {
               return (
                 <AdditionalMessage
                   key={msg.id}
-                  content={msg.content}
+                  content={msg.content.text}
                   timestamp={msg.timestamp}
                   status={msg.status}
                 />
@@ -186,7 +186,7 @@ export function ChatExampleComponent() {
                   avatarAlt={msg.sender.username}
                   avatarFallback={msg.sender.name.slice(0, 2)}
                   senderName={msg.sender.name}
-                  content={msg.content}
+                  content={msg.content.text}
                   timestamp={msg.timestamp}
                   status={msg.status}
                 />

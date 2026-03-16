@@ -87,7 +87,7 @@ export default function ChatBasicPage() {
                   avatarAlt={msg.sender.username}
                   avatarFallback={msg.sender.name.slice(0, 2)}
                   senderName={msg.sender.name}
-                  content={msg.content}
+                  content={msg.content.text}
                   timestamp={msg.timestamp}
                 />
                 <DateItem timestamp={msg.timestamp} className="my-4" />
@@ -100,7 +100,7 @@ export default function ChatBasicPage() {
             return (
               <AdditionalMessage
                 key={msg.id}
-                content={msg.content}
+                content={msg.content.text}
                 timestamp={msg.timestamp}
               />
             );
@@ -115,7 +115,7 @@ export default function ChatBasicPage() {
                 avatarAlt={msg.sender.username}
                 avatarFallback={msg.sender.name.slice(0, 2)}
                 senderName={msg.sender.name}
-                content={msg.content}
+                content={msg.content.text}
                 timestamp={msg.timestamp}
               />
             );
