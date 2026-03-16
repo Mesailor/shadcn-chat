@@ -45,9 +45,12 @@ export function ChatExampleComponent() {
   const [input, setInput] = useState("");
   const chatMessagesRef = useRef<HTMLDivElement>(null);
 
-  const usersHandleSendEvent = useCallback(async (content: string) => {
-    return postEvent({ type: "text", text: content });
-  }, []);
+  const usersHandleToolbarSubmit = useCallback(
+    async (submitData: { text: string; files: File[] }) => {
+      return postEvent({ type: "text", text: submitData.text });
+    },
+    [],
+  );
 
   const handleSubmit = useCallback(async (content: string) => {
     const trimmedContent = content.trim();
@@ -73,7 +76,10 @@ export function ChatExampleComponent() {
     setTimeout(() => {
       chatMessagesRef.current?.scrollTo({ top: 0, behavior: "smooth" });
     });
-    const postedMessage = await usersHandleSendEvent(trimmedContent);
+    const postedMessage = await usersHandleToolbarSubmit({
+      text: trimmedContent,
+      files: [],
+    });
     // Replace the temporary message with the posted message
     setMessages((prev) =>
       prev.map((msg) => (msg.tempId === tempId ? postedMessage : msg)),
