@@ -27,6 +27,8 @@ import {
 import {
   ChatToolbar,
   ChatToolbarAddon,
+  ChatToolbarAttachment,
+  ChatToolbarAttachmentButton,
   ChatToolbarButton,
   ChatToolbarTextarea,
 } from "@/registry/new-york/chat/chat-toolbar";
@@ -43,6 +45,7 @@ export function ChatExampleComponent() {
   const [fetching, setFetching] = useState(false);
   const [messages, setMessages] = useState<Event[]>([]);
   const [input, setInput] = useState("");
+  const [files, setFiles] = useState<File[]>([]);
   const chatMessagesRef = useRef<HTMLDivElement>(null);
 
   const usersHandleToolbarSubmit = useCallback(
@@ -202,10 +205,30 @@ export function ChatExampleComponent() {
       </ChatMessages>
 
       <ChatToolbar>
+        {files.length > 0 && (
+          <ChatToolbarAddon
+            align="block-start"
+            className="mb-2 overflow-x-auto gap-2"
+          >
+            {files.map((file, i) => (
+              <ChatToolbarAttachment
+                key={i}
+                file={file}
+                onRemove={() =>
+                  setFiles((prev) => prev.filter((_, idx) => idx !== i))
+                }
+              />
+            ))}
+          </ChatToolbarAddon>
+        )}
         <ChatToolbarAddon align="inline-start">
-          <ChatToolbarButton>
+          <ChatToolbarAttachmentButton
+            onFilesSelected={(files) => {
+              setFiles((prev) => [...prev, ...files]);
+            }}
+          >
             <PlusIcon />
-          </ChatToolbarButton>
+          </ChatToolbarAttachmentButton>
         </ChatToolbarAddon>
         <ChatToolbarTextarea
           value={input}
