@@ -44,49 +44,53 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export function ChatExampleComponent() {
   const [fetching, setFetching] = useState(false);
   const [messages, setMessages] = useState<Event[]>([]);
+
   const [input, setInput] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const chatMessagesRef = useRef<HTMLDivElement>(null);
 
   const usersHandleToolbarSubmit = useCallback(
     async (submitData: { text: string; files: File[] }) => {
-      return postEvent({ type: "text", text: submitData.text });
+      const tempId = Date.now(); // Temporary ID for optimistic UI
+      const newMessage: Event = {
+        id: tempId,
+        status: "sending",
+        tempId: tempId,
+        sender: {
+          id: "johndoe-user-id",
+          name: "John Doe",
+          avatarUrl:
+            "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
+          username: "@johndoe",
+        },
+        timestamp: Date.now(),
+        content: { type: "text", text: submitData.text },
+      };
+      setMessages((prev) => [newMessage, ...prev]);
+      const postedMessage = await postEvent({
+        type: "text",
+        text: submitData.text,
+      });
+      // Replace the temporary message with the posted message
+      setMessages((prev) =>
+        prev.map((msg) => (msg.tempId === tempId ? postedMessage : msg)),
+      );
     },
     [],
   );
 
-  const handleSubmit = useCallback(async (content: string) => {
+  const handleSubmit = useCallback((content: string) => {
     const trimmedContent = content.trim();
     if (!trimmedContent) return; // Don't send empty messages
-    const tempId = Date.now(); // Temporary ID for optimistic UI
-    const newMessage: Event = {
-      id: tempId,
-      status: "sending",
-      tempId: tempId,
-      sender: {
-        id: "johndoe-user-id",
-        name: "John Doe",
-        avatarUrl:
-          "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
-        username: "@johndoe",
-      },
-      timestamp: Date.now(),
-      content: { type: "text", text: trimmedContent },
-    };
-    setMessages((prev) => [newMessage, ...prev]);
+    usersHandleToolbarSubmit({
+      text: trimmedContent,
+      files: [],
+    });
     setInput("");
     // Scroll to top (newest message) when a new message is sent
     setTimeout(() => {
       chatMessagesRef.current?.scrollTo({ top: 0, behavior: "smooth" });
     });
-    const postedMessage = await usersHandleToolbarSubmit({
-      text: trimmedContent,
-      files: [],
-    });
-    // Replace the temporary message with the posted message
-    setMessages((prev) =>
-      prev.map((msg) => (msg.tempId === tempId ? postedMessage : msg)),
-    );
   }, []);
 
   useEffect(() => {
