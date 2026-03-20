@@ -9,7 +9,6 @@ import {
   PlusIcon,
   SearchIcon,
   SendIcon,
-  SquareChevronRightIcon,
   VideoIcon,
 } from "lucide-react";
 import {
@@ -43,16 +42,14 @@ import { DateItemSkeleton } from "@/components/message-items/date-item-skeleton"
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export function ChatExampleComponent() {
+  const chatMessagesRef = useRef<HTMLDivElement>(null);
   const [fetching, setFetching] = useState(false);
   const [messages, setMessages] = useState<Event[]>([]);
 
-  const [input, setInput] = useState("");
-  const [files, setFiles] = useState<File[]>([]);
-  const chatMessagesRef = useRef<HTMLDivElement>(null);
-
-  const usersHandleToolbarSubmit = useCallback(
+  const handleSubmit = useCallback(
     async (submitData: { text: string; files: File[] }) => {
-      const tempId = Date.now(); // Temporary ID for optimistic UI
+      // Optimistically add the new message to the UI with a temporary ID and "sending" status
+      const tempId = Date.now();
       const newMessage: Event = {
         id: tempId,
         status: "sending",
@@ -68,11 +65,12 @@ export function ChatExampleComponent() {
         content: { type: "text", text: submitData.text },
       };
       setMessages((prev) => [newMessage, ...prev]);
+
+      // Replace the temporary message with the posted message
       const postedMessage = await postEvent({
         type: "text",
         text: submitData.text,
       });
-      // Replace the temporary message with the posted message
       setMessages((prev) =>
         prev.map((msg) => (msg.tempId === tempId ? postedMessage : msg)),
       );
@@ -80,19 +78,9 @@ export function ChatExampleComponent() {
     [],
   );
 
-  const handleSubmit = useCallback(() => {
-    const trimmedContent = input.trim();
-    if (!trimmedContent) return; // Don't send empty messages
-    usersHandleToolbarSubmit({
-      text: trimmedContent,
-      files: [],
-    });
-    setInput("");
-    // Scroll to top (newest message) when a new message is sent
-    setTimeout(() => {
-      chatMessagesRef.current?.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  }, [input]);
+  const scrollToBottom = useCallback(() => {
+    chatMessagesRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -209,49 +197,83 @@ export function ChatExampleComponent() {
           })}
       </ChatMessages>
 
-      <ChatToolbar>
-        {files.length > 0 && (
-          <ChatToolbarAddon
-            align="block-start"
-            className="mb-2 overflow-x-auto gap-2"
-          >
-            {files.map((file, i) => (
-              <ChatToolbarAttachment
-                key={i}
-                file={file}
-                onRemove={() =>
-                  setFiles((prev) => prev.filter((_, idx) => idx !== i))
-                }
-              />
-            ))}
-          </ChatToolbarAddon>
-        )}
-        <ChatToolbarAddon align="inline-start">
-          <ChatToolbarAttachmentButton
-            onFilesSelected={(files) => {
-              setFiles((prev) => [...prev, ...files]);
-            }}
-          >
-            <PlusIcon />
-          </ChatToolbarAttachmentButton>
-        </ChatToolbarAddon>
-        <ChatToolbarTextarea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onSubmit={() => handleSubmit()}
-        />
-        <ChatToolbarAddon align="inline-end">
-          <ChatToolbarButton>
-            <GiftIcon />
-          </ChatToolbarButton>
-          <ChatToolbarButton>
-            <CalendarDaysIcon />
-          </ChatToolbarButton>
-          <ChatToolbarButton onClick={() => handleSubmit()}>
-            <SendIcon />
-          </ChatToolbarButton>
-        </ChatToolbarAddon>
-      </ChatToolbar>
+      <Toolbar onSubmit={handleSubmit} onScrollToBottom={scrollToBottom} />
     </Chat>
+  );
+}
+
+interface ToolbarProps {
+  onSubmit: (data: { text: string; files: File[] }) => Promise<void> | void;
+  onScrollToBottom?: () => void;
+}
+
+function Toolbar({ onSubmit, onScrollToBottom }: ToolbarProps) {
+  const [input, setInput] = useState("");
+  const [files, setFiles] = useState<File[]>([]);
+
+  const handleSubmit = useCallback(() => {
+    const trimmedContent = input.trim();
+    if (!trimmedContent && files.length === 0) return; // Don't submit empty messages
+
+    onSubmit?.({
+      text: trimmedContent,
+      files,
+    });
+
+    setInput("");
+    setFiles([]);
+    // Scroll to top (newest message) when a new message is sent
+    setTimeout(() => {
+      onScrollToBottom?.();
+    });
+  }, [input, onSubmit, onScrollToBottom]);
+
+  return (
+    <ChatToolbar>
+      {files.length > 0 && (
+        <ChatToolbarAddon
+          align="block-start"
+          className="mb-2 overflow-x-auto gap-2"
+        >
+          {files.map((file, i) => (
+            <ChatToolbarAttachment
+              key={i}
+              file={file}
+              onRemove={() =>
+                setFiles((prev) => prev.filter((_, idx) => idx !== i))
+              }
+            />
+          ))}
+        </ChatToolbarAddon>
+      )}
+
+      <ChatToolbarAddon align="inline-start">
+        <ChatToolbarAttachmentButton
+          onFilesSelected={(files) => {
+            setFiles((prev) => [...prev, ...files]);
+          }}
+        >
+          <PlusIcon />
+        </ChatToolbarAttachmentButton>
+      </ChatToolbarAddon>
+
+      <ChatToolbarTextarea
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onSubmit={() => handleSubmit()}
+      />
+
+      <ChatToolbarAddon align="inline-end">
+        <ChatToolbarButton>
+          <GiftIcon />
+        </ChatToolbarButton>
+        <ChatToolbarButton>
+          <CalendarDaysIcon />
+        </ChatToolbarButton>
+        <ChatToolbarButton onClick={() => handleSubmit()}>
+          <SendIcon />
+        </ChatToolbarButton>
+      </ChatToolbarAddon>
+    </ChatToolbar>
   );
 }
