@@ -62,14 +62,24 @@ export function ChatExampleComponent() {
           username: "@johndoe",
         },
         timestamp: Date.now(),
-        content: { type: "text", text: submitData.text },
+        content: {
+          type: "message",
+          ...(submitData.text && { text: submitData.text }),
+          ...(submitData.files.length > 0 && {
+            files: submitData.files.map((file) => ({
+              url: URL.createObjectURL(file),
+              fileName: file.name,
+              mimeType: file.type,
+            })),
+          }),
+        },
       };
       setMessages((prev) => [newMessage, ...prev]);
 
       // Replace the temporary message with the posted message
       const postedMessage = await postEvent({
-        type: "text",
         text: submitData.text,
+        files: submitData.files,
       });
       setMessages((prev) =>
         prev.map((msg) => (msg.tempId === tempId ? postedMessage : msg)),
@@ -158,7 +168,7 @@ export function ChatExampleComponent() {
                     avatarAlt={msg.sender.username}
                     avatarFallback={msg.sender.name.slice(0, 2)}
                     senderName={msg.sender.name}
-                    content={msg.content.text}
+                    content={msg.content}
                     timestamp={msg.timestamp}
                     status={msg.status}
                   />
@@ -172,7 +182,7 @@ export function ChatExampleComponent() {
               return (
                 <AdditionalMessage
                   key={msg.id}
-                  content={msg.content.text}
+                  content={msg.content}
                   timestamp={msg.timestamp}
                   status={msg.status}
                 />
@@ -188,7 +198,7 @@ export function ChatExampleComponent() {
                   avatarAlt={msg.sender.username}
                   avatarFallback={msg.sender.name.slice(0, 2)}
                   senderName={msg.sender.name}
-                  content={msg.content.text}
+                  content={msg.content}
                   timestamp={msg.timestamp}
                   status={msg.status}
                 />
@@ -226,7 +236,7 @@ function Toolbar({ onSubmit, onScrollToBottom }: ToolbarProps) {
     setTimeout(() => {
       onScrollToBottom?.();
     });
-  }, [input, onSubmit, onScrollToBottom]);
+  }, [input, files, onSubmit, onScrollToBottom]);
 
   return (
     <ChatToolbar>

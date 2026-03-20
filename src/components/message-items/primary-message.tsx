@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import {
   ChatEvent,
@@ -9,6 +8,8 @@ import {
   ChatEventTime,
   ChatEventTitle,
 } from "@/registry/new-york/chat/chat-event";
+import { EventContent } from "@/data/messages";
+import { MessageContent } from "./message-content";
 
 export function PrimaryMessage({
   avatarSrc,
@@ -25,7 +26,7 @@ export function PrimaryMessage({
   avatarAlt?: string;
   avatarFallback?: string;
   senderName: string;
-  content: ReactNode;
+  content: EventContent;
   timestamp: number;
   status?: "sent" | "sending" | "failed";
 
@@ -50,7 +51,7 @@ export function PrimaryMessage({
             "opacity-70": status === "sending",
           })}
         >
-          {content}
+          <MessageContent content={content} />
         </ChatEventContent>
       </ChatEventBody>
     </ChatEvent>

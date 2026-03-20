@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import {
   ChatEvent,
   ChatEventAddon,
@@ -7,13 +6,15 @@ import {
   ChatEventTime,
 } from "@/registry/new-york/chat/chat-event";
 import { cn } from "@/lib/utils";
+import { EventContent } from "@/data/messages";
+import { MessageContent } from "./message-content";
 
 export function AdditionalMessage({
   content,
   timestamp,
   status,
 }: {
-  content: ReactNode;
+  content: EventContent;
   timestamp: number;
   status?: "sent" | "sending" | "failed";
 }) {
@@ -32,7 +33,7 @@ export function AdditionalMessage({
             "opacity-70": status === "sending",
           })}
         >
-          {content}
+          <MessageContent content={content} />
         </ChatEventContent>
       </ChatEventBody>
     </ChatEvent>
