@@ -8,6 +8,7 @@ import {
   PhoneIcon,
   PlusIcon,
   SearchIcon,
+  SendIcon,
   SquareChevronRightIcon,
   VideoIcon,
 } from "lucide-react";
@@ -79,8 +80,8 @@ export function ChatExampleComponent() {
     [],
   );
 
-  const handleSubmit = useCallback((content: string) => {
-    const trimmedContent = content.trim();
+  const handleSubmit = useCallback(() => {
+    const trimmedContent = input.trim();
     if (!trimmedContent) return; // Don't send empty messages
     usersHandleToolbarSubmit({
       text: trimmedContent,
@@ -91,7 +92,7 @@ export function ChatExampleComponent() {
     setTimeout(() => {
       chatMessagesRef.current?.scrollTo({ top: 0, behavior: "smooth" });
     });
-  }, []);
+  }, [input]);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -237,9 +238,7 @@ export function ChatExampleComponent() {
         <ChatToolbarTextarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onSubmit={() => {
-            handleSubmit(input);
-          }}
+          onSubmit={() => handleSubmit()}
         />
         <ChatToolbarAddon align="inline-end">
           <ChatToolbarButton>
@@ -248,8 +247,8 @@ export function ChatExampleComponent() {
           <ChatToolbarButton>
             <CalendarDaysIcon />
           </ChatToolbarButton>
-          <ChatToolbarButton>
-            <SquareChevronRightIcon />
+          <ChatToolbarButton onClick={() => handleSubmit()}>
+            <SendIcon />
           </ChatToolbarButton>
         </ChatToolbarAddon>
       </ChatToolbar>
