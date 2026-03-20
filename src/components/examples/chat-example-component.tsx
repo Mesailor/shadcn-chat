@@ -181,6 +181,7 @@ export function ChatExampleComponent() {
             if (msg.sender.id === msgs[i + 1]?.sender.id) {
               return (
                 <AdditionalMessage
+                  className="pt-1"
                   key={msg.id}
                   content={msg.content}
                   timestamp={msg.timestamp}

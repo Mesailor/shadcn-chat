@@ -10,16 +10,18 @@ import { EventContent } from "@/data/messages";
 import { MessageContent } from "./message-content";
 
 export function AdditionalMessage({
+  className,
   content,
   timestamp,
   status,
 }: {
+  className?: string;
   content: EventContent;
   timestamp: number;
   status?: "sent" | "sending" | "failed";
 }) {
   return (
-    <ChatEvent className="hover:bg-accent group">
+    <ChatEvent className={cn("hover:bg-accent group", className)}>
       <ChatEventAddon>
         <ChatEventTime
           timestamp={timestamp}
