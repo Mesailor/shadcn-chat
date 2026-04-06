@@ -24,6 +24,7 @@ export interface Event {
   };
   timestamp: number;
   content: EventContent;
+  reactions?: string[];
 }
 
 export const EVENTS: Event[] = [
@@ -291,6 +292,24 @@ export const EVENTS: Event[] = [
     content: { type: "message", text: "Hey there! How's your day going?" },
   },
 ];
+
+export const reactToEvent = (
+  eventId: number,
+  emoji: string,
+): Promise<Event> => {
+  const event = EVENTS.find((e) => e.id === eventId);
+  if (!event) return Promise.reject(new Error("Event not found"));
+
+  if (event.reactions?.includes(emoji)) {
+    event.reactions = event.reactions.filter((r) => r !== emoji);
+  } else {
+    event.reactions = [emoji];
+  }
+
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(event), 200);
+  });
+};
 
 export const getEvents = () => {
   // Simulate fetching events from an API with a delay

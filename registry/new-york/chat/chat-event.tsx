@@ -455,11 +455,12 @@ export function ChatEventHoverActions({
   return (
     <div
       className={cn(
-        "hidden group-hover/event:flex",
+        "opacity-0 group-hover/event:opacity-100 pointer-events-none group-hover/event:pointer-events-auto",
+        "[&:has([data-state=open])]:opacity-100 [&:has([data-state=open])]:pointer-events-auto",
         "absolute right-2 -top-4",
         "bg-background border rounded-md shadow-sm",
-        "items-center gap-0.5 p-0.5",
-        "z-10",
+        "flex items-center gap-0.5 p-0.5",
+        "z-15",
         className,
       )}
       {...props}

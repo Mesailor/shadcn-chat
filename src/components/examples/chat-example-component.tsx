@@ -33,13 +33,13 @@ import {
   ChatToolbarTextarea,
 } from "@/registry/new-york/chat/chat-toolbar";
 import { ChatMessages } from "@/registry/new-york/chat/chat-messages";
-import { Event, getEvents, postEvent } from "@/data/messages";
 import { PrimaryMessage } from "@/components/message-items/primary-message";
 import { DateItem } from "@/components/message-items/date-item";
 import { AdditionalMessage } from "@/components/message-items/additional-message";
 import { PrimaryMessageSkeleton } from "@/components/message-items/primary-message-skeleton";
 import { DateItemSkeleton } from "@/components/message-items/date-item-skeleton";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Event, getEvents, postEvent, reactToEvent } from "@/data/messages";
 
 export function ChatExampleComponent() {
   const chatMessagesRef = useRef<HTMLDivElement>(null);
@@ -87,6 +87,18 @@ export function ChatExampleComponent() {
     },
     [],
   );
+
+  const handleReaction = useCallback(async (eventId: number, emoji: string) => {
+    try {
+      const updated = await reactToEvent(eventId, emoji);
+      setMessages((prev) =>
+        prev.map((msg) => (msg.id === eventId ? updated : msg)),
+      );
+    } catch (error) {
+      console.error("Failed to add reaction:", error);
+      // Optionally show a toast or other user feedback
+    }
+  }, []);
 
   const scrollToBottom = useCallback(() => {
     chatMessagesRef.current?.scrollTo({ top: 0, behavior: "smooth" });
@@ -171,6 +183,8 @@ export function ChatExampleComponent() {
                     content={msg.content}
                     timestamp={msg.timestamp}
                     status={msg.status}
+                    reactions={msg.reactions}
+                    onReaction={(emoji) => handleReaction(msg.id, emoji)}
                   />
                   <DateItem timestamp={msg.timestamp} className="my-4" />
                 </Fragment>
@@ -186,6 +200,8 @@ export function ChatExampleComponent() {
                   content={msg.content}
                   timestamp={msg.timestamp}
                   status={msg.status}
+                  reactions={msg.reactions}
+                  onReaction={(emoji) => handleReaction(msg.id, emoji)}
                 />
               );
             }
@@ -202,6 +218,8 @@ export function ChatExampleComponent() {
                   content={msg.content}
                   timestamp={msg.timestamp}
                   status={msg.status}
+                  reactions={msg.reactions}
+                  onReaction={(emoji) => handleReaction(msg.id, emoji)}
                 />
               );
             }
