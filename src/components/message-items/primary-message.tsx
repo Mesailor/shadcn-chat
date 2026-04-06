@@ -5,11 +5,14 @@ import {
   ChatEventAvatar,
   ChatEventBody,
   ChatEventContent,
+  ChatEventHoverActions,
   ChatEventTime,
   ChatEventTitle,
 } from "@/registry/new-york/chat/chat-event";
 import { EventContent } from "@/data/messages";
 import { MessageContent } from "./message-content";
+import { Button } from "@/components/ui/button";
+import { MoreHorizontalIcon, SmilePlusIcon } from "lucide-react";
 
 export function PrimaryMessage({
   avatarSrc,
@@ -54,6 +57,24 @@ export function PrimaryMessage({
           <MessageContent content={content} />
         </ChatEventContent>
       </ChatEventBody>
+      <ChatEventHoverActions>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="size-7 [&_svg]:size-3.5"
+          aria-label="Add reaction"
+        >
+          <SmilePlusIcon />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="size-7 [&_svg]:size-3.5"
+          aria-label="More options"
+        >
+          <MoreHorizontalIcon />
+        </Button>
+      </ChatEventHoverActions>
     </ChatEvent>
   );
 }

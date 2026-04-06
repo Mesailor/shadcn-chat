@@ -67,12 +67,12 @@ export function EventUsageExample() {
       />
 
       <h4 className="font-semibold mt-4">Additional Message</h4>
-      <ChatEvent className="hover:bg-accent group py-2 border-y">
+      <ChatEvent className="hover:bg-accent py-2 border-y">
         <ChatEventAddon>
           <ChatEventTime
             timestamp={ADDITIONAL_MSG.timestamp}
             format="time"
-            className="text-right text-[8px] md:text-[10px] group-hover:visible invisible"
+            className="text-right text-[8px] md:text-[10px] group-hover/event:visible invisible"
           />
         </ChatEventAddon>
         <ChatEventBody>
@@ -127,6 +127,14 @@ const primaryMessageCodeString = `export function PrimaryMessage({
         </ChatEventTitle>
         <ChatEventContent>{content}</ChatEventContent>
       </ChatEventBody>
+      <ChatEventHoverActions>
+        <Button variant="ghost" size="icon" className="size-7 [&_svg]:size-3.5">
+          <SmilePlusIcon />
+        </Button>
+        <Button variant="ghost" size="icon" className="size-7 [&_svg]:size-3.5">
+          <MoreHorizontalIcon />
+        </Button>
+      </ChatEventHoverActions>
     </ChatEvent>
   );
 }
@@ -140,17 +148,25 @@ const additionalMessageCodeString = `export function AdditionalMessage({
   timestamp: number;
 }) {
   return (
-    <ChatEvent className="hover:bg-accent group">
+    <ChatEvent className="hover:bg-accent">
       <ChatEventAddon>
         <ChatEventTime
           timestamp={timestamp}
           format="time"
-          className="text-right text-[8px] @md/chat:text-[10px] group-hover:visible invisible"
+          className="text-right text-[8px] @md/chat:text-[10px] group-hover/event:visible invisible"
         />
       </ChatEventAddon>
       <ChatEventBody>
         <ChatEventContent>{content}</ChatEventContent>
       </ChatEventBody>
+      <ChatEventHoverActions>
+        <Button variant="ghost" size="icon" className="size-7 [&_svg]:size-3.5">
+          <SmilePlusIcon />
+        </Button>
+        <Button variant="ghost" size="icon" className="size-7 [&_svg]:size-3.5">
+          <MoreHorizontalIcon />
+        </Button>
+      </ChatEventHoverActions>
     </ChatEvent>
   );
 }

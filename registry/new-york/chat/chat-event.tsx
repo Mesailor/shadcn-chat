@@ -110,17 +110,20 @@ export interface ChatEventProps extends React.ComponentProps<"div"> {}
  * </ChatEvent>
  *
  * // Follow-up message (same sender, no avatar)
- * <ChatEvent className="hover:bg-accent group">
+ * <ChatEvent className="hover:bg-accent">
  *   <ChatEventAddon>
  *     <ChatEventTime
  *       timestamp={1700000000000}
  *       format="time"
- *       className="text-right text-[8px] group-hover:visible invisible"
+ *       className="text-right text-[8px] group-hover/event:visible invisible"
  *     />
  *   </ChatEventAddon>
  *   <ChatEventBody>
  *     <ChatEventContent>Another message from the same sender.</ChatEventContent>
  *   </ChatEventBody>
+ *   <ChatEventHoverActions>
+ *     ...
+ *   </ChatEventHoverActions>
  * </ChatEvent>
  *
  * // Date separator
@@ -137,7 +140,13 @@ export interface ChatEventProps extends React.ComponentProps<"div"> {}
  */
 export function ChatEvent({ children, className, ...props }: ChatEventProps) {
   return (
-    <div className={cn("flex gap-2 px-2", className)} {...props}>
+    <div
+      className={cn(
+        "flex gap-2 px-2 relative group/event hover:z-10",
+        className,
+      )}
+      {...props}
+    >
       {children}
     </div>
   );
@@ -222,7 +231,13 @@ export function ChatEventContent({
   ...props
 }: ChatEventContentProps) {
   return (
-    <div className={cn("text-sm @md/chat:text-base whitespace-pre-wrap", className)} {...props}>
+    <div
+      className={cn(
+        "text-sm @md/chat:text-base whitespace-pre-wrap",
+        className,
+      )}
+      {...props}
+    >
       {children}
     </div>
   );
@@ -358,7 +373,7 @@ function getRelativeTimeString(date: Date, locale: string): string {
  * <ChatEventTime
  *   timestamp={1700000000000}
  *   format="time"
- *   className="text-right text-[8px] group-hover:visible invisible"
+ *   className="text-right text-[8px] group-hover/event:visible invisible"
  * />
  *
  * // Long date format for date separators
@@ -404,5 +419,52 @@ export function ChatEventTime({
     >
       {formattedTime}
     </time>
+  );
+}
+
+export interface ChatEventHoverActionsProps extends React.ComponentProps<"div"> {}
+
+/**
+ * Container for hover action buttons. Appears absolutely positioned at the
+ * top-right of the `ChatEvent` row when it is hovered. Place as a direct
+ * child of `ChatEvent`, after `ChatEventBody`.
+ *
+ * `ChatEvent` provides the named group (`group/event`) and `relative`
+ * positioning required for this component to work.
+ *
+ * @example
+ * ```tsx
+ * <ChatEvent className="hover:bg-accent">
+ *   <ChatEventBody>...</ChatEventBody>
+ *   <ChatEventHoverActions>
+ *     <Button variant="ghost" size="icon" className="size-7 [&_svg]:size-3.5">
+ *       <SmilePlusIcon />
+ *     </Button>
+ *     <Button variant="ghost" size="icon" className="size-7 [&_svg]:size-3.5">
+ *       <MoreHorizontalIcon />
+ *     </Button>
+ *   </ChatEventHoverActions>
+ * </ChatEvent>
+ * ```
+ */
+export function ChatEventHoverActions({
+  children,
+  className,
+  ...props
+}: ChatEventHoverActionsProps) {
+  return (
+    <div
+      className={cn(
+        "hidden group-hover/event:flex",
+        "absolute right-2 -top-4",
+        "bg-background border rounded-md shadow-sm",
+        "items-center gap-0.5 p-0.5",
+        "z-10",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </div>
   );
 }
