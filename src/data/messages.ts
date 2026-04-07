@@ -311,6 +311,16 @@ export const reactToEvent = (
   });
 };
 
+export const searchEvents = (query: string): Promise<Event[]> => {
+  const q = query.trim().toLowerCase();
+  if (!q) return Promise.resolve([]);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(EVENTS.filter((e) => e.content.text?.toLowerCase().includes(q)));
+    }, 150);
+  });
+};
+
 export const getEvents = () => {
   // Simulate fetching events from an API with a delay
   return new Promise<typeof EVENTS>((resolve) => {

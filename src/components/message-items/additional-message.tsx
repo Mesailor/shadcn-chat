@@ -20,6 +20,8 @@ export function AdditionalMessage({
   status,
   reactions,
   onReaction,
+  id,
+  highlighted,
 }: {
   className?: string;
   content: EventContent;
@@ -27,9 +29,14 @@ export function AdditionalMessage({
   status?: "sent" | "sending" | "failed";
   reactions?: string[];
   onReaction?: (emoji: string) => void;
+  id?: string;
+  highlighted?: boolean;
 }) {
   return (
-    <ChatEvent className={cn("hover:bg-accent", className)}>
+    <ChatEvent
+      id={id}
+      className={cn("hover:bg-accent", highlighted && "animate-message-highlight", className)}
+    >
       <ChatEventAddon>
         <ChatEventTime
           timestamp={timestamp}

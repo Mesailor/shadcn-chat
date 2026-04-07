@@ -26,6 +26,8 @@ export function PrimaryMessage({
   reactions,
   onReaction,
   className,
+  id,
+  highlighted,
 }: {
   avatarSrc?: string;
   avatarAlt?: string;
@@ -37,9 +39,14 @@ export function PrimaryMessage({
   reactions?: string[];
   onReaction?: (emoji: string) => void;
   className?: string;
+  id?: string;
+  highlighted?: boolean;
 }) {
   return (
-    <ChatEvent className={cn("hover:bg-accent", className)}>
+    <ChatEvent
+      id={id}
+      className={cn("hover:bg-accent", highlighted && "animate-message-highlight", className)}
+    >
       <ChatEventAddon>
         <ChatEventAvatar
           src={avatarSrc}

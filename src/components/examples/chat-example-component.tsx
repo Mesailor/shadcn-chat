@@ -10,12 +10,27 @@ import {
   SearchIcon,
   SendIcon,
   VideoIcon,
+  XIcon,
 } from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import {
+  SidebarContent,
+  SidebarHeader,
+  SidebarInset,
+  SidebarProvider,
+} from "@/components/ui/sidebar";
 import { Chat } from "@/registry/new-york/chat/chat";
 import {
   ChatHeader,
@@ -34,17 +49,34 @@ import {
 } from "@/registry/new-york/chat/chat-toolbar";
 import { ChatMessages } from "@/registry/new-york/chat/chat-messages";
 import { PrimaryMessage } from "@/components/message-items/primary-message";
+import { SearchResultItem } from "@/components/message-items/search-result-item";
 import { DateItem } from "@/components/message-items/date-item";
 import { AdditionalMessage } from "@/components/message-items/additional-message";
 import { PrimaryMessageSkeleton } from "@/components/message-items/primary-message-skeleton";
 import { DateItemSkeleton } from "@/components/message-items/date-item-skeleton";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Event, getEvents, postEvent, reactToEvent } from "@/data/messages";
+import {
+  Event,
+  getEvents,
+  postEvent,
+  reactToEvent,
+  searchEvents,
+} from "@/data/messages";
 
 export function ChatExampleComponent() {
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const chatMessagesRef = useRef<HTMLDivElement>(null);
+  const [isChatWide, setIsChatWide] = useState(false);
   const [fetching, setFetching] = useState(false);
   const [messages, setMessages] = useState<Event[]>([]);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeSearchQuery, setActiveSearchQuery] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState<Event[]>([]);
+  const [highlightedMessageId, setHighlightedMessageId] = useState<
+    number | null
+  >(null);
 
   const handleSubmit = useCallback(
     async (submitData: { text: string; files: File[] }) => {
@@ -104,6 +136,61 @@ export function ChatExampleComponent() {
     chatMessagesRef.current?.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
+  const scrollToMessage = useCallback((id: number) => {
+    const container = chatMessagesRef.current;
+    const element = document.getElementById(`message-${id}`);
+    if (!container || !element) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const elementRect = element.getBoundingClientRect();
+    container.scrollTo({
+      top:
+        container.scrollTop +
+        elementRect.top -
+        containerRect.top -
+        containerRect.height / 2 +
+        elementRect.height / 2,
+      behavior: "smooth",
+    });
+
+    setHighlightedMessageId(id);
+  }, []);
+
+  const handleSearch = useCallback(async (query: string) => {
+    const trimmed = query.trim();
+    if (!trimmed) return;
+    setActiveSearchQuery(trimmed);
+    setSearchOpen(true);
+    const results = await searchEvents(trimmed);
+    setSearchResults(results);
+  }, []);
+
+  const handleSearchClose = useCallback(() => {
+    setSearchOpen(false);
+  }, []);
+
+  const handleClearSearch = useCallback(() => {
+    setSearchQuery("");
+    setActiveSearchQuery("");
+    setSearchResults([]);
+  }, []);
+
+  useEffect(() => {
+    if (highlightedMessageId === null) return;
+    const timer = setTimeout(() => setHighlightedMessageId(null), 3000);
+    return () => clearTimeout(timer);
+  }, [highlightedMessageId]);
+
+  useEffect(() => {
+    const el = chatContainerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      setIsChatWide(entry.contentRect.width >= 672);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   useEffect(() => {
     const fetchMessages = async () => {
       setFetching(true);
@@ -115,119 +202,165 @@ export function ChatExampleComponent() {
   }, []);
 
   return (
-    <Chat>
-      <ChatHeader className="border-b">
-        <ChatHeaderAddon>
-          <ChatHeaderAvatar
-            src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png"
-            alt="@annsmith"
-            fallback="AS"
-          />
-        </ChatHeaderAddon>
-        <ChatHeaderMain>
-          <span className="font-medium">Ann Smith</span>
-          <span className="text-sm font-semibold">AKA</span>
-          <span className="flex-1 grid">
-            <span className="text-sm font-medium truncate">
-              Front-end developer
+    <div ref={chatContainerRef} className="h-full">
+      <Chat>
+        <ChatHeader className="border-b">
+          <ChatHeaderAddon>
+            <ChatHeaderAvatar
+              src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png"
+              alt="@annsmith"
+              fallback="AS"
+            />
+          </ChatHeaderAddon>
+          <ChatHeaderMain>
+            <span className="font-medium">Ann Smith</span>
+            <span className="text-sm font-semibold">AKA</span>
+            <span className="flex-1 grid">
+              <span className="text-sm font-medium truncate">
+                Front-end developer
+              </span>
             </span>
-          </span>
-        </ChatHeaderMain>
-        <ChatHeaderAddon>
-          <InputGroup className="@2xl/chat:flex hidden">
-            <InputGroupInput placeholder="Search..." />
-            <InputGroupAddon>
-              <SearchIcon />
-            </InputGroupAddon>
-          </InputGroup>
-          <ChatHeaderButton className=" @2xl/chat:inline-flex hidden">
-            <PhoneIcon />
-          </ChatHeaderButton>
-          <ChatHeaderButton className=" @2xl/chat:inline-flex hidden">
-            <VideoIcon />
-          </ChatHeaderButton>
-          <ChatHeaderButton>
-            <MoreHorizontalIcon />
-          </ChatHeaderButton>
-        </ChatHeaderAddon>
-      </ChatHeader>
+          </ChatHeaderMain>
+          <ChatHeaderAddon>
+            <InputGroup className="@2xl/chat:flex hidden">
+              <InputGroupInput
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleSearch(searchQuery);
+                  }
+                }}
+              />
+              <InputGroupAddon>
+                <SearchIcon />
+              </InputGroupAddon>
+            </InputGroup>
+            <ChatHeaderButton className="@2xl/chat:inline-flex hidden">
+              <PhoneIcon />
+            </ChatHeaderButton>
+            <ChatHeaderButton className="@2xl/chat:inline-flex hidden">
+              <VideoIcon />
+            </ChatHeaderButton>
+            <ChatHeaderButton>
+              <MoreHorizontalIcon />
+            </ChatHeaderButton>
+          </ChatHeaderAddon>
+        </ChatHeader>
 
-      <ChatMessages ref={chatMessagesRef} className="scrollbar-hidden">
-        {fetching &&
-          Array.from({ length: 20 }).map((_, i) => {
-            if (i % 6 === 0) {
-              return (
-                <Fragment key={i}>
-                  <PrimaryMessageSkeleton className="w-full" />
-                  <DateItemSkeleton className="my-4" />
-                </Fragment>
-              );
-            }
-            return <PrimaryMessageSkeleton key={i} className="w-full mt-4" />;
-          })}
+        <SidebarProvider
+          open={searchOpen}
+          onOpenChange={(open) => {
+            if (!open) handleSearchClose();
+          }}
+          className="flex-1 min-h-0"
+        >
+          <SidebarInset className="min-h-0 overflow-hidden">
+            <ChatMessages ref={chatMessagesRef} className="scrollbar-hidden">
+              {fetching &&
+                Array.from({ length: 20 }).map((_, i) => {
+                  if (i % 6 === 0) {
+                    return (
+                      <Fragment key={i}>
+                        <PrimaryMessageSkeleton className="w-full" />
+                        <DateItemSkeleton className="my-4" />
+                      </Fragment>
+                    );
+                  }
+                  return (
+                    <PrimaryMessageSkeleton key={i} className="w-full mt-4" />
+                  );
+                })}
 
-        {!fetching &&
-          messages.map((msg, i, msgs) => {
-            // If date changed, show date item
-            if (
-              new Date(msg.timestamp).toDateString() !==
-              new Date(msgs[i + 1]?.timestamp).toDateString()
-            ) {
-              return (
-                <Fragment key={msg.id}>
-                  <PrimaryMessage
-                    avatarSrc={msg.sender.avatarUrl}
-                    avatarAlt={msg.sender.username}
-                    avatarFallback={msg.sender.name.slice(0, 2)}
-                    senderName={msg.sender.name}
-                    content={msg.content}
-                    timestamp={msg.timestamp}
-                    status={msg.status}
-                    reactions={msg.reactions}
-                    onReaction={(emoji) => handleReaction(msg.id, emoji)}
-                  />
-                  <DateItem timestamp={msg.timestamp} className="my-4" />
-                </Fragment>
-              );
-            }
+              {!fetching &&
+                messages.map((msg, i, msgs) => {
+                  // If date changed, show date item
+                  if (
+                    new Date(msg.timestamp).toDateString() !==
+                    new Date(msgs[i + 1]?.timestamp).toDateString()
+                  ) {
+                    return (
+                      <Fragment key={msg.id}>
+                        <PrimaryMessage
+                          id={`message-${msg.id}`}
+                          highlighted={highlightedMessageId === msg.id}
+                          avatarSrc={msg.sender.avatarUrl}
+                          avatarAlt={msg.sender.username}
+                          avatarFallback={msg.sender.name.slice(0, 2)}
+                          senderName={msg.sender.name}
+                          content={msg.content}
+                          timestamp={msg.timestamp}
+                          status={msg.status}
+                          reactions={msg.reactions}
+                          onReaction={(emoji) => handleReaction(msg.id, emoji)}
+                        />
+                        <DateItem timestamp={msg.timestamp} className="my-4" />
+                      </Fragment>
+                    );
+                  }
 
-            // If next item is same user, show additional
-            if (msg.sender.id === msgs[i + 1]?.sender.id) {
-              return (
-                <AdditionalMessage
-                  className="pt-1"
-                  key={msg.id}
-                  content={msg.content}
-                  timestamp={msg.timestamp}
-                  status={msg.status}
-                  reactions={msg.reactions}
-                  onReaction={(emoji) => handleReaction(msg.id, emoji)}
-                />
-              );
-            }
-            // Else, show primary
-            else {
-              return (
-                <PrimaryMessage
-                  className="mt-4"
-                  key={msg.id}
-                  avatarSrc={msg.sender.avatarUrl}
-                  avatarAlt={msg.sender.username}
-                  avatarFallback={msg.sender.name.slice(0, 2)}
-                  senderName={msg.sender.name}
-                  content={msg.content}
-                  timestamp={msg.timestamp}
-                  status={msg.status}
-                  reactions={msg.reactions}
-                  onReaction={(emoji) => handleReaction(msg.id, emoji)}
-                />
-              );
-            }
-          })}
-      </ChatMessages>
+                  // If next item is same user, show additional
+                  if (msg.sender.id === msgs[i + 1]?.sender.id) {
+                    return (
+                      <AdditionalMessage
+                        id={`message-${msg.id}`}
+                        className="pt-1"
+                        highlighted={highlightedMessageId === msg.id}
+                        key={msg.id}
+                        content={msg.content}
+                        timestamp={msg.timestamp}
+                        status={msg.status}
+                        reactions={msg.reactions}
+                        onReaction={(emoji) => handleReaction(msg.id, emoji)}
+                      />
+                    );
+                  }
+                  // Else, show primary
+                  else {
+                    return (
+                      <PrimaryMessage
+                        id={`message-${msg.id}`}
+                        className="mt-4"
+                        highlighted={highlightedMessageId === msg.id}
+                        key={msg.id}
+                        avatarSrc={msg.sender.avatarUrl}
+                        avatarAlt={msg.sender.username}
+                        avatarFallback={msg.sender.name.slice(0, 2)}
+                        senderName={msg.sender.name}
+                        content={msg.content}
+                        timestamp={msg.timestamp}
+                        status={msg.status}
+                        reactions={msg.reactions}
+                        onReaction={(emoji) => handleReaction(msg.id, emoji)}
+                      />
+                    );
+                  }
+                })}
+            </ChatMessages>
 
-      <Toolbar onSubmit={handleSubmit} onScrollToBottom={scrollToBottom} />
-    </Chat>
+            <Toolbar
+              onSubmit={handleSubmit}
+              onScrollToBottom={scrollToBottom}
+            />
+          </SidebarInset>
+
+          <SearchSidebar
+            open={searchOpen}
+            onClose={handleSearchClose}
+            onClear={handleClearSearch}
+            query={activeSearchQuery}
+            results={searchResults}
+            useDialog={!isChatWide}
+            searchQuery={searchQuery}
+            onSearchQueryChange={setSearchQuery}
+            onSearch={handleSearch}
+            onResultClick={scrollToMessage}
+          />
+        </SidebarProvider>
+      </Chat>
+    </div>
   );
 }
 
@@ -304,5 +437,126 @@ function Toolbar({ onSubmit, onScrollToBottom }: ToolbarProps) {
         </ChatToolbarButton>
       </ChatToolbarAddon>
     </ChatToolbar>
+  );
+}
+
+interface SearchSidebarProps {
+  open: boolean;
+  onClose: () => void;
+  onClear: () => void;
+  query: string;
+  results: Event[];
+  useDialog: boolean;
+  searchQuery: string;
+  onSearchQueryChange: (value: string) => void;
+  onSearch: (query: string) => void;
+  onResultClick: (id: number) => void;
+}
+
+function SearchSidebar({
+  open,
+  onClose,
+  onClear,
+  query,
+  results,
+  useDialog,
+  searchQuery,
+  onSearchQueryChange,
+  onSearch,
+  onResultClick,
+}: SearchSidebarProps) {
+  const label = `${results.length} result${results.length !== 1 ? "s" : ""} for "${query}"`;
+
+  const resultItems = results.map((msg) => (
+    <SearchResultItem
+      className="p-1"
+      key={msg.id}
+      avatarSrc={msg.sender.avatarUrl}
+      avatarAlt={msg.sender.username}
+      avatarFallback={msg.sender.name.slice(0, 2)}
+      senderName={msg.sender.name}
+      content={msg.content}
+      timestamp={msg.timestamp}
+      onClick={() => {
+        onResultClick(msg.id);
+        if (useDialog) onClose();
+      }}
+    />
+  ));
+
+  const emptyState = (
+    <p className="text-sm text-muted-foreground text-center py-8">
+      No messages found.
+    </p>
+  );
+
+  if (useDialog) {
+    return (
+      <Sheet
+        open={open}
+        onOpenChange={(o) => {
+          if (!o) onClose();
+        }}
+      >
+        <SheetContent side="right" className="flex flex-col gap-0 p-0">
+          <SheetHeader className="sr-only">
+            <SheetTitle>Search messages</SheetTitle>
+          </SheetHeader>
+          <div className="border-b p-3 pr-12">
+            <InputGroup>
+              <InputGroupInput
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => onSearchQueryChange(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    onSearch(searchQuery);
+                  }
+                }}
+                autoFocus
+              />
+              <InputGroupAddon>
+                <SearchIcon />
+              </InputGroupAddon>
+            </InputGroup>
+          </div>
+          {query && (
+            <div className="border-b px-4 py-2 text-sm text-muted-foreground">
+              {label}
+            </div>
+          )}
+          <div className="overflow-y-auto flex-1 space-y-2 p-2">
+            {query && (results.length === 0 ? emptyState : resultItems)}
+          </div>
+        </SheetContent>
+      </Sheet>
+    );
+  }
+
+  const content = results.length === 0 ? emptyState : resultItems;
+
+  return (
+    <div
+      className={cn(
+        "flex flex-col border-l bg-sidebar text-sidebar-foreground overflow-hidden",
+        open ? "@3xl/chat:w-96 @2xl/chat:w-72 w-0" : "w-0",
+      )}
+    >
+      <SidebarHeader className="border-b flex-row items-center justify-between">
+        <span className="text-sm font-medium truncate">{label}</span>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={() => {
+            onClear();
+            onClose();
+          }}
+        >
+          <XIcon />
+        </Button>
+      </SidebarHeader>
+      <SidebarContent className="gap-2 p-2">{content}</SidebarContent>
+    </div>
   );
 }
