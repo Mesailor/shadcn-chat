@@ -1,3 +1,5 @@
+export const AUTHED_USER_ID = "johndoe-user-id";
+
 export type EventType = "message" | "system";
 
 export interface EventFile {
@@ -373,5 +375,19 @@ export const postEvent = ({
       EVENTS.unshift(newEvent); // Add to the beginning since events are in reverse order
       resolve(newEvent);
     }, 1000);
+  });
+};
+
+export const deleteEvent = (id: number) => {
+  return new Promise<number>((resolve, reject) => {
+    setTimeout(() => {
+      const index = EVENTS.findIndex((e) => e.id === id);
+      if (index !== -1) {
+        EVENTS.splice(index, 1);
+        resolve(id);
+      } else {
+        reject(new Error("Event not found"));
+      }
+    }, 500);
   });
 };

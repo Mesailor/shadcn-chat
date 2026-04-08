@@ -14,6 +14,24 @@ import { MessageContent } from "./message-content";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontalIcon, SmilePlusIcon } from "lucide-react";
 import { ReactionsPopover } from "./reactions-popover";
+import { MessageActionsDropdown } from "./message-actions-dropdown";
+
+interface PrimaryMessageProps {
+  avatarSrc?: string;
+  avatarAlt?: string;
+  avatarFallback?: string;
+  senderName: string;
+  content: EventContent;
+  timestamp: number;
+  status?: "sent" | "sending" | "failed";
+  reactions?: string[];
+  onReaction?: (emoji: string) => void;
+  onDelete?: () => void;
+  onEdit?: () => void;
+  className?: string;
+  id?: string;
+  highlighted?: boolean;
+}
 
 export function PrimaryMessage({
   avatarSrc,
@@ -25,27 +43,20 @@ export function PrimaryMessage({
   status,
   reactions,
   onReaction,
+  onDelete,
+  onEdit,
   className,
   id,
   highlighted,
-}: {
-  avatarSrc?: string;
-  avatarAlt?: string;
-  avatarFallback?: string;
-  senderName: string;
-  content: EventContent;
-  timestamp: number;
-  status?: "sent" | "sending" | "failed";
-  reactions?: string[];
-  onReaction?: (emoji: string) => void;
-  className?: string;
-  id?: string;
-  highlighted?: boolean;
-}) {
+}: PrimaryMessageProps) {
   return (
     <ChatEvent
       id={id}
-      className={cn("hover:bg-accent", highlighted && "animate-message-highlight", className)}
+      className={cn(
+        "hover:bg-accent",
+        highlighted && "animate-message-highlight",
+        className,
+      )}
     >
       <ChatEventAddon>
         <ChatEventAvatar
@@ -93,14 +104,16 @@ export function PrimaryMessage({
             <SmilePlusIcon />
           </Button>
         </ReactionsPopover>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-7 [&_svg]:size-3.5"
-          aria-label="More options"
-        >
-          <MoreHorizontalIcon />
-        </Button>
+        <MessageActionsDropdown onEdit={onEdit} onDelete={onDelete}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-7 [&_svg]:size-3.5"
+            aria-label="More options"
+          >
+            <MoreHorizontalIcon />
+          </Button>
+        </MessageActionsDropdown>
       </ChatEventHoverActions>
     </ChatEvent>
   );

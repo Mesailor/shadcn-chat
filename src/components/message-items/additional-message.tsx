@@ -12,6 +12,20 @@ import { MessageContent } from "./message-content";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontalIcon, SmilePlusIcon } from "lucide-react";
 import { ReactionsPopover } from "./reactions-popover";
+import { MessageActionsDropdown } from "./message-actions-dropdown";
+
+interface AdditionalMessageProps {
+  className?: string;
+  content: EventContent;
+  timestamp: number;
+  status?: "sent" | "sending" | "failed";
+  reactions?: string[];
+  onReaction?: (emoji: string) => void;
+  onDelete?: () => void;
+  onEdit?: () => void;
+  id?: string;
+  highlighted?: boolean;
+}
 
 export function AdditionalMessage({
   className,
@@ -20,22 +34,19 @@ export function AdditionalMessage({
   status,
   reactions,
   onReaction,
+  onDelete,
+  onEdit,
   id,
   highlighted,
-}: {
-  className?: string;
-  content: EventContent;
-  timestamp: number;
-  status?: "sent" | "sending" | "failed";
-  reactions?: string[];
-  onReaction?: (emoji: string) => void;
-  id?: string;
-  highlighted?: boolean;
-}) {
+}: AdditionalMessageProps) {
   return (
     <ChatEvent
       id={id}
-      className={cn("hover:bg-accent", highlighted && "animate-message-highlight", className)}
+      className={cn(
+        "hover:bg-accent",
+        highlighted && "animate-message-highlight",
+        className,
+      )}
     >
       <ChatEventAddon>
         <ChatEventTime
@@ -79,14 +90,16 @@ export function AdditionalMessage({
             <SmilePlusIcon />
           </Button>
         </ReactionsPopover>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-7 [&_svg]:size-3.5"
-          aria-label="More options"
-        >
-          <MoreHorizontalIcon />
-        </Button>
+        <MessageActionsDropdown onEdit={onEdit} onDelete={onDelete}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-7 [&_svg]:size-3.5"
+            aria-label="More options"
+          >
+            <MoreHorizontalIcon />
+          </Button>
+        </MessageActionsDropdown>
       </ChatEventHoverActions>
     </ChatEvent>
   );

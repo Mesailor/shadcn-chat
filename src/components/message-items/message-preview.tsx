@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import {
   ChatEvent,
   ChatEventAddon,
@@ -11,7 +10,7 @@ import {
 import { EventContent } from "@/data/messages";
 import { MessageContent } from "./message-content";
 
-export function SearchResultItem({
+export function MessagePreview({
   avatarSrc,
   avatarAlt,
   avatarFallback,
@@ -31,13 +30,7 @@ export function SearchResultItem({
   className?: string;
 }) {
   return (
-    <ChatEvent
-      className={cn(
-        "hover:bg-accent cursor-pointer border rounded-md",
-        className,
-      )}
-      onClick={onClick}
-    >
+    <ChatEvent className={className} onClick={onClick}>
       <ChatEventAddon>
         <ChatEventAvatar
           src={avatarSrc}
