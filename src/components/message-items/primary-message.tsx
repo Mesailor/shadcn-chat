@@ -25,6 +25,7 @@ interface PrimaryMessageProps {
   timestamp: number;
   status?: "sent" | "sending" | "failed";
   reactions?: string[];
+  isEdited?: boolean;
   onReaction?: (emoji: string) => void;
   onDelete?: () => void;
   onEdit?: () => void;
@@ -42,6 +43,7 @@ export function PrimaryMessage({
   timestamp,
   status,
   reactions,
+  isEdited,
   onReaction,
   onDelete,
   onEdit,
@@ -77,6 +79,9 @@ export function PrimaryMessage({
         >
           <MessageContent content={content} />
         </ChatEventContent>
+        {isEdited && (
+          <span className="text-muted-foreground text-sm">(edited)</span>
+        )}
         {reactions && reactions.length > 0 && (
           <div className="flex gap-1 flex-wrap mt-1">
             {reactions.map((emoji, i) => (

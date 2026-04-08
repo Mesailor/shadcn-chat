@@ -27,6 +27,7 @@ export interface Event {
   timestamp: number;
   content: EventContent;
   reactions?: string[];
+  isEdited?: boolean;
 }
 
 export const EVENTS: Event[] = [
@@ -388,6 +389,34 @@ export const deleteEvent = (id: number) => {
       } else {
         reject(new Error("Event not found"));
       }
+    }, 500);
+  });
+};
+
+export const updateEvent = (
+  id: number,
+  data: { text?: string; uploadFiles?: File[]; editedFiles?: EventFile[] },
+) => {
+  return new Promise<Event>((resolve, reject) => {
+    setTimeout(() => {
+      const event = EVENTS.find((e) => e.id === id);
+      if (!event) {
+        reject(new Error("Event not found"));
+        return;
+      }
+      const newFiles: EventFile[] = (data.uploadFiles ?? []).map((file) => ({
+        url: URL.createObjectURL(file),
+        fileName: file.name,
+        mimeType: file.type || undefined,
+      }));
+      const allFiles = [...(data.editedFiles ?? []), ...newFiles];
+      event.content = {
+        ...event.content,
+        ...(data.text !== undefined && { text: data.text }),
+        ...(allFiles.length > 0 ? { files: allFiles } : { files: undefined }),
+      };
+      event.isEdited = true;
+      resolve({ ...event });
     }, 500);
   });
 };

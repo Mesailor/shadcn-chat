@@ -270,8 +270,8 @@ export interface ChatToolbarAttachmentButtonProps extends Omit<
  * ```
  */
 export interface ChatToolbarAttachmentProps extends React.ComponentProps<"div"> {
-  /** The file to display. */
-  file: File;
+  /** The file name to display. */
+  fileName: string;
   /** Called when the user clicks the remove button. */
   onRemove?: () => void;
 }
@@ -295,7 +295,7 @@ export interface ChatToolbarAttachmentProps extends React.ComponentProps<"div"> 
  * ```
  */
 export function ChatToolbarAttachment({
-  file,
+  fileName,
   onRemove,
   className,
   ...props
@@ -310,7 +310,7 @@ export function ChatToolbarAttachment({
     >
       <FileTextIcon className="size-5 @md/chat:size-6 text-muted-foreground stroke-[1.5px]" />
       <span className="text-[10px] @md/chat:text-xs text-muted-foreground leading-tight max-w-[calc(100%-8px)] truncate">
-        {file.name}
+        {fileName}
       </span>
       {onRemove && (
         <button

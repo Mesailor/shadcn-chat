@@ -2,8 +2,9 @@
 
 import { Fragment } from "react/jsx-runtime";
 import {
-  CalendarDaysIcon,
-  GiftIcon,
+  CheckCircle2Icon,
+  CheckCircleIcon,
+  CheckIcon,
   MoreHorizontalIcon,
   PhoneIcon,
   PlusIcon,
@@ -68,10 +69,13 @@ import {
   AUTHED_USER_ID,
   deleteEvent,
   Event,
+  EventContent,
+  EventFile,
   getEvents,
   postEvent,
   reactToEvent,
   searchEvents,
+  updateEvent,
 } from "@/data/messages";
 
 export function ChatExampleComponent() {
@@ -91,6 +95,8 @@ export function ChatExampleComponent() {
 
   const [messageToDelete, setMessageToDelete] = useState<Event | null>(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
+  const [messageToEdit, setMessageToEdit] = useState<Event | null>(null);
 
   const handleSubmit = useCallback(
     async (submitData: { text: string; files: File[] }) => {
@@ -206,6 +212,66 @@ export function ChatExampleComponent() {
       console.error("Failed to delete message:", error);
     }
   }, [messageToDelete]);
+
+  const handleStartEdit = useCallback((msg: Event) => {
+    setMessageToEdit(msg);
+  }, []);
+
+  const handleSubmitEdit = useCallback(
+    async (data: {
+      text: string;
+      uploadFiles: File[];
+      editedFiles: EventFile[];
+    }) => {
+      if (!messageToEdit) return;
+
+      // Client-side mapping only for the optimistic update
+      const optimisticNewFiles: EventFile[] = data.uploadFiles.map((file) => ({
+        url: URL.createObjectURL(file),
+        fileName: file.name,
+        mimeType: file.type,
+      }));
+      const optimisticAllFiles = [...data.editedFiles, ...optimisticNewFiles];
+      const optimisticContent: EventContent = {
+        type: "message",
+        ...(data.text && { text: data.text }),
+        ...(optimisticAllFiles.length > 0 && { files: optimisticAllFiles }),
+      };
+
+      // Optimistic update
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === messageToEdit.id
+            ? { ...msg, content: optimisticContent, isEdited: true }
+            : msg,
+        ),
+      );
+      setMessageToEdit(null);
+
+      try {
+        const updated = await updateEvent(messageToEdit.id, {
+          text: data.text,
+          uploadFiles: data.uploadFiles,
+          editedFiles: data.editedFiles,
+        });
+        setMessages((prev) =>
+          prev.map((msg) => (msg.id === updated.id ? updated : msg)),
+        );
+      } catch (error) {
+        console.error("Failed to update message:", error);
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === messageToEdit.id ? messageToEdit : msg,
+          ),
+        );
+      }
+    },
+    [messageToEdit],
+  );
+
+  const handleCancelEdit = useCallback(() => {
+    setMessageToEdit(null);
+  }, []);
 
   useEffect(() => {
     if (highlightedMessageId === null) return;
@@ -327,12 +393,18 @@ export function ChatExampleComponent() {
                             timestamp={msg.timestamp}
                             status={msg.status}
                             reactions={msg.reactions}
+                            isEdited={msg.isEdited}
                             onReaction={(emoji) =>
                               handleReaction(msg.id, emoji)
                             }
                             onDelete={
                               msg.sender.id === AUTHED_USER_ID
                                 ? () => handleOpenDeleteDialog(msg)
+                                : undefined
+                            }
+                            onEdit={
+                              msg.sender.id === AUTHED_USER_ID
+                                ? () => handleStartEdit(msg)
                                 : undefined
                             }
                           />
@@ -356,10 +428,16 @@ export function ChatExampleComponent() {
                           timestamp={msg.timestamp}
                           status={msg.status}
                           reactions={msg.reactions}
+                          isEdited={msg.isEdited}
                           onReaction={(emoji) => handleReaction(msg.id, emoji)}
                           onDelete={
                             msg.sender.id === AUTHED_USER_ID
                               ? () => handleOpenDeleteDialog(msg)
+                              : undefined
+                          }
+                          onEdit={
+                            msg.sender.id === AUTHED_USER_ID
+                              ? () => handleStartEdit(msg)
                               : undefined
                           }
                         />
@@ -381,10 +459,16 @@ export function ChatExampleComponent() {
                           timestamp={msg.timestamp}
                           status={msg.status}
                           reactions={msg.reactions}
+                          isEdited={msg.isEdited}
                           onReaction={(emoji) => handleReaction(msg.id, emoji)}
                           onDelete={
                             msg.sender.id === AUTHED_USER_ID
                               ? () => handleOpenDeleteDialog(msg)
+                              : undefined
+                          }
+                          onEdit={
+                            msg.sender.id === AUTHED_USER_ID
+                              ? () => handleStartEdit(msg)
                               : undefined
                           }
                         />
@@ -396,6 +480,9 @@ export function ChatExampleComponent() {
               <Toolbar
                 onSubmit={handleSubmit}
                 onScrollToBottom={scrollToBottom}
+                messageToEdit={messageToEdit}
+                onSubmitEdit={handleSubmitEdit}
+                onCancelEdit={handleCancelEdit}
               />
             </SidebarInset>
 
@@ -425,13 +512,28 @@ export function ChatExampleComponent() {
 }
 
 interface ToolbarProps {
+  messageToEdit: Event | null;
   onSubmit: (data: { text: string; files: File[] }) => Promise<void> | void;
+  onSubmitEdit: (data: {
+    text: string;
+    uploadFiles: File[];
+    editedFiles: EventFile[];
+  }) => Promise<void> | void;
+  onCancelEdit: () => void;
   onScrollToBottom?: () => void;
 }
 
-function Toolbar({ onSubmit, onScrollToBottom }: ToolbarProps) {
+function Toolbar({
+  messageToEdit,
+  onSubmit,
+  onSubmitEdit,
+  onCancelEdit,
+  onScrollToBottom,
+}: ToolbarProps) {
   const [input, setInput] = useState("");
   const [files, setFiles] = useState<File[]>([]);
+
+  const [filesToEdit, setFilesToEdit] = useState<EventFile[]>([]);
 
   const handleSubmit = useCallback(() => {
     const trimmedContent = input.trim();
@@ -450,19 +552,55 @@ function Toolbar({ onSubmit, onScrollToBottom }: ToolbarProps) {
     });
   }, [input, files, onSubmit, onScrollToBottom]);
 
+  const handleSubmitEdit = useCallback(() => {
+    const trimmedContent = input.trim();
+    if (!trimmedContent && files.length === 0 && filesToEdit.length === 0) {
+      return; // Don't submit empty messages
+    }
+
+    onSubmitEdit?.({
+      text: trimmedContent,
+      uploadFiles: files,
+      editedFiles: filesToEdit,
+    });
+
+    setInput("");
+    setFiles([]);
+  }, [input, files, filesToEdit, onSubmitEdit]);
+
+  useEffect(() => {
+    if (messageToEdit) {
+      setInput(messageToEdit.content.text || "");
+      setFilesToEdit(messageToEdit.content.files || []);
+    } else {
+      setInput("");
+      setFiles([]);
+      setFilesToEdit([]);
+    }
+  }, [messageToEdit]);
+
   return (
     <ChatToolbar>
-      {files.length > 0 && (
+      {(files.length > 0 || filesToEdit.length > 0) && (
         <ChatToolbarAddon
           align="block-start"
           className="mb-2 overflow-x-auto gap-2"
         >
           {files.map((file, i) => (
             <ChatToolbarAttachment
-              key={i}
-              file={file}
+              key={file.name + i}
+              fileName={file.name}
               onRemove={() =>
                 setFiles((prev) => prev.filter((_, idx) => idx !== i))
+              }
+            />
+          ))}
+          {filesToEdit.map((file, i) => (
+            <ChatToolbarAttachment
+              key={file.fileName + i}
+              fileName={file.fileName}
+              onRemove={() =>
+                setFilesToEdit((prev) => prev.filter((_, idx) => idx !== i))
               }
             />
           ))}
@@ -482,19 +620,33 @@ function Toolbar({ onSubmit, onScrollToBottom }: ToolbarProps) {
       <ChatToolbarTextarea
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        onSubmit={() => handleSubmit()}
+        onSubmit={() => (messageToEdit ? handleSubmitEdit() : handleSubmit())}
       />
 
       <ChatToolbarAddon align="inline-end">
-        <ChatToolbarButton>
-          <GiftIcon />
-        </ChatToolbarButton>
-        <ChatToolbarButton>
-          <CalendarDaysIcon />
-        </ChatToolbarButton>
-        <ChatToolbarButton onClick={() => handleSubmit()}>
-          <SendIcon />
-        </ChatToolbarButton>
+        {messageToEdit && (
+          <>
+            <ChatToolbarButton onClick={onCancelEdit}>
+              <XIcon />
+            </ChatToolbarButton>
+            <ChatToolbarButton
+              disabled={
+                !input.trim() && files.length === 0 && filesToEdit.length === 0
+              }
+              onClick={() => handleSubmitEdit()}
+            >
+              <CheckIcon />
+            </ChatToolbarButton>
+          </>
+        )}
+        {!messageToEdit && (
+          <ChatToolbarButton
+            disabled={!input.trim() && files.length === 0}
+            onClick={() => handleSubmit()}
+          >
+            <SendIcon />
+          </ChatToolbarButton>
+        )}
       </ChatToolbarAddon>
     </ChatToolbar>
   );
