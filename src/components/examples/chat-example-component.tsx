@@ -2,8 +2,6 @@
 
 import { Fragment } from "react/jsx-runtime";
 import {
-  CheckCircle2Icon,
-  CheckCircleIcon,
   CheckIcon,
   MoreHorizontalIcon,
   PhoneIcon,

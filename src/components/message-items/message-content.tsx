@@ -1,6 +1,5 @@
 import { EventContent, EventFile } from "@/data/messages";
 import { FileTextIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 export function MessageContent({ content }: { content: EventContent }) {
   const hasText = !!content.text;
