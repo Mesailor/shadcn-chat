@@ -110,6 +110,9 @@ export function ChatExampleComponent() {
   const [messageToDelete, setMessageToDelete] = useState<Event | null>(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
+  const [openBlockDialog, setOpenBlockDialog] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
+
   const [messageToEdit, setMessageToEdit] = useState<Event | null>(null);
 
   const handleSubmit = useCallback(
@@ -385,10 +388,20 @@ export function ChatExampleComponent() {
                     <UserIcon />
                     Show profile
                   </DropdownMenuItem>
-                  <DropdownMenuItem variant="destructive">
-                    <BanIcon />
-                    Block
-                  </DropdownMenuItem>
+                  {isBlocked ? (
+                    <DropdownMenuItem onSelect={() => setIsBlocked(false)}>
+                      <BanIcon />
+                      Unblock
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onSelect={() => setOpenBlockDialog(true)}
+                    >
+                      <BanIcon />
+                      Block
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </ChatHeaderAddon>
@@ -552,6 +565,14 @@ export function ChatExampleComponent() {
         onOpenChange={setOpenDeleteDialog}
         message={messageToDelete}
         onConfirm={handleDelete}
+      />
+      <BlockDialog
+        open={openBlockDialog}
+        onOpenChange={setOpenBlockDialog}
+        onConfirm={() => {
+          setIsBlocked(true);
+          setOpenBlockDialog(false);
+        }}
       />
     </>
   );
@@ -825,6 +846,38 @@ function SearchSidebar({
       </SidebarHeader>
       <SidebarContent className="gap-2 p-2">{content}</SidebarContent>
     </div>
+  );
+}
+
+function BlockDialog({
+  open,
+  onOpenChange,
+  onConfirm,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onConfirm: () => void;
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Block user</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to block this user? They will no longer be
+            able to send you messages.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button>Cancel</Button>
+          </DialogClose>
+          <Button variant="destructive" onClick={onConfirm}>
+            Block
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
