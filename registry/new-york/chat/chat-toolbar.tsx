@@ -71,7 +71,7 @@ export function ChatToolbar({
     >
       <div
         className={cn(
-          "border rounded-md py-2 px-3",
+          "border rounded-md p-2",
           "flex flex-wrap items-start gap-x-2",
         )}
       >
@@ -233,7 +233,7 @@ export function ChatToolbarButton({
     <Button
       variant="ghost"
       className={cn(
-        "size-8 @md/chat:size-9 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='size-'])]:@md/chat:size-5 [&_svg]:stroke-[1.7px]",
+        "size-9 @md/chat:size-9 [&_svg:not([class*='size-'])]:size-5 [&_svg:not([class*='size-'])]:@md/chat:size-5 [&_svg]:stroke-[1.7px]",
         className,
       )}
       type="button"

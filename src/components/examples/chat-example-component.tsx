@@ -694,7 +694,10 @@ function Toolbar({
         </ChatToolbarAddon>
       )}
 
-      <ChatToolbarAddon align="inline-start">
+      <ChatToolbarAddon
+        align="inline-start"
+        className="order-2 flex-1 @2xl/chat:order-1 @2xl/chat:flex-none"
+      >
         <ChatToolbarAttachmentButton
           onFilesSelected={(files) => {
             setFiles((prev) => [...prev, ...files]);
@@ -702,15 +705,6 @@ function Toolbar({
         >
           <PlusIcon />
         </ChatToolbarAttachmentButton>
-      </ChatToolbarAddon>
-
-      <ChatToolbarTextarea
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onSubmit={() => (messageToEdit ? handleSubmitEdit() : handleSubmit())}
-      />
-
-      <ChatToolbarAddon align="inline-end">
         <Popover open={emojiOpen} onOpenChange={setEmojiOpen}>
           <PopoverTrigger asChild>
             <ChatToolbarButton>
@@ -727,12 +721,24 @@ function Toolbar({
             />
           </PopoverContent>
         </Popover>
+      </ChatToolbarAddon>
+
+      <div className="w-full min-w-0 order-1 pb-1 @2xl/chat:pb-0 @2xl/chat:flex-1 @2xl/chat:w-auto @2xl/chat:order-2">
+        <ChatToolbarTextarea
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onSubmit={() => (messageToEdit ? handleSubmitEdit() : handleSubmit())}
+        />
+      </div>
+
+      <ChatToolbarAddon align="inline-end">
         {messageToEdit && (
           <>
             <ChatToolbarButton onClick={onCancelEdit}>
               <XIcon />
             </ChatToolbarButton>
             <ChatToolbarButton
+              variant="default"
               disabled={
                 !input.trim() && files.length === 0 && filesToEdit.length === 0
               }
@@ -744,6 +750,7 @@ function Toolbar({
         )}
         {!messageToEdit && (
           <ChatToolbarButton
+            variant="default"
             disabled={!input.trim() && files.length === 0}
             onClick={() => handleSubmit()}
           >
