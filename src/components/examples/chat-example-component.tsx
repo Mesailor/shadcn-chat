@@ -2,6 +2,7 @@
 
 import { Fragment } from "react/jsx-runtime";
 import {
+  BanIcon,
   CheckIcon,
   MoreHorizontalIcon,
   PhoneIcon,
@@ -9,9 +10,17 @@ import {
   SearchIcon,
   SendIcon,
   SmileIcon,
+  UserIcon,
   VideoIcon,
   XIcon,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   InputGroup,
   InputGroupAddon,
@@ -348,9 +357,40 @@ export function ChatExampleComponent() {
               <ChatHeaderButton className="@2xl/chat:inline-flex hidden">
                 <VideoIcon />
               </ChatHeaderButton>
-              <ChatHeaderButton>
-                <MoreHorizontalIcon />
-              </ChatHeaderButton>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <ChatHeaderButton>
+                    <MoreHorizontalIcon />
+                  </ChatHeaderButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {!isChatWide && (
+                    <>
+                      <DropdownMenuItem onSelect={() => setSearchOpen(true)}>
+                        <SearchIcon />
+                        Search
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <PhoneIcon />
+                        Start call
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <VideoIcon />
+                        Start video
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                    </>
+                  )}
+                  <DropdownMenuItem>
+                    <UserIcon />
+                    Show profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem variant="destructive">
+                    <BanIcon />
+                    Block
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </ChatHeaderAddon>
           </ChatHeader>
 
