@@ -80,7 +80,8 @@ import { PrimaryMessageSkeleton } from "@/components/message-items/primary-messa
 import { DateItemSkeleton } from "@/components/message-items/date-item-skeleton";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  AUTHED_USER_ID,
+  CURRENT_USER,
+  OTHER_USER,
   deleteEvent,
   Event,
   EventContent,
@@ -91,6 +92,7 @@ import {
   searchEvents,
   updateEvent,
 } from "@/data/messages";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function ChatExampleComponent() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -101,7 +103,10 @@ export function ChatExampleComponent() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSearchQuery, setActiveSearchQuery] = useState("");
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarView, setSidebarView] = useState<"search" | "profile">(
+    "search",
+  );
   const [searchResults, setSearchResults] = useState<Event[]>([]);
   const [highlightedMessageId, setHighlightedMessageId] = useState<
     number | null
@@ -197,19 +202,33 @@ export function ChatExampleComponent() {
     const trimmed = query.trim();
     if (!trimmed) return;
     setActiveSearchQuery(trimmed);
-    setSearchOpen(true);
+    setSidebarView("search");
+    setSidebarOpen(true);
     const results = await searchEvents(trimmed);
     setSearchResults(results);
-  }, []);
-
-  const handleSearchClose = useCallback(() => {
-    setSearchOpen(false);
   }, []);
 
   const handleClearSearch = useCallback(() => {
     setSearchQuery("");
     setActiveSearchQuery("");
     setSearchResults([]);
+  }, []);
+
+  const handleSidebarClose = useCallback(() => {
+    if (isChatWide && sidebarView === "search") {
+      handleClearSearch();
+    }
+    setSidebarOpen(false);
+  }, [isChatWide, sidebarView, handleClearSearch]);
+
+  const openSearch = useCallback(() => {
+    setSidebarView("search");
+    setSidebarOpen(true);
+  }, []);
+
+  const openProfile = useCallback(() => {
+    setSidebarView("profile");
+    setSidebarOpen(true);
   }, []);
 
   const handleOpenDeleteDialog = useCallback((event: Event) => {
@@ -369,7 +388,7 @@ export function ChatExampleComponent() {
                 <DropdownMenuContent align="end">
                   {!isChatWide && (
                     <>
-                      <DropdownMenuItem onSelect={() => setSearchOpen(true)}>
+                      <DropdownMenuItem onSelect={openSearch}>
                         <SearchIcon />
                         Search
                       </DropdownMenuItem>
@@ -384,7 +403,7 @@ export function ChatExampleComponent() {
                       <DropdownMenuSeparator />
                     </>
                   )}
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onSelect={openProfile}>
                     <UserIcon />
                     Show profile
                   </DropdownMenuItem>
@@ -408,9 +427,9 @@ export function ChatExampleComponent() {
           </ChatHeader>
 
           <SidebarProvider
-            open={searchOpen}
+            open={sidebarOpen}
             onOpenChange={(open) => {
-              if (!open) handleSearchClose();
+              if (!open) handleSidebarClose();
             }}
             className="flex-1 min-h-0"
           >
@@ -456,12 +475,12 @@ export function ChatExampleComponent() {
                               handleReaction(msg.id, emoji)
                             }
                             onDelete={
-                              msg.sender.id === AUTHED_USER_ID
+                              msg.sender.id === CURRENT_USER.id
                                 ? () => handleOpenDeleteDialog(msg)
                                 : undefined
                             }
                             onEdit={
-                              msg.sender.id === AUTHED_USER_ID
+                              msg.sender.id === CURRENT_USER.id
                                 ? () => handleStartEdit(msg)
                                 : undefined
                             }
@@ -489,12 +508,12 @@ export function ChatExampleComponent() {
                           isEdited={msg.isEdited}
                           onReaction={(emoji) => handleReaction(msg.id, emoji)}
                           onDelete={
-                            msg.sender.id === AUTHED_USER_ID
+                            msg.sender.id === CURRENT_USER.id
                               ? () => handleOpenDeleteDialog(msg)
                               : undefined
                           }
                           onEdit={
-                            msg.sender.id === AUTHED_USER_ID
+                            msg.sender.id === CURRENT_USER.id
                               ? () => handleStartEdit(msg)
                               : undefined
                           }
@@ -520,12 +539,12 @@ export function ChatExampleComponent() {
                           isEdited={msg.isEdited}
                           onReaction={(emoji) => handleReaction(msg.id, emoji)}
                           onDelete={
-                            msg.sender.id === AUTHED_USER_ID
+                            msg.sender.id === CURRENT_USER.id
                               ? () => handleOpenDeleteDialog(msg)
                               : undefined
                           }
                           onEdit={
-                            msg.sender.id === AUTHED_USER_ID
+                            msg.sender.id === CURRENT_USER.id
                               ? () => handleStartEdit(msg)
                               : undefined
                           }
@@ -545,18 +564,26 @@ export function ChatExampleComponent() {
               />
             </SidebarInset>
 
-            <SearchSidebar
-              open={searchOpen}
-              onClose={handleSearchClose}
-              onClear={handleClearSearch}
-              query={activeSearchQuery}
-              results={searchResults}
-              useDialog={!isChatWide}
-              searchQuery={searchQuery}
-              onSearchQueryChange={setSearchQuery}
-              onSearch={handleSearch}
-              onResultClick={scrollToMessage}
-            />
+            <ChatSidebar
+              open={sidebarOpen}
+              onClose={handleSidebarClose}
+              title={sidebarView === "search" ? "Search" : "Profile"}
+              isMobile={!isChatWide}
+            >
+              {sidebarView === "search" && (
+                <SearchSidebarContent
+                  query={activeSearchQuery}
+                  results={searchResults}
+                  searchQuery={searchQuery}
+                  onSearchQueryChange={setSearchQuery}
+                  onSearch={handleSearch}
+                  onResultClick={scrollToMessage}
+                  onClose={handleSidebarClose}
+                  isMobile={!isChatWide}
+                />
+              )}
+              {sidebarView === "profile" && <ProfileSidebarContent />}
+            </ChatSidebar>
           </SidebarProvider>
         </Chat>
       </div>
@@ -728,31 +755,74 @@ function Toolbar({
   );
 }
 
-interface SearchSidebarProps {
-  open: boolean;
-  onClose: () => void;
-  onClear: () => void;
-  query: string;
-  results: Event[];
-  useDialog: boolean;
-  searchQuery: string;
-  onSearchQueryChange: (value: string) => void;
-  onSearch: (query: string) => void;
-  onResultClick: (id: number) => void;
-}
-
-function SearchSidebar({
+function ChatSidebar({
   open,
   onClose,
-  onClear,
+  title,
+  isMobile,
+  children,
+}: {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  isMobile: boolean;
+  children: React.ReactNode;
+}) {
+  if (isMobile) {
+    return (
+      <Sheet
+        open={open}
+        onOpenChange={(o) => {
+          if (!o) onClose();
+        }}
+      >
+        <SheetContent side="right" className="flex flex-col gap-0 p-0">
+          <SheetHeader className="border-b px-4 py-3 flex-row items-center space-y-0">
+            <SheetTitle className="text-sm font-medium">{title}</SheetTitle>
+          </SheetHeader>
+          {children}
+        </SheetContent>
+      </Sheet>
+    );
+  }
+
+  return (
+    <div
+      className={cn(
+        "flex flex-col border-l bg-sidebar text-sidebar-foreground overflow-hidden",
+        open ? "@3xl/chat:w-96 @2xl/chat:w-80 w-0" : "w-0",
+      )}
+    >
+      <SidebarHeader className="border-b flex-row items-center justify-between">
+        <span className="text-sm font-medium truncate">{title}</span>
+        <Button variant="ghost" size="icon-sm" onClick={onClose}>
+          <XIcon />
+        </Button>
+      </SidebarHeader>
+      <SidebarContent className="gap-2">{children}</SidebarContent>
+    </div>
+  );
+}
+
+function SearchSidebarContent({
   query,
   results,
-  useDialog,
   searchQuery,
   onSearchQueryChange,
   onSearch,
   onResultClick,
-}: SearchSidebarProps) {
+  onClose,
+  isMobile,
+}: {
+  query: string;
+  results: Event[];
+  searchQuery: string;
+  onSearchQueryChange: (value: string) => void;
+  onSearch: (query: string) => void;
+  onResultClick: (id: number) => void;
+  onClose: () => void;
+  isMobile: boolean;
+}) {
   const label = `${results.length} result${results.length !== 1 ? "s" : ""} for "${query}"`;
 
   const resultItems = results.map((msg) => (
@@ -767,7 +837,7 @@ function SearchSidebar({
       timestamp={msg.timestamp}
       onClick={() => {
         onResultClick(msg.id);
-        if (useDialog) onClose();
+        if (isMobile) onClose();
       }}
     />
   ));
@@ -778,73 +848,65 @@ function SearchSidebar({
     </p>
   );
 
-  if (useDialog) {
+  if (isMobile) {
     return (
-      <Sheet
-        open={open}
-        onOpenChange={(o) => {
-          if (!o) onClose();
-        }}
-      >
-        <SheetContent side="right" className="flex flex-col gap-0 p-0">
-          <SheetHeader className="sr-only">
-            <SheetTitle>Search messages</SheetTitle>
-          </SheetHeader>
-          <div className="border-b p-3 pr-12">
-            <InputGroup>
-              <InputGroupInput
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => onSearchQueryChange(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    onSearch(searchQuery);
-                  }
-                }}
-                autoFocus
-              />
-              <InputGroupAddon>
-                <SearchIcon />
-              </InputGroupAddon>
-            </InputGroup>
+      <>
+        <div className="border-b p-3 pr-12">
+          <InputGroup>
+            <InputGroupInput
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => onSearchQueryChange(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  onSearch(searchQuery);
+                }
+              }}
+              autoFocus
+            />
+            <InputGroupAddon>
+              <SearchIcon />
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
+        {query && (
+          <div className="border-b px-4 py-2 text-sm text-muted-foreground">
+            {label}
           </div>
-          {query && (
-            <div className="border-b px-4 py-2 text-sm text-muted-foreground">
-              {label}
-            </div>
-          )}
-          <div className="overflow-y-auto flex-1 space-y-2 p-2">
-            {query && (results.length === 0 ? emptyState : resultItems)}
-          </div>
-        </SheetContent>
-      </Sheet>
+        )}
+        <div className="overflow-y-auto flex-1 space-y-2 p-2">
+          {query && (results.length === 0 ? emptyState : resultItems)}
+        </div>
+      </>
     );
   }
 
-  const content = results.length === 0 ? emptyState : resultItems;
-
   return (
-    <div
-      className={cn(
-        "flex flex-col border-l bg-sidebar text-sidebar-foreground overflow-hidden",
-        open ? "@3xl/chat:w-96 @2xl/chat:w-72 w-0" : "w-0",
+    <>
+      {query && (
+        <div className="border-b px-2 py-2 text-sm text-muted-foreground flex items-center justify-between gap-2">
+          <span className="truncate">{label}</span>
+        </div>
       )}
-    >
-      <SidebarHeader className="border-b flex-row items-center justify-between">
-        <span className="text-sm font-medium truncate">{label}</span>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={() => {
-            onClear();
-            onClose();
-          }}
-        >
-          <XIcon />
-        </Button>
-      </SidebarHeader>
-      <SidebarContent className="gap-2 p-2">{content}</SidebarContent>
+      <div className="overflow-y-auto flex-1 space-y-2 px-2">
+        {query && (results.length === 0 ? emptyState : resultItems)}
+      </div>
+    </>
+  );
+}
+
+function ProfileSidebarContent() {
+  return (
+    <div className="flex flex-col items-center gap-4 p-6">
+      <Avatar className="size-20">
+        <AvatarImage src={OTHER_USER.avatarUrl} alt={OTHER_USER.username} />
+        <AvatarFallback>{OTHER_USER.name.slice(0, 2)}</AvatarFallback>
+      </Avatar>
+      <div className="text-center">
+        <p className="font-medium">{OTHER_USER.name}</p>
+        <p className="text-sm text-muted-foreground">{OTHER_USER.username}</p>
+      </div>
     </div>
   );
 }
