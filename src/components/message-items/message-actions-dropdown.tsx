@@ -24,7 +24,7 @@ export function MessageActionsDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
+      <DropdownMenuContent align="end">
         {onEdit && (
           <DropdownMenuItem onSelect={onEdit}>
             <PencilIcon />
