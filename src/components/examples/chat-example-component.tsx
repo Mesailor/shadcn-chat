@@ -8,6 +8,7 @@ import {
   PlusIcon,
   SearchIcon,
   SendIcon,
+  SmileIcon,
   VideoIcon,
   XIcon,
 } from "lucide-react";
@@ -47,6 +48,11 @@ import {
   ChatToolbarTextarea,
 } from "@/registry/new-york/chat/chat-toolbar";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   Dialog,
   DialogClose,
   DialogContent,
@@ -55,6 +61,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
 import { ChatMessages } from "@/registry/new-york/chat/chat-messages";
 import { PrimaryMessage } from "@/components/message-items/primary-message";
 import { MessagePreview } from "@/components/message-items/message-preview";
@@ -536,6 +543,8 @@ function Toolbar({
     messageToEdit?.content.files ?? [],
   );
 
+  const [emojiOpen, setEmojiOpen] = useState(false);
+
   const handleSubmit = useCallback(() => {
     const trimmedContent = input.trim();
     if (!trimmedContent && files.length === 0) return; // Don't submit empty messages
@@ -614,6 +623,22 @@ function Toolbar({
       />
 
       <ChatToolbarAddon align="inline-end">
+        <Popover open={emojiOpen} onOpenChange={setEmojiOpen}>
+          <PopoverTrigger asChild>
+            <ChatToolbarButton>
+              <SmileIcon />
+            </ChatToolbarButton>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="end" side="top">
+            <EmojiPicker
+              theme={Theme.AUTO}
+              onEmojiClick={(emojiData: EmojiClickData) => {
+                setInput((prev) => prev + emojiData.emoji);
+                setEmojiOpen(false);
+              }}
+            />
+          </PopoverContent>
+        </Popover>
         {messageToEdit && (
           <>
             <ChatToolbarButton onClick={onCancelEdit}>
