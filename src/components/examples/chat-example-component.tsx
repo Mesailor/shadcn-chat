@@ -476,6 +476,7 @@ export function ChatExampleComponent() {
               </ChatMessages>
 
               <Toolbar
+                key={messageToEdit?.id ?? "new"}
                 onSubmit={handleSubmit}
                 onScrollToBottom={scrollToBottom}
                 messageToEdit={messageToEdit}
@@ -528,10 +529,12 @@ function Toolbar({
   onCancelEdit,
   onScrollToBottom,
 }: ToolbarProps) {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(messageToEdit?.content.text ?? "");
   const [files, setFiles] = useState<File[]>([]);
 
-  const [filesToEdit, setFilesToEdit] = useState<EventFile[]>([]);
+  const [filesToEdit, setFilesToEdit] = useState<EventFile[]>(
+    messageToEdit?.content.files ?? [],
+  );
 
   const handleSubmit = useCallback(() => {
     const trimmedContent = input.trim();
@@ -565,17 +568,6 @@ function Toolbar({
     setInput("");
     setFiles([]);
   }, [input, files, filesToEdit, onSubmitEdit]);
-
-  useEffect(() => {
-    if (messageToEdit) {
-      setInput(messageToEdit.content.text || "");
-      setFilesToEdit(messageToEdit.content.files || []);
-    } else {
-      setInput("");
-      setFiles([]);
-      setFilesToEdit([]);
-    }
-  }, [messageToEdit]);
 
   return (
     <ChatToolbar>
