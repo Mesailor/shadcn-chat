@@ -321,6 +321,7 @@ export function ChatExampleComponent() {
 
                 {!loading &&
                   messages.map((msg, i, msgs) => {
+                    const isOwnMessage = msg.sender.id === CURRENT_USER.id;
                     // If date changed, show date item
                     if (
                       new Date(msg.timestamp).toDateString() !==
@@ -344,12 +345,12 @@ export function ChatExampleComponent() {
                               handleReaction(msg.id, emoji)
                             }
                             onDelete={
-                              msg.sender.id === CURRENT_USER.id
+                              isOwnMessage
                                 ? () => handleOpenDeleteDialog(msg)
                                 : undefined
                             }
                             onEdit={
-                              msg.sender.id === CURRENT_USER.id
+                              isOwnMessage
                                 ? () => handleStartEdit(msg)
                                 : undefined
                             }
@@ -377,12 +378,12 @@ export function ChatExampleComponent() {
                           isEdited={msg.isEdited}
                           onReaction={(emoji) => handleReaction(msg.id, emoji)}
                           onDelete={
-                            msg.sender.id === CURRENT_USER.id
+                            isOwnMessage
                               ? () => handleOpenDeleteDialog(msg)
                               : undefined
                           }
                           onEdit={
-                            msg.sender.id === CURRENT_USER.id
+                            isOwnMessage
                               ? () => handleStartEdit(msg)
                               : undefined
                           }
@@ -408,12 +409,12 @@ export function ChatExampleComponent() {
                           isEdited={msg.isEdited}
                           onReaction={(emoji) => handleReaction(msg.id, emoji)}
                           onDelete={
-                            msg.sender.id === CURRENT_USER.id
+                            isOwnMessage
                               ? () => handleOpenDeleteDialog(msg)
                               : undefined
                           }
                           onEdit={
-                            msg.sender.id === CURRENT_USER.id
+                            isOwnMessage
                               ? () => handleStartEdit(msg)
                               : undefined
                           }
