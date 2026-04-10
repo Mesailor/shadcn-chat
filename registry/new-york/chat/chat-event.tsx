@@ -48,6 +48,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/registry/new-york/ui/avatar";
+import { Button } from "@/registry/new-york/ui/button";
 import { useMemo } from "react";
 
 /**
@@ -467,5 +468,40 @@ export function ChatEventHoverActions({
     >
       {children}
     </div>
+  );
+}
+
+export type ChatEventHoverActionsButtonProps = React.ComponentProps<
+  typeof Button
+>;
+
+/**
+ * Pre-styled ghost icon button for use inside `ChatEventHoverActions`.
+ * Applies `variant="ghost"`, `size="icon"`, and the standard size classes
+ * (`size-7 [&_svg]:size-3.5`) so every action button is consistent.
+ *
+ * @example
+ * ```tsx
+ * <ChatEventHoverActions>
+ *   <ChatEventHoverActionsButton aria-label="Add reaction">
+ *     <SmilePlusIcon />
+ *   </ChatEventHoverActionsButton>
+ * </ChatEventHoverActions>
+ * ```
+ */
+export function ChatEventHoverActionsButton({
+  className,
+  children,
+  ...props
+}: ChatEventHoverActionsButtonProps) {
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className={cn("size-7 [&_svg]:size-3.5", className)}
+      {...props}
+    >
+      {children}
+    </Button>
   );
 }

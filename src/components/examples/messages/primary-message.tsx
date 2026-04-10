@@ -6,12 +6,12 @@ import {
   ChatEventBody,
   ChatEventContent,
   ChatEventHoverActions,
+  ChatEventHoverActionsButton,
   ChatEventTime,
   ChatEventTitle,
 } from "@/registry/new-york/chat/chat-event";
 import { EventContent } from "@/data/messages";
 import { MessageContent } from "./message-content";
-import { Button } from "@/components/ui/button";
 import { MoreHorizontalIcon, SmilePlusIcon } from "lucide-react";
 import { ReactionsPopover } from "../reactions-popover";
 import { MessageActionsDropdown } from "./message-actions-dropdown";
@@ -100,24 +100,14 @@ export function PrimaryMessage({
       </ChatEventBody>
       <ChatEventHoverActions>
         <ReactionsPopover onReaction={onReaction}>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-7 [&_svg]:size-3.5"
-            aria-label="Add reaction"
-          >
+          <ChatEventHoverActionsButton aria-label="Add reaction">
             <SmilePlusIcon />
-          </Button>
+          </ChatEventHoverActionsButton>
         </ReactionsPopover>
         <MessageActionsDropdown onEdit={onEdit} onDelete={onDelete}>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-7 [&_svg]:size-3.5"
-            aria-label="More options"
-          >
+          <ChatEventHoverActionsButton aria-label="More options">
             <MoreHorizontalIcon />
-          </Button>
+          </ChatEventHoverActionsButton>
         </MessageActionsDropdown>
       </ChatEventHoverActions>
     </ChatEvent>
