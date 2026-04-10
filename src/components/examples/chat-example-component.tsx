@@ -5,6 +5,7 @@ import { Fragment } from "react/jsx-runtime";
 import { Event, EventFile } from "@/data/messages";
 import { mockAPI } from "@/data/examples/mock-api";
 import { CURRENT_USER, OTHER_USER } from "@/data/users";
+import { useMessages } from "@/hooks/examples/messages";
 import { useMessageReactions } from "@/hooks/examples/message-reactions";
 import { useMessageSearch } from "@/hooks/examples/message-search";
 import { useMessageActions } from "@/hooks/examples/message-actions";
@@ -74,8 +75,10 @@ export function ChatExampleComponent() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const chatMessagesRef = useRef<HTMLDivElement>(null);
   const [isChatWide, setIsChatWide] = useState(false);
-  const [fetching, setFetching] = useState(false);
-  const [messages, setMessages] = useState<Event[]>([]);
+
+  const { loading, messages, setMessages } = useMessages({
+    onFetch: mockAPI.getEvents,
+  });
 
   const { sidebarOpen, setSidebarOpen, sidebarView, setSidebarView } =
     useChatSidebar();
@@ -139,13 +142,7 @@ export function ChatExampleComponent() {
         id: tempId,
         status: "sending",
         tempId: tempId,
-        sender: {
-          id: "johndoe-user-id",
-          name: "John Doe",
-          avatarUrl:
-            "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_13.png",
-          username: "@johndoe",
-        },
+        sender: CURRENT_USER,
         timestamp: Date.now(),
         content: {
           type: "message",
@@ -212,16 +209,6 @@ export function ChatExampleComponent() {
     });
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const fetchMessages = async () => {
-      setFetching(true);
-      const fetchedMessages = await mockAPI.getEvents();
-      setMessages(fetchedMessages);
-      setFetching(false);
-    };
-    fetchMessages();
   }, []);
 
   return (
@@ -326,7 +313,7 @@ export function ChatExampleComponent() {
           >
             <SidebarInset className="min-h-0 overflow-hidden">
               <ChatMessages ref={chatMessagesRef} className="scrollbar-hidden">
-                {fetching &&
+                {loading &&
                   Array.from({ length: 20 }).map((_, i) => {
                     if (i % 6 === 0) {
                       return (
@@ -341,7 +328,7 @@ export function ChatExampleComponent() {
                     );
                   })}
 
-                {!fetching &&
+                {!loading &&
                   messages.map((msg, i, msgs) => {
                     // If date changed, show date item
                     if (
