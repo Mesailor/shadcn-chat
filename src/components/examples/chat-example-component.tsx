@@ -72,12 +72,12 @@ import {
 } from "@/components/ui/dialog";
 import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
 import { ChatMessages } from "@/registry/new-york/chat/chat-messages";
-import { PrimaryMessage } from "@/components/examples/messages/primary-message";
-import { MessagePreview } from "@/components/examples/messages/message-preview";
-import { DateItem } from "@/components/examples/messages/date-item";
-import { AdditionalMessage } from "@/components/examples/messages/additional-message";
-import { PrimaryMessageSkeleton } from "@/components/examples/messages/primary-message-skeleton";
-import { DateItemSkeleton } from "@/components/examples/messages/date-item-skeleton";
+import { PrimaryMessage } from "@/components/examples/message-items/primary-message";
+import { MessagePreview } from "@/components/examples/message-items/message-preview";
+import { DateItem } from "@/components/examples/message-items/date-item";
+import { AdditionalMessage } from "@/components/examples/message-items/additional-message";
+import { PrimaryMessageSkeleton } from "@/components/examples/message-items/primary-message-skeleton";
+import { DateItemSkeleton } from "@/components/examples/message-items/date-item-skeleton";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   CURRENT_USER,

@@ -9,7 +9,7 @@ import {
   ChatEventTime,
   ChatEventTitle,
 } from "@/registry/new-york/chat/chat-event";
-import { DateItem } from "@/components/examples/messages/date-item";
+import { DateItem } from "@/components/examples/message-items/date-item";
 import { Anchor } from "@/components/common/anchor";
 import { HighlightedComponent } from "@/components/ui/typography";
 
