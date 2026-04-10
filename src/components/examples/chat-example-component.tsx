@@ -580,7 +580,7 @@ function Toolbar({
               <SmileIcon />
             </ChatToolbarButton>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="end" side="top">
+          <PopoverContent className="w-auto p-0" align="start" side="top">
             <EmojiPicker
               theme={Theme.AUTO}
               onEmojiClick={(emojiData: EmojiClickData) => {
