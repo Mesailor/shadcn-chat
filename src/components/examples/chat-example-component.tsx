@@ -5,11 +5,11 @@ import { Fragment } from "react/jsx-runtime";
 import { Event, EventFile } from "@/data/messages";
 import { mockAPI } from "@/data/examples/mock-api";
 import { CURRENT_USER, OTHER_USER } from "@/data/users";
-import { cn } from "@/lib/utils";
 import { useMessageReactions } from "@/hooks/examples/message-reactions";
 import { useMessageSearch } from "@/hooks/examples/message-search";
 import { useMessageActions } from "@/hooks/examples/message-actions";
 import { useProfile } from "@/hooks/examples/profile";
+import { useChatSidebar } from "@/hooks/examples/chat-sidebar";
 import {
   BanIcon,
   CheckIcon,
@@ -35,19 +35,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
-import {
-  SidebarContent,
-  SidebarHeader,
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Chat } from "@/registry/new-york/chat/chat";
 import {
   ChatHeader,
@@ -80,6 +68,7 @@ import { SearchSidebarContent } from "@/components/examples/message-search/searc
 import { DeleteDialog } from "@/components/examples/message-actions/delete-dialog";
 import { ProfileSidebarContent } from "@/components/examples/profile/profile-sidebar-content";
 import { BlockDialog } from "@/components/examples/profile/block-dialog";
+import { ChatSidebar } from "@/components/examples/chat-sidebar/chat-sidebar";
 
 export function ChatExampleComponent() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -88,10 +77,8 @@ export function ChatExampleComponent() {
   const [fetching, setFetching] = useState(false);
   const [messages, setMessages] = useState<Event[]>([]);
 
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarView, setSidebarView] = useState<"search" | "profile">(
-    "search",
-  );
+  const { sidebarOpen, setSidebarOpen, sidebarView, setSidebarView } =
+    useChatSidebar();
 
   const { handleReaction } = useMessageReactions({
     setMessages,
@@ -660,54 +647,5 @@ function Toolbar({
         )}
       </ChatToolbarAddon>
     </ChatToolbar>
-  );
-}
-
-function ChatSidebar({
-  open,
-  onClose,
-  title,
-  isMobile,
-  children,
-}: {
-  open: boolean;
-  onClose: () => void;
-  title: string;
-  isMobile: boolean;
-  children: React.ReactNode;
-}) {
-  if (isMobile) {
-    return (
-      <Sheet
-        open={open}
-        onOpenChange={(o) => {
-          if (!o) onClose();
-        }}
-      >
-        <SheetContent side="right" className="flex flex-col gap-0 p-0">
-          <SheetHeader className="border-b px-4 py-3 flex-row items-center space-y-0">
-            <SheetTitle className="text-sm font-medium">{title}</SheetTitle>
-          </SheetHeader>
-          {children}
-        </SheetContent>
-      </Sheet>
-    );
-  }
-
-  return (
-    <div
-      className={cn(
-        "flex flex-col border-l bg-sidebar text-sidebar-foreground overflow-hidden",
-        open ? "@3xl/chat:w-96 @2xl/chat:w-80 w-0" : "w-0",
-      )}
-    >
-      <SidebarHeader className="border-b flex-row items-center justify-between">
-        <span className="text-sm font-medium truncate">{title}</span>
-        <Button variant="ghost" size="icon-sm" onClick={onClose}>
-          <XIcon />
-        </Button>
-      </SidebarHeader>
-      <SidebarContent className="gap-2">{children}</SidebarContent>
-    </div>
   );
 }
