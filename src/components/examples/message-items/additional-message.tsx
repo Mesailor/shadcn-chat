@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+import { EventContent } from "@/data/messages";
 import {
   ChatEvent,
   ChatEventAddon,
@@ -7,12 +9,10 @@ import {
   ChatEventHoverActionsButton,
   ChatEventTime,
 } from "@/registry/new-york/chat/chat-event";
-import { cn } from "@/lib/utils";
-import { EventContent } from "@/data/messages";
 import { MessageContent } from "./message-content";
-import { MoreHorizontalIcon, SmilePlusIcon } from "lucide-react";
-import { ReactionsPopover } from "../reactions-popover";
 import { MessageActionsDropdown } from "./message-actions-dropdown";
+import { ReactionsPopover } from "@/components/examples/message-reactions/reactions-popover";
+import { MoreHorizontalIcon, SmilePlusIcon } from "lucide-react";
 
 interface AdditionalMessageProps {
   className?: string;
@@ -72,11 +72,11 @@ export function AdditionalMessage({
           <div className="flex gap-1 flex-wrap mt-1">
             {reactions.map((emoji, i) => (
               <button
-                key={i}
+                key={`${emoji}-${i}`}
                 type="button"
                 onClick={() => onReaction?.(emoji)}
                 className="text-sm bg-accent border rounded-full px-2 py-0.5 select-none hover:bg-destructive/10 hover:border-destructive/40 transition-colors"
-                aria-label={`Remove ${emoji} reaction`}
+                aria-label={`Toggle ${emoji} reaction`}
               >
                 {emoji}
               </button>

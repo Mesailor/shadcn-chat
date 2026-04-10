@@ -88,11 +88,12 @@ import {
   EventFile,
   getEvents,
   postEvent,
-  reactToEvent,
   searchEvents,
   updateEvent,
 } from "@/data/messages";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useMessageReactions } from "@/hooks/examples/message-reactions";
+import { mockAPI } from "@/data/examples/mock-api";
 
 export function ChatExampleComponent() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -119,6 +120,11 @@ export function ChatExampleComponent() {
   const [isBlocked, setIsBlocked] = useState(false);
 
   const [messageToEdit, setMessageToEdit] = useState<Event | null>(null);
+
+  const { handleReaction } = useMessageReactions({
+    setMessages,
+    onReact: mockAPI.reactToEvent,
+  });
 
   const handleSubmit = useCallback(
     async (submitData: { text: string; files: File[] }) => {
@@ -161,18 +167,6 @@ export function ChatExampleComponent() {
     },
     [],
   );
-
-  const handleReaction = useCallback(async (eventId: number, emoji: string) => {
-    try {
-      const updated = await reactToEvent(eventId, emoji);
-      setMessages((prev) =>
-        prev.map((msg) => (msg.id === eventId ? updated : msg)),
-      );
-    } catch (error) {
-      console.error("Failed to add reaction:", error);
-      // Optionally show a toast or other user feedback
-    }
-  }, []);
 
   const scrollToBottom = useCallback(() => {
     chatMessagesRef.current?.scrollTo({ top: 0, behavior: "smooth" });

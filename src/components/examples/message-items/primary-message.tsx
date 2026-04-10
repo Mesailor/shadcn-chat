@@ -1,3 +1,4 @@
+import { EventContent } from "@/data/messages";
 import { cn } from "@/lib/utils";
 import {
   ChatEvent,
@@ -10,11 +11,10 @@ import {
   ChatEventTime,
   ChatEventTitle,
 } from "@/registry/new-york/chat/chat-event";
-import { EventContent } from "@/data/messages";
 import { MessageContent } from "./message-content";
-import { MoreHorizontalIcon, SmilePlusIcon } from "lucide-react";
-import { ReactionsPopover } from "../reactions-popover";
 import { MessageActionsDropdown } from "./message-actions-dropdown";
+import { ReactionsPopover } from "@/components/examples/message-reactions/reactions-popover";
+import { MoreHorizontalIcon, SmilePlusIcon } from "lucide-react";
 
 interface PrimaryMessageProps {
   avatarSrc?: string;
@@ -90,7 +90,7 @@ export function PrimaryMessage({
                 type="button"
                 onClick={() => onReaction?.(emoji)}
                 className="text-sm bg-accent border rounded-full px-2 py-0.5 select-none hover:bg-destructive/10 hover:border-destructive/40 transition-colors"
-                aria-label={`React with ${emoji}`}
+                aria-label={`Toggle ${emoji} reaction`}
               >
                 {emoji}
               </button>
