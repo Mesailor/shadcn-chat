@@ -38,6 +38,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { Badge } from "@/components/ui/badge";
 import { Chat } from "@/registry/new-york/chat/chat";
 import {
   ChatHeader,
@@ -216,6 +217,7 @@ export function ChatExampleComponent() {
             </ChatHeaderAddon>
             <ChatHeaderMain>
               <span className="font-medium">Ann Smith</span>
+              {isBlocked && <Badge variant="destructive">Blocked</Badge>}
               <span className="text-sm font-semibold">AKA</span>
               <span className="flex-1 grid">
                 <span className="text-sm font-medium truncate">
