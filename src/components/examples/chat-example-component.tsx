@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Fragment } from "react/jsx-runtime";
 import { Event, EventFile } from "@/data/messages";
 import { mockAPI } from "@/data/examples/mock-api";
@@ -11,6 +11,7 @@ import { useMessageSearch } from "@/hooks/examples/message-search";
 import { useMessageActions } from "@/hooks/examples/message-actions";
 import { useProfile } from "@/hooks/examples/profile";
 import { useChatSidebar } from "@/hooks/examples/chat-sidebar";
+import { useIsWider } from "@/hooks/use-is-wider";
 import {
   BanIcon,
   CheckIcon,
@@ -74,7 +75,7 @@ import { ChatSidebar } from "@/components/examples/chat-sidebar/chat-sidebar";
 export function ChatExampleComponent() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const chatMessagesRef = useRef<HTMLDivElement>(null);
-  const [isChatWide, setIsChatWide] = useState(false);
+  const isChatWide = useIsWider(chatContainerRef, 672);
 
   const { loading, messages, setMessages } = useMessages({
     onFetch: mockAPI.getEvents,
@@ -200,16 +201,6 @@ export function ChatExampleComponent() {
     }
     setSidebarOpen(false);
   }, [isChatWide, sidebarView, handleClearSearch]);
-
-  useEffect(() => {
-    const el = chatContainerRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(([entry]) => {
-      setIsChatWide(entry.contentRect.width >= 672);
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
 
   return (
     <>
