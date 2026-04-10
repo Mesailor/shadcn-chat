@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { useMessageReactions } from "@/hooks/examples/message-reactions";
 import { useMessageSearch } from "@/hooks/examples/message-search";
 import { useMessageActions } from "@/hooks/examples/message-actions";
+import { useProfile } from "@/hooks/examples/profile";
 import {
   BanIcon,
   CheckIcon,
@@ -68,15 +69,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
 import { ChatMessages } from "@/registry/new-york/chat/chat-messages";
 import { PrimaryMessage } from "@/components/examples/message-items/primary-message";
@@ -84,9 +76,10 @@ import { DateItem } from "@/components/examples/message-items/date-item";
 import { AdditionalMessage } from "@/components/examples/message-items/additional-message";
 import { PrimaryMessageSkeleton } from "@/components/examples/message-items/primary-message-skeleton";
 import { DateItemSkeleton } from "@/components/examples/message-items/date-item-skeleton";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SearchSidebarContent } from "@/components/examples/message-search/search-sidebar-content";
 import { DeleteDialog } from "@/components/examples/message-actions/delete-dialog";
+import { ProfileSidebarContent } from "@/components/examples/profile/profile-sidebar-content";
+import { BlockDialog } from "@/components/examples/profile/block-dialog";
 
 export function ChatExampleComponent() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -99,9 +92,6 @@ export function ChatExampleComponent() {
   const [sidebarView, setSidebarView] = useState<"search" | "profile">(
     "search",
   );
-
-  const [openBlockDialog, setOpenBlockDialog] = useState(false);
-  const [isBlocked, setIsBlocked] = useState(false);
 
   const { handleReaction } = useMessageReactions({
     setMessages,
@@ -122,6 +112,36 @@ export function ChatExampleComponent() {
     setSidebarOpen,
     setSidebarView,
     onSearch: mockAPI.searchEvents,
+  });
+
+  const {
+    openBlockDialog,
+    setOpenBlockDialog,
+    isBlocked,
+    openProfile,
+    handleBlock,
+    handleUnblock,
+  } = useProfile({
+    setSidebarOpen,
+    setSidebarView,
+    onBlock: mockAPI.blockUser,
+    onUnblock: mockAPI.unblockUser,
+  });
+
+  const {
+    messageToDelete,
+    openDeleteDialog,
+    setOpenDeleteDialog,
+    messageToEdit,
+    handleOpenDeleteDialog,
+    handleDelete,
+    handleStartEdit,
+    handleSubmitEdit,
+    handleCancelEdit,
+  } = useMessageActions({
+    setMessages,
+    onDelete: mockAPI.deleteEvent,
+    onUpdate: mockAPI.updateEvent,
   });
 
   const handleSubmit = useCallback(
@@ -196,27 +216,6 @@ export function ChatExampleComponent() {
     }
     setSidebarOpen(false);
   }, [isChatWide, sidebarView, handleClearSearch]);
-
-  const openProfile = useCallback(() => {
-    setSidebarView("profile");
-    setSidebarOpen(true);
-  }, []);
-
-  const {
-    messageToDelete,
-    openDeleteDialog,
-    setOpenDeleteDialog,
-    messageToEdit,
-    handleOpenDeleteDialog,
-    handleDelete,
-    handleStartEdit,
-    handleSubmitEdit,
-    handleCancelEdit,
-  } = useMessageActions({
-    setMessages,
-    onDelete: mockAPI.deleteEvent,
-    onUpdate: mockAPI.updateEvent,
-  });
 
   useEffect(() => {
     const el = chatContainerRef.current;
@@ -311,7 +310,9 @@ export function ChatExampleComponent() {
                     Show profile
                   </DropdownMenuItem>
                   {isBlocked ? (
-                    <DropdownMenuItem onSelect={() => setIsBlocked(false)}>
+                    <DropdownMenuItem
+                      onSelect={() => handleUnblock(OTHER_USER.id)}
+                    >
                       <BanIcon />
                       Unblock
                     </DropdownMenuItem>
@@ -499,10 +500,7 @@ export function ChatExampleComponent() {
       <BlockDialog
         open={openBlockDialog}
         onOpenChange={setOpenBlockDialog}
-        onConfirm={() => {
-          setIsBlocked(true);
-          setOpenBlockDialog(false);
-        }}
+        onConfirm={() => handleBlock(OTHER_USER.id)}
       />
     </>
   );
@@ -711,52 +709,5 @@ function ChatSidebar({
       </SidebarHeader>
       <SidebarContent className="gap-2">{children}</SidebarContent>
     </div>
-  );
-}
-
-function ProfileSidebarContent() {
-  return (
-    <div className="flex flex-col items-center gap-4 p-6">
-      <Avatar className="size-20">
-        <AvatarImage src={OTHER_USER.avatarUrl} alt={OTHER_USER.username} />
-        <AvatarFallback>{OTHER_USER.name.slice(0, 2)}</AvatarFallback>
-      </Avatar>
-      <div className="text-center">
-        <p className="font-medium">{OTHER_USER.name}</p>
-        <p className="text-sm text-muted-foreground">{OTHER_USER.username}</p>
-      </div>
-    </div>
-  );
-}
-
-function BlockDialog({
-  open,
-  onOpenChange,
-  onConfirm,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onConfirm: () => void;
-}) {
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Block user</DialogTitle>
-          <DialogDescription>
-            Are you sure you want to block this user? They will no longer be
-            able to send you messages.
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button>Cancel</Button>
-          </DialogClose>
-          <Button variant="destructive" onClick={onConfirm}>
-            Block
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
   );
 }
