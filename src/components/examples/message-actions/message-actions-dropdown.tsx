@@ -24,7 +24,7 @@ export function MessageActionsDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" onCloseAutoFocus={(e) => e.preventDefault()}>
         {onEdit && (
           <DropdownMenuItem onSelect={onEdit}>
             <PencilIcon />
