@@ -1,6 +1,14 @@
 "use client";
 
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Fragment } from "react/jsx-runtime";
+import { Event, EventFile } from "@/data/messages";
+import { mockAPI } from "@/data/examples/mock-api";
+import { CURRENT_USER, OTHER_USER } from "@/data/users";
+import { cn } from "@/lib/utils";
+import { useMessageReactions } from "@/hooks/examples/message-reactions";
+import { useMessageSearch } from "@/hooks/examples/message-search";
+import { useMessageActions } from "@/hooks/examples/message-actions";
 import {
   BanIcon,
   CheckIcon,
@@ -26,7 +34,6 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -73,28 +80,13 @@ import {
 import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
 import { ChatMessages } from "@/registry/new-york/chat/chat-messages";
 import { PrimaryMessage } from "@/components/examples/message-items/primary-message";
-import { MessagePreview } from "@/components/examples/message-items/message-preview";
 import { DateItem } from "@/components/examples/message-items/date-item";
 import { AdditionalMessage } from "@/components/examples/message-items/additional-message";
 import { PrimaryMessageSkeleton } from "@/components/examples/message-items/primary-message-skeleton";
 import { DateItemSkeleton } from "@/components/examples/message-items/date-item-skeleton";
-import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  CURRENT_USER,
-  OTHER_USER,
-  deleteEvent,
-  Event,
-  EventContent,
-  EventFile,
-  getEvents,
-  postEvent,
-  updateEvent,
-} from "@/data/messages";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useMessageReactions } from "@/hooks/examples/message-reactions";
-import { useMessageSearch } from "@/hooks/examples/message-search";
 import { SearchSidebarContent } from "@/components/examples/message-search/search-sidebar-content";
-import { mockAPI } from "@/data/examples/mock-api";
+import { DeleteDialog } from "@/components/examples/message-actions/delete-dialog";
 
 export function ChatExampleComponent() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -108,13 +100,8 @@ export function ChatExampleComponent() {
     "search",
   );
 
-  const [messageToDelete, setMessageToDelete] = useState<Event | null>(null);
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-
   const [openBlockDialog, setOpenBlockDialog] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
-
-  const [messageToEdit, setMessageToEdit] = useState<Event | null>(null);
 
   const { handleReaction } = useMessageReactions({
     setMessages,
@@ -168,7 +155,7 @@ export function ChatExampleComponent() {
       setMessages((prev) => [newMessage, ...prev]);
 
       // Replace the temporary message with the posted message
-      const postedMessage = await postEvent({
+      const postedMessage = await mockAPI.postEvent({
         text: submitData.text,
         files: submitData.files,
       });
@@ -215,83 +202,21 @@ export function ChatExampleComponent() {
     setSidebarOpen(true);
   }, []);
 
-  const handleOpenDeleteDialog = useCallback((event: Event) => {
-    setMessageToDelete(event);
-    setOpenDeleteDialog(true);
-  }, []);
-
-  const handleDelete = useCallback(async () => {
-    setOpenDeleteDialog(false);
-    if (!messageToDelete) return;
-
-    try {
-      const deletedMessageId = await deleteEvent(messageToDelete.id);
-      setMessages((prev) => prev.filter((msg) => msg.id !== deletedMessageId));
-      setMessageToDelete(null);
-    } catch (error) {
-      console.error("Failed to delete message:", error);
-    }
-  }, [messageToDelete]);
-
-  const handleStartEdit = useCallback((msg: Event) => {
-    setMessageToEdit(msg);
-  }, []);
-
-  const handleSubmitEdit = useCallback(
-    async (data: {
-      text: string;
-      uploadFiles: File[];
-      editedFiles: EventFile[];
-    }) => {
-      if (!messageToEdit) return;
-
-      // Client-side mapping only for the optimistic update
-      const optimisticNewFiles: EventFile[] = data.uploadFiles.map((file) => ({
-        url: URL.createObjectURL(file),
-        fileName: file.name,
-        mimeType: file.type,
-      }));
-      const optimisticAllFiles = [...data.editedFiles, ...optimisticNewFiles];
-      const optimisticContent: EventContent = {
-        type: "message",
-        ...(data.text && { text: data.text }),
-        ...(optimisticAllFiles.length > 0 && { files: optimisticAllFiles }),
-      };
-
-      // Optimistic update
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === messageToEdit.id
-            ? { ...msg, content: optimisticContent, isEdited: true }
-            : msg,
-        ),
-      );
-      setMessageToEdit(null);
-
-      try {
-        const updated = await updateEvent(messageToEdit.id, {
-          text: data.text,
-          uploadFiles: data.uploadFiles,
-          editedFiles: data.editedFiles,
-        });
-        setMessages((prev) =>
-          prev.map((msg) => (msg.id === updated.id ? updated : msg)),
-        );
-      } catch (error) {
-        console.error("Failed to update message:", error);
-        setMessages((prev) =>
-          prev.map((msg) =>
-            msg.id === messageToEdit.id ? messageToEdit : msg,
-          ),
-        );
-      }
-    },
-    [messageToEdit],
-  );
-
-  const handleCancelEdit = useCallback(() => {
-    setMessageToEdit(null);
-  }, []);
+  const {
+    messageToDelete,
+    openDeleteDialog,
+    setOpenDeleteDialog,
+    messageToEdit,
+    handleOpenDeleteDialog,
+    handleDelete,
+    handleStartEdit,
+    handleSubmitEdit,
+    handleCancelEdit,
+  } = useMessageActions({
+    setMessages,
+    onDelete: mockAPI.deleteEvent,
+    onUpdate: mockAPI.updateEvent,
+  });
 
   useEffect(() => {
     const el = chatContainerRef.current;
@@ -306,7 +231,7 @@ export function ChatExampleComponent() {
   useEffect(() => {
     const fetchMessages = async () => {
       setFetching(true);
-      const fetchedMessages = await getEvents();
+      const fetchedMessages = await mockAPI.getEvents();
       setMessages(fetchedMessages);
       setFetching(false);
     };
@@ -829,51 +754,6 @@ function BlockDialog({
           </DialogClose>
           <Button variant="destructive" onClick={onConfirm}>
             Block
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function DeleteDialog({
-  open,
-  onOpenChange,
-  message,
-  onConfirm,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  message: Event | null;
-  onConfirm: () => void;
-}) {
-  return (
-    <Dialog open={open && !!message} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Delete message</DialogTitle>
-          <DialogDescription>
-            Are you sure you want to delete this message?
-          </DialogDescription>
-        </DialogHeader>
-        {message && (
-          <MessagePreview
-            className="p-1 border rounded-md"
-            key={message.id}
-            avatarSrc={message.sender.avatarUrl}
-            avatarAlt={message.sender.username}
-            avatarFallback={message.sender.name.slice(0, 2)}
-            senderName={message.sender.name}
-            content={message.content}
-            timestamp={message.timestamp}
-          />
-        )}
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button>Cancel</Button>
-          </DialogClose>
-          <Button variant="destructive" onClick={onConfirm}>
-            Delete
           </Button>
         </DialogFooter>
       </DialogContent>

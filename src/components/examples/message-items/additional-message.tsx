@@ -10,7 +10,7 @@ import {
   ChatEventTime,
 } from "@/registry/new-york/chat/chat-event";
 import { MessageContent } from "./message-content";
-import { MessageActionsDropdown } from "./message-actions-dropdown";
+import { MessageActionsDropdown } from "@/components/examples/message-actions/message-actions-dropdown";
 import { ReactionsPopover } from "@/components/examples/message-reactions/reactions-popover";
 import { MoreHorizontalIcon, SmilePlusIcon } from "lucide-react";
 
