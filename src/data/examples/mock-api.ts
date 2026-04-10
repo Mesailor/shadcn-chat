@@ -1,4 +1,4 @@
-import { Event, EVENTS } from "../messages";
+import { Event, EVENTS, searchEvents } from "../messages";
 
 const reactToEvent = (eventId: number, emoji: string): Promise<Event> => {
   const event = EVENTS.find((e) => e.id === eventId);
@@ -17,4 +17,5 @@ const reactToEvent = (eventId: number, emoji: string): Promise<Event> => {
 
 export const mockAPI = {
   reactToEvent,
+  searchEvents,
 };

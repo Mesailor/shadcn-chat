@@ -88,11 +88,12 @@ import {
   EventFile,
   getEvents,
   postEvent,
-  searchEvents,
   updateEvent,
 } from "@/data/messages";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMessageReactions } from "@/hooks/examples/message-reactions";
+import { useMessageSearch } from "@/hooks/examples/message-search";
+import { SearchSidebarContent } from "@/components/examples/message-search/search-sidebar-content";
 import { mockAPI } from "@/data/examples/mock-api";
 
 export function ChatExampleComponent() {
@@ -102,16 +103,10 @@ export function ChatExampleComponent() {
   const [fetching, setFetching] = useState(false);
   const [messages, setMessages] = useState<Event[]>([]);
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeSearchQuery, setActiveSearchQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarView, setSidebarView] = useState<"search" | "profile">(
     "search",
   );
-  const [searchResults, setSearchResults] = useState<Event[]>([]);
-  const [highlightedMessageId, setHighlightedMessageId] = useState<
-    number | null
-  >(null);
 
   const [messageToDelete, setMessageToDelete] = useState<Event | null>(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -124,6 +119,22 @@ export function ChatExampleComponent() {
   const { handleReaction } = useMessageReactions({
     setMessages,
     onReact: mockAPI.reactToEvent,
+  });
+
+  const {
+    searchQuery,
+    setSearchQuery,
+    activeSearchQuery,
+    searchResults,
+    highlightedMessageId,
+    setHighlightedMessageId,
+    handleSearch,
+    handleClearSearch,
+    openSearch,
+  } = useMessageSearch({
+    setSidebarOpen,
+    setSidebarView,
+    onSearch: mockAPI.searchEvents,
   });
 
   const handleSubmit = useCallback(
@@ -192,33 +203,12 @@ export function ChatExampleComponent() {
     setHighlightedMessageId(id);
   }, []);
 
-  const handleSearch = useCallback(async (query: string) => {
-    const trimmed = query.trim();
-    if (!trimmed) return;
-    setActiveSearchQuery(trimmed);
-    setSidebarView("search");
-    setSidebarOpen(true);
-    const results = await searchEvents(trimmed);
-    setSearchResults(results);
-  }, []);
-
-  const handleClearSearch = useCallback(() => {
-    setSearchQuery("");
-    setActiveSearchQuery("");
-    setSearchResults([]);
-  }, []);
-
   const handleSidebarClose = useCallback(() => {
     if (isChatWide && sidebarView === "search") {
       handleClearSearch();
     }
     setSidebarOpen(false);
   }, [isChatWide, sidebarView, handleClearSearch]);
-
-  const openSearch = useCallback(() => {
-    setSidebarView("search");
-    setSidebarOpen(true);
-  }, []);
 
   const openProfile = useCallback(() => {
     setSidebarView("profile");
@@ -302,12 +292,6 @@ export function ChatExampleComponent() {
   const handleCancelEdit = useCallback(() => {
     setMessageToEdit(null);
   }, []);
-
-  useEffect(() => {
-    if (highlightedMessageId === null) return;
-    const timer = setTimeout(() => setHighlightedMessageId(null), 3000);
-    return () => clearTimeout(timer);
-  }, [highlightedMessageId]);
 
   useEffect(() => {
     const el = chatContainerRef.current;
@@ -802,98 +786,6 @@ function ChatSidebar({
       </SidebarHeader>
       <SidebarContent className="gap-2">{children}</SidebarContent>
     </div>
-  );
-}
-
-function SearchSidebarContent({
-  query,
-  results,
-  searchQuery,
-  onSearchQueryChange,
-  onSearch,
-  onResultClick,
-  onClose,
-  isMobile,
-}: {
-  query: string;
-  results: Event[];
-  searchQuery: string;
-  onSearchQueryChange: (value: string) => void;
-  onSearch: (query: string) => void;
-  onResultClick: (id: number) => void;
-  onClose: () => void;
-  isMobile: boolean;
-}) {
-  const label = `${results.length} result${results.length !== 1 ? "s" : ""} for "${query}"`;
-
-  const resultItems = results.map((msg) => (
-    <MessagePreview
-      className="p-1 hover:bg-accent cursor-pointer border rounded-md"
-      key={msg.id}
-      avatarSrc={msg.sender.avatarUrl}
-      avatarAlt={msg.sender.username}
-      avatarFallback={msg.sender.name.slice(0, 2)}
-      senderName={msg.sender.name}
-      content={msg.content}
-      timestamp={msg.timestamp}
-      onClick={() => {
-        onResultClick(msg.id);
-        if (isMobile) onClose();
-      }}
-    />
-  ));
-
-  const emptyState = (
-    <p className="text-sm text-muted-foreground text-center py-8">
-      No messages found.
-    </p>
-  );
-
-  if (isMobile) {
-    return (
-      <>
-        <div className="border-b p-3 pr-12">
-          <InputGroup>
-            <InputGroupInput
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => onSearchQueryChange(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  onSearch(searchQuery);
-                }
-              }}
-              autoFocus
-            />
-            <InputGroupAddon>
-              <SearchIcon />
-            </InputGroupAddon>
-          </InputGroup>
-        </div>
-        {query && (
-          <div className="border-b px-4 py-2 text-sm text-muted-foreground">
-            {label}
-          </div>
-        )}
-        <div className="overflow-y-auto flex-1 space-y-2 p-2">
-          {query && (results.length === 0 ? emptyState : resultItems)}
-        </div>
-      </>
-    );
-  }
-
-  return (
-    <>
-      {query && (
-        <div className="border-b px-2 py-2 text-sm text-muted-foreground flex items-center justify-between gap-2">
-          <span className="truncate">{label}</span>
-        </div>
-      )}
-      <div className="overflow-y-auto flex-1 space-y-2 px-2">
-        {query && (results.length === 0 ? emptyState : resultItems)}
-      </div>
-    </>
   );
 }
 
