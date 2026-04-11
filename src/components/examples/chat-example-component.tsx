@@ -169,39 +169,42 @@ export function ChatExampleComponent() {
         prev.map((msg) => (msg.tempId === tempId ? postedMessage : msg)),
       );
     },
-    [],
+    [setMessages],
   );
 
   const scrollToBottom = useCallback(() => {
     chatMessagesRef.current?.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  const scrollToMessage = useCallback((id: number) => {
-    const container = chatMessagesRef.current;
-    const element = document.getElementById(`message-${id}`);
-    if (!container || !element) return;
+  const scrollToMessage = useCallback(
+    (id: number) => {
+      const container = chatMessagesRef.current;
+      const element = document.getElementById(`message-${id}`);
+      if (!container || !element) return;
 
-    const containerRect = container.getBoundingClientRect();
-    const elementRect = element.getBoundingClientRect();
-    container.scrollTo({
-      top:
-        container.scrollTop +
-        elementRect.top -
-        containerRect.top -
-        containerRect.height / 2 +
-        elementRect.height / 2,
-      behavior: "smooth",
-    });
+      const containerRect = container.getBoundingClientRect();
+      const elementRect = element.getBoundingClientRect();
+      container.scrollTo({
+        top:
+          container.scrollTop +
+          elementRect.top -
+          containerRect.top -
+          containerRect.height / 2 +
+          elementRect.height / 2,
+        behavior: "smooth",
+      });
 
-    setHighlightedMessageId(id);
-  }, []);
+      setHighlightedMessageId(id);
+    },
+    [setHighlightedMessageId],
+  );
 
   const handleSidebarClose = useCallback(() => {
     if (isChatWide && sidebarView === "search") {
       handleClearSearch();
     }
     setSidebarOpen(false);
-  }, [isChatWide, sidebarView, handleClearSearch]);
+  }, [isChatWide, sidebarView, handleClearSearch, setSidebarOpen]);
 
   return (
     <>
