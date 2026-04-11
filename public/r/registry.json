@@ -46,13 +46,43 @@
       "registryDependencies": [
         "https://shadcn-chat.vercel.app/r/chat.json",
         "separator",
-        "input-group"
+        "input-group",
+        "sidebar",
+        "badge",
+        "popover",
+        "button",
+        "dropdown-menu",
+        "skeleton",
+        "dialog",
+        "avatar",
+        "sheet"
       ],
       "dependencies": [
         "@radix-ui/react-separator",
         "@radix-ui/react-slot",
-        "class-variance-authority"
+        "class-variance-authority",
+        "emoji-picker-react"
       ],
+      "css": {
+        "@keyframes message-highlight": {
+          "0%, 60%": {
+            "background-color": "var(--accent)"
+          },
+          "100%": {
+            "background-color": "transparent"
+          }
+        },
+        "@utility animate-message-highlight": {
+          "animation": "message-highlight 3s ease-out forwards"
+        },
+        "@utility scrollbar-hidden": {
+          "-ms-overflow-style": "none",
+          "scrollbar-width": "none",
+          "&::-webkit-scrollbar": {
+            "display": "none"
+          }
+        }
+      },
       "files": [
         {
           "path": "registry/new-york/blocks/chat-basic/page.tsx",
@@ -60,24 +90,124 @@
           "target": "app/chat/page.tsx"
         },
         {
-          "path": "registry/new-york/blocks/chat-basic/components/primary-message.tsx",
-          "type": "registry:component",
-          "target": "components/examples/primary-message.tsx"
-        },
-        {
-          "path": "registry/new-york/blocks/chat-basic/components/additional-message.tsx",
-          "type": "registry:component",
-          "target": "components/examples/additional-message.tsx"
-        },
-        {
-          "path": "registry/new-york/blocks/chat-basic/components/date-item.tsx",
-          "type": "registry:component",
-          "target": "components/examples/date-item.tsx"
-        },
-        {
           "path": "registry/new-york/blocks/chat-basic/data/messages.ts",
           "type": "registry:file",
-          "target": "data/examples/messages.ts"
+          "target": "data/mock/messages.ts"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/data/users.ts",
+          "type": "registry:file",
+          "target": "data/mock/users.ts"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/data/mock-api.ts",
+          "type": "registry:file",
+          "target": "data/mock/mock-api.ts"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/hooks/use-messages.ts",
+          "type": "registry:hook",
+          "target": "hooks/chat/use-messages.ts"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/hooks/use-message-reactions.ts",
+          "type": "registry:hook",
+          "target": "hooks/chat/use-message-reactions.ts"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/hooks/use-message-search.ts",
+          "type": "registry:hook",
+          "target": "hooks/chat/use-message-search.ts"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/hooks/use-message-actions.ts",
+          "type": "registry:hook",
+          "target": "hooks/chat/use-message-actions.ts"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/hooks/use-profile.ts",
+          "type": "registry:hook",
+          "target": "hooks/chat/use-profile.ts"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/hooks/use-chat-sidebar.ts",
+          "type": "registry:hook",
+          "target": "hooks/chat/use-chat-sidebar.ts"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/hooks/use-is-wider.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-is-wider.ts"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/message-items/primary-message.tsx",
+          "type": "registry:component",
+          "target": "components/chat/message-items/primary-message.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/message-items/additional-message.tsx",
+          "type": "registry:component",
+          "target": "components/chat/message-items/additional-message.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/message-items/date-item.tsx",
+          "type": "registry:component",
+          "target": "components/chat/message-items/date-item.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/message-items/message-content.tsx",
+          "type": "registry:component",
+          "target": "components/chat/message-items/message-content.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/message-items/primary-message-skeleton.tsx",
+          "type": "registry:component",
+          "target": "components/chat/message-items/primary-message-skeleton.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/message-items/date-item-skeleton.tsx",
+          "type": "registry:component",
+          "target": "components/chat/message-items/date-item-skeleton.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/message-items/message-preview.tsx",
+          "type": "registry:component",
+          "target": "components/chat/message-items/message-preview.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/message-reactions/reactions-popover.tsx",
+          "type": "registry:component",
+          "target": "components/chat/message-reactions/reactions-popover.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/message-actions/message-actions-dropdown.tsx",
+          "type": "registry:component",
+          "target": "components/chat/message-actions/message-actions-dropdown.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/message-actions/delete-dialog.tsx",
+          "type": "registry:component",
+          "target": "components/chat/message-actions/delete-dialog.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/message-search/search-sidebar-content.tsx",
+          "type": "registry:component",
+          "target": "components/chat/message-search/search-sidebar-content.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/profile/profile-sidebar-content.tsx",
+          "type": "registry:component",
+          "target": "components/chat/profile/profile-sidebar-content.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/profile/block-dialog.tsx",
+          "type": "registry:component",
+          "target": "components/chat/profile/block-dialog.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/chat-sidebar/chat-sidebar.tsx",
+          "type": "registry:component",
+          "target": "components/chat/chat-sidebar/chat-sidebar.tsx"
         }
       ]
     },
@@ -103,17 +233,17 @@
           "target": "app/page.tsx"
         },
         {
-          "path": "registry/new-york/blocks/chat-basic/components/primary-message.tsx",
+          "path": "registry/new-york/blocks/chat-basic/components/message-items/primary-message.tsx",
           "type": "registry:component",
           "target": "components/examples/primary-message.tsx"
         },
         {
-          "path": "registry/new-york/blocks/chat-basic/components/additional-message.tsx",
+          "path": "registry/new-york/blocks/chat-basic/components/message-items/additional-message.tsx",
           "type": "registry:component",
           "target": "components/examples/additional-message.tsx"
         },
         {
-          "path": "registry/new-york/blocks/chat-basic/components/date-item.tsx",
+          "path": "registry/new-york/blocks/chat-basic/components/message-items/date-item.tsx",
           "type": "registry:component",
           "target": "components/examples/date-item.tsx"
         },
