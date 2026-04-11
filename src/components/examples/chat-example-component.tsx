@@ -208,201 +208,134 @@ export function ChatExampleComponent() {
 
   return (
     <>
-      <div ref={chatContainerRef} className="h-full">
-        <Chat>
-          <ChatHeader className="border-b">
-            <ChatHeaderAddon>
-              <ChatHeaderAvatar
-                src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png"
-                alt="@annsmith"
-                fallback="AS"
-              />
-            </ChatHeaderAddon>
-            <ChatHeaderMain>
-              <span className="font-medium">Ann Smith</span>
-              {isBlocked && <Badge variant="destructive">Blocked</Badge>}
-              <span className="text-sm font-semibold">AKA</span>
-              <span className="flex-1 grid">
-                <span className="text-sm font-medium truncate">
-                  Front-end developer
-                </span>
+      <Chat ref={chatContainerRef} className="h-full">
+        <ChatHeader className="border-b">
+          <ChatHeaderAddon>
+            <ChatHeaderAvatar
+              src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png"
+              alt="@annsmith"
+              fallback="AS"
+            />
+          </ChatHeaderAddon>
+          <ChatHeaderMain>
+            <span className="font-medium">Ann Smith</span>
+            {isBlocked && <Badge variant="destructive">Blocked</Badge>}
+            <span className="text-sm font-semibold">AKA</span>
+            <span className="flex-1 grid">
+              <span className="text-sm font-medium truncate">
+                Front-end developer
               </span>
-            </ChatHeaderMain>
-            <ChatHeaderAddon>
-              <InputGroup className="@2xl/chat:flex hidden">
-                <InputGroupInput
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      handleSearch(searchQuery);
-                    }
-                  }}
-                />
-                <InputGroupAddon>
-                  <SearchIcon />
-                </InputGroupAddon>
-              </InputGroup>
-              <ChatHeaderButton className="@2xl/chat:inline-flex hidden">
-                <PhoneIcon />
-              </ChatHeaderButton>
-              <ChatHeaderButton className="@2xl/chat:inline-flex hidden">
-                <VideoIcon />
-              </ChatHeaderButton>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <ChatHeaderButton>
-                    <MoreHorizontalIcon />
-                  </ChatHeaderButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {!isChatWide && (
-                    <>
-                      <DropdownMenuItem onSelect={openSearch}>
-                        <SearchIcon />
-                        Search
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <PhoneIcon />
-                        Start call
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <VideoIcon />
-                        Start video
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                    </>
-                  )}
-                  <DropdownMenuItem onSelect={openProfile}>
-                    <UserIcon />
-                    Show profile
+            </span>
+          </ChatHeaderMain>
+          <ChatHeaderAddon>
+            <InputGroup className="@2xl/chat:flex hidden">
+              <InputGroupInput
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleSearch(searchQuery);
+                  }
+                }}
+              />
+              <InputGroupAddon>
+                <SearchIcon />
+              </InputGroupAddon>
+            </InputGroup>
+            <ChatHeaderButton className="@2xl/chat:inline-flex hidden">
+              <PhoneIcon />
+            </ChatHeaderButton>
+            <ChatHeaderButton className="@2xl/chat:inline-flex hidden">
+              <VideoIcon />
+            </ChatHeaderButton>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <ChatHeaderButton>
+                  <MoreHorizontalIcon />
+                </ChatHeaderButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {!isChatWide && (
+                  <>
+                    <DropdownMenuItem onSelect={openSearch}>
+                      <SearchIcon />
+                      Search
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <PhoneIcon />
+                      Start call
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <VideoIcon />
+                      Start video
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
+                <DropdownMenuItem onSelect={openProfile}>
+                  <UserIcon />
+                  Show profile
+                </DropdownMenuItem>
+                {isBlocked ? (
+                  <DropdownMenuItem
+                    onSelect={() => handleUnblock(OTHER_USER.id)}
+                  >
+                    <BanIcon />
+                    Unblock
                   </DropdownMenuItem>
-                  {isBlocked ? (
-                    <DropdownMenuItem
-                      onSelect={() => handleUnblock(OTHER_USER.id)}
-                    >
-                      <BanIcon />
-                      Unblock
-                    </DropdownMenuItem>
-                  ) : (
-                    <DropdownMenuItem
-                      variant="destructive"
-                      onSelect={() => setOpenBlockDialog(true)}
-                    >
-                      <BanIcon />
-                      Block
-                    </DropdownMenuItem>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </ChatHeaderAddon>
-          </ChatHeader>
+                ) : (
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onSelect={() => setOpenBlockDialog(true)}
+                  >
+                    <BanIcon />
+                    Block
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </ChatHeaderAddon>
+        </ChatHeader>
 
-          <SidebarProvider
-            open={sidebarOpen}
-            onOpenChange={(open) => {
-              if (!open) handleSidebarClose();
-            }}
-            className="flex-1 min-h-0"
-          >
-            <SidebarInset className="min-h-0 overflow-hidden">
-              <ChatMessages ref={chatMessagesRef} className="scrollbar-hidden">
-                {loading &&
-                  Array.from({ length: 20 }).map((_, i) => {
-                    if (i % 6 === 0) {
-                      return (
-                        <Fragment key={i}>
-                          <PrimaryMessageSkeleton className="w-full" />
-                          <DateItemSkeleton className="my-4" />
-                        </Fragment>
-                      );
-                    }
+        <SidebarProvider
+          open={sidebarOpen}
+          onOpenChange={(open) => {
+            if (!open) handleSidebarClose();
+          }}
+          className="flex-1 min-h-0"
+        >
+          <SidebarInset className="min-h-0 overflow-hidden">
+            <ChatMessages ref={chatMessagesRef} className="scrollbar-hidden">
+              {loading &&
+                Array.from({ length: 20 }).map((_, i) => {
+                  if (i % 6 === 0) {
                     return (
-                      <PrimaryMessageSkeleton key={i} className="w-full mt-4" />
+                      <Fragment key={i}>
+                        <PrimaryMessageSkeleton className="w-full" />
+                        <DateItemSkeleton className="my-4" />
+                      </Fragment>
                     );
-                  })}
+                  }
+                  return (
+                    <PrimaryMessageSkeleton key={i} className="w-full mt-4" />
+                  );
+                })}
 
-                {!loading &&
-                  messages.map((msg, i, msgs) => {
-                    const isOwnMessage = msg.sender.id === CURRENT_USER.id;
-                    // If date changed, show date item
-                    if (
-                      new Date(msg.timestamp).toDateString() !==
-                      new Date(msgs[i + 1]?.timestamp).toDateString()
-                    ) {
-                      return (
-                        <Fragment key={msg.id}>
-                          <PrimaryMessage
-                            id={`message-${msg.id}`}
-                            highlighted={highlightedMessageId === msg.id}
-                            avatarSrc={msg.sender.avatarUrl}
-                            avatarAlt={msg.sender.username}
-                            avatarFallback={msg.sender.name.slice(0, 2)}
-                            senderName={msg.sender.name}
-                            content={msg.content}
-                            timestamp={msg.timestamp}
-                            status={msg.status}
-                            reactions={msg.reactions}
-                            isEdited={msg.isEdited}
-                            onReaction={(emoji) =>
-                              handleReaction(msg.id, emoji)
-                            }
-                            onDelete={
-                              isOwnMessage
-                                ? () => handleOpenDeleteDialog(msg)
-                                : undefined
-                            }
-                            onEdit={
-                              isOwnMessage
-                                ? () => handleStartEdit(msg)
-                                : undefined
-                            }
-                          />
-                          <DateItem
-                            timestamp={msg.timestamp}
-                            className="my-4"
-                          />
-                        </Fragment>
-                      );
-                    }
-
-                    // If next item is same user, show additional
-                    if (msg.sender.id === msgs[i + 1]?.sender.id) {
-                      return (
-                        <AdditionalMessage
-                          id={`message-${msg.id}`}
-                          className="pt-1"
-                          highlighted={highlightedMessageId === msg.id}
-                          key={msg.id}
-                          content={msg.content}
-                          timestamp={msg.timestamp}
-                          status={msg.status}
-                          reactions={msg.reactions}
-                          isEdited={msg.isEdited}
-                          onReaction={(emoji) => handleReaction(msg.id, emoji)}
-                          onDelete={
-                            isOwnMessage
-                              ? () => handleOpenDeleteDialog(msg)
-                              : undefined
-                          }
-                          onEdit={
-                            isOwnMessage
-                              ? () => handleStartEdit(msg)
-                              : undefined
-                          }
-                        />
-                      );
-                    }
-                    // Else, show primary
-                    else {
-                      return (
+              {!loading &&
+                messages.map((msg, i, msgs) => {
+                  const isOwnMessage = msg.sender.id === CURRENT_USER.id;
+                  // If date changed, show date item
+                  if (
+                    new Date(msg.timestamp).toDateString() !==
+                    new Date(msgs[i + 1]?.timestamp).toDateString()
+                  ) {
+                    return (
+                      <Fragment key={msg.id}>
                         <PrimaryMessage
                           id={`message-${msg.id}`}
-                          className="mt-4"
                           highlighted={highlightedMessageId === msg.id}
-                          key={msg.id}
                           avatarSrc={msg.sender.avatarUrl}
                           avatarAlt={msg.sender.username}
                           avatarFallback={msg.sender.name.slice(0, 2)}
@@ -424,44 +357,100 @@ export function ChatExampleComponent() {
                               : undefined
                           }
                         />
-                      );
-                    }
-                  })}
-              </ChatMessages>
+                        <DateItem timestamp={msg.timestamp} className="my-4" />
+                      </Fragment>
+                    );
+                  }
 
-              <Toolbar
-                key={messageToEdit?.id ?? "new"}
-                onSubmit={handleSubmit}
-                onScrollToBottom={scrollToBottom}
-                messageToEdit={messageToEdit}
-                onSubmitEdit={handleSubmitEdit}
-                onCancelEdit={handleCancelEdit}
+                  // If next item is same user, show additional
+                  if (msg.sender.id === msgs[i + 1]?.sender.id) {
+                    return (
+                      <AdditionalMessage
+                        id={`message-${msg.id}`}
+                        className="pt-1"
+                        highlighted={highlightedMessageId === msg.id}
+                        key={msg.id}
+                        content={msg.content}
+                        timestamp={msg.timestamp}
+                        status={msg.status}
+                        reactions={msg.reactions}
+                        isEdited={msg.isEdited}
+                        onReaction={(emoji) => handleReaction(msg.id, emoji)}
+                        onDelete={
+                          isOwnMessage
+                            ? () => handleOpenDeleteDialog(msg)
+                            : undefined
+                        }
+                        onEdit={
+                          isOwnMessage ? () => handleStartEdit(msg) : undefined
+                        }
+                      />
+                    );
+                  }
+                  // Else, show primary
+                  else {
+                    return (
+                      <PrimaryMessage
+                        id={`message-${msg.id}`}
+                        className="mt-4"
+                        highlighted={highlightedMessageId === msg.id}
+                        key={msg.id}
+                        avatarSrc={msg.sender.avatarUrl}
+                        avatarAlt={msg.sender.username}
+                        avatarFallback={msg.sender.name.slice(0, 2)}
+                        senderName={msg.sender.name}
+                        content={msg.content}
+                        timestamp={msg.timestamp}
+                        status={msg.status}
+                        reactions={msg.reactions}
+                        isEdited={msg.isEdited}
+                        onReaction={(emoji) => handleReaction(msg.id, emoji)}
+                        onDelete={
+                          isOwnMessage
+                            ? () => handleOpenDeleteDialog(msg)
+                            : undefined
+                        }
+                        onEdit={
+                          isOwnMessage ? () => handleStartEdit(msg) : undefined
+                        }
+                      />
+                    );
+                  }
+                })}
+            </ChatMessages>
+
+            <Toolbar
+              key={messageToEdit?.id ?? "new"}
+              onSubmit={handleSubmit}
+              onScrollToBottom={scrollToBottom}
+              messageToEdit={messageToEdit}
+              onSubmitEdit={handleSubmitEdit}
+              onCancelEdit={handleCancelEdit}
+            />
+          </SidebarInset>
+
+          <ChatSidebar
+            open={sidebarOpen}
+            onClose={handleSidebarClose}
+            title={sidebarView === "search" ? "Search" : "Profile"}
+            isMobile={!isChatWide}
+          >
+            {sidebarView === "search" && (
+              <SearchSidebarContent
+                query={activeSearchQuery}
+                results={searchResults}
+                searchQuery={searchQuery}
+                onSearchQueryChange={setSearchQuery}
+                onSearch={handleSearch}
+                onResultClick={scrollToMessage}
+                onClose={handleSidebarClose}
+                isMobile={!isChatWide}
               />
-            </SidebarInset>
-
-            <ChatSidebar
-              open={sidebarOpen}
-              onClose={handleSidebarClose}
-              title={sidebarView === "search" ? "Search" : "Profile"}
-              isMobile={!isChatWide}
-            >
-              {sidebarView === "search" && (
-                <SearchSidebarContent
-                  query={activeSearchQuery}
-                  results={searchResults}
-                  searchQuery={searchQuery}
-                  onSearchQueryChange={setSearchQuery}
-                  onSearch={handleSearch}
-                  onResultClick={scrollToMessage}
-                  onClose={handleSidebarClose}
-                  isMobile={!isChatWide}
-                />
-              )}
-              {sidebarView === "profile" && <ProfileSidebarContent />}
-            </ChatSidebar>
-          </SidebarProvider>
-        </Chat>
-      </div>
+            )}
+            {sidebarView === "profile" && <ProfileSidebarContent />}
+          </ChatSidebar>
+        </SidebarProvider>
+      </Chat>
       <DeleteDialog
         open={openDeleteDialog}
         onOpenChange={setOpenDeleteDialog}
