@@ -45,6 +45,7 @@ export function CTASection() {
           url={
             "https://v0.dev/chat/api/open?url=https://shadcn-chat.vercel.app/r/open-in-v0-chat.json"
           }
+          aria-label="Open in V0 Chat"
         >
           Open in
         </V0Button>
