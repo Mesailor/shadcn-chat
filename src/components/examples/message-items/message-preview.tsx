@@ -1,5 +1,3 @@
-import { ReactNode } from "react";
-import { cn } from "@/lib/utils";
 import {
   ChatEvent,
   ChatEventAddon,
@@ -9,28 +7,30 @@ import {
   ChatEventTime,
   ChatEventTitle,
 } from "@/registry/new-york/chat/chat-event";
+import { EventContent } from "@/data/messages";
+import { MessageContent } from "./message-content";
 
-export function PrimaryMessage({
+export function MessagePreview({
   avatarSrc,
   avatarAlt,
   avatarFallback,
   senderName,
   content,
   timestamp,
-
+  onClick,
   className,
 }: {
   avatarSrc?: string;
   avatarAlt?: string;
   avatarFallback?: string;
   senderName: string;
-  content: ReactNode;
+  content: EventContent;
   timestamp: number;
-
+  onClick?: () => void;
   className?: string;
 }) {
   return (
-    <ChatEvent className={cn("hover:bg-accent", className)}>
+    <ChatEvent className={className} onClick={onClick}>
       <ChatEventAddon>
         <ChatEventAvatar
           src={avatarSrc}
@@ -40,10 +40,12 @@ export function PrimaryMessage({
       </ChatEventAddon>
       <ChatEventBody>
         <ChatEventTitle>
-          <span className="font-medium">{senderName}</span>
+          <span className="font-medium truncate">{senderName}</span>
           <ChatEventTime timestamp={timestamp} />
         </ChatEventTitle>
-        <ChatEventContent>{content}</ChatEventContent>
+        <ChatEventContent>
+          <MessageContent content={content} />
+        </ChatEventContent>
       </ChatEventBody>
     </ChatEvent>
   );

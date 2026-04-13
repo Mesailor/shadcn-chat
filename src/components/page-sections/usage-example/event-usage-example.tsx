@@ -1,5 +1,5 @@
 import { CodeBlock } from "@/components/common/code-block";
-import { MESSAGES } from "@/data/messages";
+import { EVENTS } from "@/data/messages";
 import {
   ChatEvent,
   ChatEventAddon,
@@ -9,12 +9,12 @@ import {
   ChatEventTime,
   ChatEventTitle,
 } from "@/registry/new-york/chat/chat-event";
-import { DateItem } from "@/components/message-items/date-item";
+import { DateItem } from "@/components/examples/message-items/date-item";
 import { Anchor } from "@/components/common/anchor";
 import { HighlightedComponent } from "@/components/ui/typography";
 
-const PRIMARY_MSG = MESSAGES[1];
-const ADDITIONAL_MSG = MESSAGES[0];
+const PRIMARY_MSG = EVENTS[1];
+const ADDITIONAL_MSG = EVENTS[0];
 
 export function EventUsageExample() {
   return (
@@ -56,7 +56,7 @@ export function EventUsageExample() {
             <ChatEventTime timestamp={PRIMARY_MSG.timestamp} />
           </ChatEventTitle>
           <ChatEventContent className="text-sm md:text-base">
-            {PRIMARY_MSG.content}
+            {PRIMARY_MSG.content.text}
           </ChatEventContent>
         </ChatEventBody>
       </ChatEvent>
@@ -67,17 +67,17 @@ export function EventUsageExample() {
       />
 
       <h4 className="font-semibold mt-4">Additional Message</h4>
-      <ChatEvent className="hover:bg-accent group py-2 border-y">
+      <ChatEvent className="hover:bg-accent py-2 border-y">
         <ChatEventAddon>
           <ChatEventTime
             timestamp={ADDITIONAL_MSG.timestamp}
             format="time"
-            className="text-right text-[8px] md:text-[10px] group-hover:visible invisible"
+            className="text-right text-[8px] md:text-[10px] group-hover/event:visible invisible"
           />
         </ChatEventAddon>
         <ChatEventBody>
           <ChatEventContent className="text-sm md:text-base">
-            {ADDITIONAL_MSG.content}
+            {ADDITIONAL_MSG.content.text}
           </ChatEventContent>
         </ChatEventBody>
       </ChatEvent>
@@ -127,6 +127,14 @@ const primaryMessageCodeString = `export function PrimaryMessage({
         </ChatEventTitle>
         <ChatEventContent>{content}</ChatEventContent>
       </ChatEventBody>
+      <ChatEventHoverActions>
+        <Button variant="ghost" size="icon" className="size-7 [&_svg]:size-3.5">
+          <SmilePlusIcon />
+        </Button>
+        <Button variant="ghost" size="icon" className="size-7 [&_svg]:size-3.5">
+          <MoreHorizontalIcon />
+        </Button>
+      </ChatEventHoverActions>
     </ChatEvent>
   );
 }
@@ -140,17 +148,25 @@ const additionalMessageCodeString = `export function AdditionalMessage({
   timestamp: number;
 }) {
   return (
-    <ChatEvent className="hover:bg-accent group">
+    <ChatEvent className="hover:bg-accent">
       <ChatEventAddon>
         <ChatEventTime
           timestamp={timestamp}
           format="time"
-          className="text-right text-[8px] @md/chat:text-[10px] group-hover:visible invisible"
+          className="text-right text-[8px] @md/chat:text-[10px] group-hover/event:visible invisible"
         />
       </ChatEventAddon>
       <ChatEventBody>
         <ChatEventContent>{content}</ChatEventContent>
       </ChatEventBody>
+      <ChatEventHoverActions>
+        <Button variant="ghost" size="icon" className="size-7 [&_svg]:size-3.5">
+          <SmilePlusIcon />
+        </Button>
+        <Button variant="ghost" size="icon" className="size-7 [&_svg]:size-3.5">
+          <MoreHorizontalIcon />
+        </Button>
+      </ChatEventHoverActions>
     </ChatEvent>
   );
 }

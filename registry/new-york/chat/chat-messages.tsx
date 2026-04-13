@@ -14,7 +14,7 @@
 
 import { cn } from "@/lib/utils";
 
-export interface ChatMessagesProps extends React.ComponentProps<"div"> {}
+export type ChatMessagesProps = React.ComponentProps<"div">;
 
 /**
  * Scrollable flex container with reverse column direction that

@@ -20,7 +20,7 @@ export function MessagesUsageExample() {
 }
 
 const codeString = `<ChatMessages>
-  {MESSAGES.map((msg, i, msgs) => {
+  {EVENTS.map((msg, i, msgs) => {
     // If date changed, show date item
     if (
       new Date(msg.timestamp).toDateString() !==
@@ -33,7 +33,7 @@ const codeString = `<ChatMessages>
             avatarAlt={msg.sender.username}
             avatarFallback={msg.sender.name.slice(0, 2)}
             senderName={msg.sender.name}
-            content={msg.content}
+            content={msg.content.text}
             timestamp={msg.timestamp}
           />
           <DateItem timestamp={msg.timestamp} className="my-4" />
@@ -46,7 +46,7 @@ const codeString = `<ChatMessages>
       return (
         <AdditionalMessage
           key={msg.id}
-          content={msg.content}
+          content={msg.content.text}
           timestamp={msg.timestamp}
         />
       );
@@ -61,7 +61,7 @@ const codeString = `<ChatMessages>
           avatarAlt={msg.sender.username}
           avatarFallback={msg.sender.name.slice(0, 2)}
           senderName={msg.sender.name}
-          content={msg.content}
+          content={msg.content.text}
           timestamp={msg.timestamp}
         />
       );

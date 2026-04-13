@@ -48,6 +48,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/registry/new-york/ui/avatar";
+import { Button } from "@/registry/new-york/ui/button";
 import { useMemo } from "react";
 
 /**
@@ -86,7 +87,7 @@ const FORMAT_PRESETS: Record<ChatEventTimeFormat, Intl.DateTimeFormatOptions> =
     relative: { dateStyle: "medium", timeStyle: "short" },
   };
 
-export interface ChatEventProps extends React.ComponentProps<"div"> {}
+export type ChatEventProps = React.ComponentProps<"div">;
 
 /**
  * Flex row wrapper for a single message or event. Each event typically
@@ -110,17 +111,20 @@ export interface ChatEventProps extends React.ComponentProps<"div"> {}
  * </ChatEvent>
  *
  * // Follow-up message (same sender, no avatar)
- * <ChatEvent className="hover:bg-accent group">
+ * <ChatEvent className="hover:bg-accent">
  *   <ChatEventAddon>
  *     <ChatEventTime
  *       timestamp={1700000000000}
  *       format="time"
- *       className="text-right text-[8px] group-hover:visible invisible"
+ *       className="text-right text-[8px] group-hover/event:visible invisible"
  *     />
  *   </ChatEventAddon>
  *   <ChatEventBody>
  *     <ChatEventContent>Another message from the same sender.</ChatEventContent>
  *   </ChatEventBody>
+ *   <ChatEventHoverActions>
+ *     ...
+ *   </ChatEventHoverActions>
  * </ChatEvent>
  *
  * // Date separator
@@ -137,13 +141,19 @@ export interface ChatEventProps extends React.ComponentProps<"div"> {}
  */
 export function ChatEvent({ children, className, ...props }: ChatEventProps) {
   return (
-    <div className={cn("flex gap-2 px-2", className)} {...props}>
+    <div
+      className={cn(
+        "flex gap-2 px-2 relative group/event hover:z-10",
+        className,
+      )}
+      {...props}
+    >
       {children}
     </div>
   );
 }
 
-export interface ChatEventAddonProps extends React.ComponentProps<"div"> {}
+export type ChatEventAddonProps = React.ComponentProps<"div">;
 
 /**
  * Fixed-width side column within a `ChatEvent`. Typically holds a
@@ -175,7 +185,7 @@ export function ChatEventAddon({
   );
 }
 
-export interface ChatEventBodyProps extends React.ComponentProps<"div"> {}
+export type ChatEventBodyProps = React.ComponentProps<"div">;
 
 /**
  * Main content area within a `ChatEvent`. Uses `flex-1` to fill the
@@ -205,7 +215,7 @@ export function ChatEventBody({
   );
 }
 
-export interface ChatEventContentProps extends React.ComponentProps<"div"> {}
+export type ChatEventContentProps = React.ComponentProps<"div">;
 
 /**
  * Message text container with responsive text sizing via container
@@ -222,13 +232,19 @@ export function ChatEventContent({
   ...props
 }: ChatEventContentProps) {
   return (
-    <div className={cn("text-sm @md/chat:text-base whitespace-pre-wrap", className)} {...props}>
+    <div
+      className={cn(
+        "text-sm @md/chat:text-base whitespace-pre-wrap",
+        className,
+      )}
+      {...props}
+    >
       {children}
     </div>
   );
 }
 
-export interface ChatEventTitleProps extends React.ComponentProps<"div"> {}
+export type ChatEventTitleProps = React.ComponentProps<"div">;
 
 /**
  * Row for the sender name and metadata (e.g. timestamp, badges).
@@ -358,7 +374,7 @@ function getRelativeTimeString(date: Date, locale: string): string {
  * <ChatEventTime
  *   timestamp={1700000000000}
  *   format="time"
- *   className="text-right text-[8px] group-hover:visible invisible"
+ *   className="text-right text-[8px] group-hover/event:visible invisible"
  * />
  *
  * // Long date format for date separators
@@ -404,5 +420,88 @@ export function ChatEventTime({
     >
       {formattedTime}
     </time>
+  );
+}
+
+export type ChatEventHoverActionsProps = React.ComponentProps<"div">;
+
+/**
+ * Container for hover action buttons. Appears absolutely positioned at the
+ * top-right of the `ChatEvent` row when it is hovered. Place as a direct
+ * child of `ChatEvent`, after `ChatEventBody`.
+ *
+ * `ChatEvent` provides the named group (`group/event`) and `relative`
+ * positioning required for this component to work.
+ *
+ * @example
+ * ```tsx
+ * <ChatEvent className="hover:bg-accent">
+ *   <ChatEventBody>...</ChatEventBody>
+ *   <ChatEventHoverActions>
+ *     <Button variant="ghost" size="icon" className="size-7 [&_svg]:size-3.5">
+ *       <SmilePlusIcon />
+ *     </Button>
+ *     <Button variant="ghost" size="icon" className="size-7 [&_svg]:size-3.5">
+ *       <MoreHorizontalIcon />
+ *     </Button>
+ *   </ChatEventHoverActions>
+ * </ChatEvent>
+ * ```
+ */
+export function ChatEventHoverActions({
+  children,
+  className,
+  ...props
+}: ChatEventHoverActionsProps) {
+  return (
+    <div
+      className={cn(
+        "opacity-0 group-hover/event:opacity-100 pointer-events-none group-hover/event:pointer-events-auto",
+        "[&:has([data-state=open])]:opacity-100 [&:has([data-state=open])]:pointer-events-auto",
+        "absolute right-2 -top-4",
+        "bg-background border rounded-md shadow-sm",
+        "flex items-center gap-0.5 p-0.5",
+        "z-15",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
+
+export type ChatEventHoverActionsButtonProps = React.ComponentProps<
+  typeof Button
+>;
+
+/**
+ * Pre-styled ghost icon button for use inside `ChatEventHoverActions`.
+ * Applies `variant="ghost"`, `size="icon"`, and the standard size classes
+ * (`size-7 [&_svg]:size-3.5`) so every action button is consistent.
+ *
+ * @example
+ * ```tsx
+ * <ChatEventHoverActions>
+ *   <ChatEventHoverActionsButton aria-label="Add reaction">
+ *     <SmilePlusIcon />
+ *   </ChatEventHoverActionsButton>
+ * </ChatEventHoverActions>
+ * ```
+ */
+export function ChatEventHoverActionsButton({
+  className,
+  children,
+  ...props
+}: ChatEventHoverActionsButtonProps) {
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className={cn("size-7 [&_svg]:size-3.5", className)}
+      {...props}
+    >
+      {children}
+    </Button>
   );
 }

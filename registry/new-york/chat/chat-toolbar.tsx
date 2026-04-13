@@ -26,6 +26,7 @@
 "use client";
 
 import * as React from "react";
+import { FileTextIcon, PaperclipIcon, XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/registry/new-york/ui/textarea";
 import { Button } from "@/registry/new-york/ui/button";
@@ -70,7 +71,7 @@ export function ChatToolbar({
     >
       <div
         className={cn(
-          "border rounded-md py-2 px-3",
+          "border rounded-md p-2",
           "flex flex-wrap items-start gap-x-2",
         )}
       >
@@ -148,8 +149,8 @@ export function ChatToolbarTextarea({
 const chatToolbarAddonAlignStyles = {
   "inline-start": "order-1",
   "inline-end": "order-3",
-  "block-start": "order-0 w-full",
-  "block-end": "order-4 w-full",
+  "block-start": "order-0 w-full h-auto",
+  "block-end": "order-4 w-full h-auto",
 };
 
 export interface ChatToolbarAddonProps extends React.ComponentProps<"div"> {
@@ -232,7 +233,7 @@ export function ChatToolbarButton({
     <Button
       variant="ghost"
       className={cn(
-        "size-8 @md/chat:size-9 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='size-'])]:@md/chat:size-5 [&_svg]:stroke-[1.7px]",
+        "size-9 @md/chat:size-9 [&_svg:not([class*='size-'])]:size-5 [&_svg:not([class*='size-'])]:@md/chat:size-5 [&_svg]:stroke-[1.7px]",
         className,
       )}
       type="button"
@@ -240,5 +241,125 @@ export function ChatToolbarButton({
     >
       {children}
     </Button>
+  );
+}
+
+export interface ChatToolbarAttachmentButtonProps extends Omit<
+  ChatToolbarButtonProps,
+  "onClick"
+> {
+  /** Called with the selected files when the user picks one or more files. */
+  onFilesSelected?: (files: File[]) => void;
+  /** Comma-separated MIME types or extensions to accept (e.g. `"image/*,.pdf"`). */
+  accept?: string;
+  /** Allow selecting multiple files. Defaults to `true`. */
+  multiple?: boolean;
+}
+
+/**
+ * Toolbar button that opens a native file picker on click.
+ * Renders a hidden `<input type="file">` and forwards selected files
+ * via the `onFilesSelected` callback.
+ *
+ * @example
+ * ```tsx
+ * <ChatToolbarAttachmentButton
+ *   accept="image/*,.pdf"
+ *   onFilesSelected={(files) => setAttachments(files)}
+ * />
+ * ```
+ */
+export interface ChatToolbarAttachmentProps extends React.ComponentProps<"div"> {
+  /** The file name to display. */
+  fileName: string;
+  /** Called when the user clicks the remove button. */
+  onRemove?: () => void;
+}
+
+/**
+ * Displays a file attachment preview as a square card with a file icon,
+ * file name, and a small remove button in the top-right corner.
+ * Discord-style attachment preview for the toolbar.
+ *
+ * @example
+ * ```tsx
+ * <ChatToolbarAddon align="block-start">
+ *   {files.map((file, i) => (
+ *     <ChatToolbarAttachment
+ *       key={i}
+ *       file={file}
+ *       onRemove={() => removeFile(i)}
+ *     />
+ *   ))}
+ * </ChatToolbarAddon>
+ * ```
+ */
+export function ChatToolbarAttachment({
+  fileName,
+  onRemove,
+  className,
+  ...props
+}: ChatToolbarAttachmentProps) {
+  return (
+    <div
+      className={cn(
+        "relative group size-20 @md/chat:size-30 rounded-md border bg-muted flex flex-col items-center justify-center gap-1 shrink-0",
+        className,
+      )}
+      {...props}
+    >
+      <FileTextIcon className="size-5 @md/chat:size-6 text-muted-foreground stroke-[1.5px]" />
+      <span className="text-[10px] @md/chat:text-xs text-muted-foreground leading-tight max-w-[calc(100%-8px)] truncate">
+        {fileName}
+      </span>
+      {onRemove && (
+        <button
+          type="button"
+          onClick={onRemove}
+          className="absolute top-0 right-0 size-4 @md/chat:size-5 rounded-full bg-foreground text-background flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+          <XIcon className="size-2.5 @md/chat:size-3" />
+        </button>
+      )}
+    </div>
+  );
+}
+
+export function ChatToolbarAttachmentButton({
+  children,
+  onFilesSelected,
+  accept,
+  multiple = true,
+  ...props
+}: ChatToolbarAttachmentButtonProps) {
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleClick = () => {
+    inputRef.current?.click();
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      onFilesSelected?.(Array.from(files));
+    }
+    // Reset so the same file can be re-selected
+    e.target.value = "";
+  };
+
+  return (
+    <>
+      <ChatToolbarButton onClick={handleClick} {...props}>
+        {children ?? <PaperclipIcon />}
+      </ChatToolbarButton>
+      <input
+        ref={inputRef}
+        type="file"
+        className="hidden"
+        accept={accept}
+        multiple={multiple}
+        onChange={handleChange}
+      />
+    </>
   );
 }

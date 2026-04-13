@@ -121,6 +121,20 @@
   }
 }
 
+@keyframes message-highlight {
+  0%,
+  60% {
+    background-color: var(--accent);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@utility animate-message-highlight {
+  animation: message-highlight 3s ease-out forwards;
+}
+
 @utility scrollbar-hidden {
   &::-webkit-scrollbar {
     display: none;
