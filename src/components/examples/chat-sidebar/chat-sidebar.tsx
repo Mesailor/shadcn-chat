@@ -34,7 +34,7 @@ export function ChatSidebar({
           if (!o) onClose();
         }}
       >
-        <SheetContent side="right" className="flex flex-col gap-0 p-0">
+        <SheetContent side="right" className="w-full flex flex-col gap-0 p-0">
           <SheetHeader className="border-b px-4 py-3 flex-row items-center space-y-0">
             <SheetTitle className="text-sm font-medium">{title}</SheetTitle>
           </SheetHeader>
