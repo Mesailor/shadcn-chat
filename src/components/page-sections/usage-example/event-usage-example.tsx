@@ -128,12 +128,12 @@ const primaryMessageCodeString = `export function PrimaryMessage({
         <ChatEventContent>{content}</ChatEventContent>
       </ChatEventBody>
       <ChatEventHoverActions>
-        <Button variant="ghost" size="icon" className="size-7 [&_svg]:size-3.5">
+        <ChatEventHoverActionsButton aria-label="Add reaction">
           <SmilePlusIcon />
-        </Button>
-        <Button variant="ghost" size="icon" className="size-7 [&_svg]:size-3.5">
+        </ChatEventHoverActionsButton>
+        <ChatEventHoverActionsButton aria-label="More options">
           <MoreHorizontalIcon />
-        </Button>
+        </ChatEventHoverActionsButton>
       </ChatEventHoverActions>
     </ChatEvent>
   );
@@ -160,12 +160,12 @@ const additionalMessageCodeString = `export function AdditionalMessage({
         <ChatEventContent>{content}</ChatEventContent>
       </ChatEventBody>
       <ChatEventHoverActions>
-        <Button variant="ghost" size="icon" className="size-7 [&_svg]:size-3.5">
+        <ChatEventHoverActionsButton aria-label="Add reaction">
           <SmilePlusIcon />
-        </Button>
-        <Button variant="ghost" size="icon" className="size-7 [&_svg]:size-3.5">
+        </ChatEventHoverActionsButton>
+        <ChatEventHoverActionsButton aria-label="More options">
           <MoreHorizontalIcon />
-        </Button>
+        </ChatEventHoverActionsButton>
       </ChatEventHoverActions>
     </ChatEvent>
   );

@@ -224,6 +224,14 @@ export function PrimaryMessage({
         </ChatEventTitle>
         <ChatEventContent>{content}</ChatEventContent>
       </ChatEventBody>
+      <ChatEventHoverActions>
+        <ChatEventHoverActionsButton aria-label="Add reaction">
+          <SmilePlusIcon />
+        </ChatEventHoverActionsButton>
+        <ChatEventHoverActionsButton aria-label="More options">
+          <MoreHorizontalIcon />
+        </ChatEventHoverActionsButton>
+      </ChatEventHoverActions>
     </ChatEvent>
   );
 }
@@ -240,17 +248,25 @@ export function AdditionalMessage({
   timestamp: number;
 }) {
   return (
-    <ChatEvent className="hover:bg-accent group">
+    <ChatEvent className="hover:bg-accent">
       <ChatEventAddon>
         <ChatEventTime
           timestamp={timestamp}
           format="time"
-          className="text-right text-[8px] @md/chat:text-[10px] group-hover:visible invisible"
+          className="text-right text-[8px] @md/chat:text-[10px] group-hover/event:visible invisible"
         />
       </ChatEventAddon>
       <ChatEventBody>
         <ChatEventContent>{content}</ChatEventContent>
       </ChatEventBody>
+      <ChatEventHoverActions>
+        <ChatEventHoverActionsButton aria-label="Add reaction">
+          <SmilePlusIcon />
+        </ChatEventHoverActionsButton>
+        <ChatEventHoverActionsButton aria-label="More options">
+          <MoreHorizontalIcon />
+        </ChatEventHoverActionsButton>
+      </ChatEventHoverActions>
     </ChatEvent>
   );
 }
