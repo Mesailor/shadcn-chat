@@ -224,6 +224,14 @@ export function PrimaryMessage({
         </ChatEventTitle>
         <ChatEventContent>{content}</ChatEventContent>
       </ChatEventBody>
+      <ChatEventHoverActions>
+        <ChatEventHoverActionsButton aria-label="Add reaction">
+          <SmilePlusIcon />
+        </ChatEventHoverActionsButton>
+        <ChatEventHoverActionsButton aria-label="More options">
+          <MoreHorizontalIcon />
+        </ChatEventHoverActionsButton>
+      </ChatEventHoverActions>
     </ChatEvent>
   );
 }
@@ -240,17 +248,25 @@ export function AdditionalMessage({
   timestamp: number;
 }) {
   return (
-    <ChatEvent className="hover:bg-accent group">
+    <ChatEvent className="hover:bg-accent">
       <ChatEventAddon>
         <ChatEventTime
           timestamp={timestamp}
           format="time"
-          className="text-right text-[8px] @md/chat:text-[10px] group-hover:visible invisible"
+          className="text-right text-[8px] @md/chat:text-[10px] group-hover/event:visible invisible"
         />
       </ChatEventAddon>
       <ChatEventBody>
         <ChatEventContent>{content}</ChatEventContent>
       </ChatEventBody>
+      <ChatEventHoverActions>
+        <ChatEventHoverActionsButton aria-label="Add reaction">
+          <SmilePlusIcon />
+        </ChatEventHoverActionsButton>
+        <ChatEventHoverActionsButton aria-label="More options">
+          <MoreHorizontalIcon />
+        </ChatEventHoverActionsButton>
+      </ChatEventHoverActions>
     </ChatEvent>
   );
 }
@@ -286,27 +302,58 @@ A sticky bottom input area for message composition. Use `ChatToolbar` as the con
 
 ```tsx
 <ChatToolbar>
-  <ChatToolbarAddon align="inline-start">
-    <ChatToolbarButton>
+  {/* Attached files preview section */}
+  {files.length > 0 && (
+    <ChatToolbarAddon
+      align="block-start"
+      className="mb-2 overflow-x-auto gap-2"
+    >
+      {files.map((file, i) => (
+        <ChatToolbarAttachment
+          key={file.name + i}
+          fileName={file.name}
+          onRemove={() =>
+            setFiles((prev) => prev.filter((_, idx) => idx !== i))
+          }
+        />
+      ))}
+    </ChatToolbarAddon>
+  )}
+
+  {/* Additional action buttons */}
+  <ChatToolbarAddon
+    align="inline-start"
+    className="order-2 flex-1 @2xl/chat:order-1 @2xl/chat:flex-none"
+  >
+    {/* Attachment button */}
+    <ChatToolbarAttachmentButton
+      onFilesSelected={(files) => {
+        setFiles((prev) => [...prev, ...files]);
+      }}
+    >
       <PlusIcon />
-    </ChatToolbarButton>
+    </ChatToolbarAttachmentButton>
+    {/* Emoji picker popover */}
+    <EmojiPickerPopover />
   </ChatToolbarAddon>
 
-  <ChatToolbarTextarea
-    value={message}
-    onChange={(e) => setMessage(e.target.value)}
-    onSubmit={() => handleSendMessage()}
-  />
+  {/* Textarea section */}
+  <div className="w-full min-w-0 order-1 pb-1 @2xl/chat:pb-0 @2xl/chat:flex-1 @2xl/chat:w-auto @2xl/chat:order-2">
+    <ChatToolbarTextarea
+      value={input}
+      onChange={(e) => setInput(e.target.value)}
+      onSubmit={() => handleSubmit()}
+    />
+  </div>
 
+  {/* Submit button */}
   <ChatToolbarAddon align="inline-end">
-    <ChatToolbarButton>
-      <GiftIcon />
-    </ChatToolbarButton>
-    <ChatToolbarButton>
-      <CalendarDaysIcon />
-    </ChatToolbarButton>
-    <ChatToolbarButton>
-      <SquareChevronRightIcon />
+    <ChatToolbarButton
+      variant="default"
+      disabled={!input.trim() && files.length === 0}
+      onClick={() => handleSubmit()}
+    >
+      <SendIcon />
     </ChatToolbarButton>
   </ChatToolbarAddon>
 </ChatToolbar>

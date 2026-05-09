@@ -8,10 +8,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import {
-  SidebarContent,
-  SidebarHeader,
-} from "@/components/ui/sidebar";
+import { SidebarContent, SidebarHeader } from "@/components/ui/sidebar";
 import { XIcon } from "lucide-react";
 
 interface ChatSidebarProps {
@@ -37,7 +34,7 @@ export function ChatSidebar({
           if (!o) onClose();
         }}
       >
-        <SheetContent side="right" className="flex flex-col gap-0 p-0">
+        <SheetContent side="right" className="w-full flex flex-col gap-0 p-0">
           <SheetHeader className="border-b px-4 py-3 flex-row items-center space-y-0">
             <SheetTitle className="text-sm font-medium">{title}</SheetTitle>
           </SheetHeader>
@@ -60,7 +57,7 @@ export function ChatSidebar({
           <XIcon />
         </Button>
       </SidebarHeader>
-      <SidebarContent className="gap-2">{children}</SidebarContent>
+      <SidebarContent className="gap-0">{children}</SidebarContent>
     </div>
   );
 }

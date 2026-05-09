@@ -1,20 +1,30 @@
+"use client";
+
 import {
   ChatToolbar,
   ChatToolbarAddon,
+  ChatToolbarAttachment,
+  ChatToolbarAttachmentButton,
   ChatToolbarButton,
   ChatToolbarTextarea,
 } from "@/registry/new-york/chat/chat-toolbar";
 import { CodeBlock } from "@/components/common/code-block";
-import {
-  CalendarDaysIcon,
-  GiftIcon,
-  PlusIcon,
-  SquareChevronRightIcon,
-} from "lucide-react";
+import { PlusIcon, SendIcon, SmileIcon } from "lucide-react";
 import { Anchor } from "@/components/common/anchor";
 import { HighlightedComponent } from "@/components/ui/typography";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
+import { useState } from "react";
 
 export function ToolbarUsageExample() {
+  const [input, setInput] = useState("");
+  const [files, setFiles] = useState<File[]>([]);
+  const [emojiOpen, setEmojiOpen] = useState(false);
+
   return (
     <div className="space-y-2">
       <div>
@@ -37,22 +47,66 @@ export function ToolbarUsageExample() {
         </p>
       </div>
 
-      <ChatToolbar className="static p-0">
-        <ChatToolbarAddon align="inline-start">
-          <ChatToolbarButton>
+      <ChatToolbar className="p-0 static">
+        {files.length > 0 && (
+          <ChatToolbarAddon
+            align="block-start"
+            className="mb-2 overflow-x-auto gap-2"
+          >
+            {files.map((file, i) => (
+              <ChatToolbarAttachment
+                key={file.name + i}
+                fileName={file.name}
+                onRemove={() =>
+                  setFiles((prev) => prev.filter((_, idx) => idx !== i))
+                }
+              />
+            ))}
+          </ChatToolbarAddon>
+        )}
+
+        <ChatToolbarAddon
+          align="inline-start"
+          className="order-2 flex-1 md:order-1 md:flex-none"
+        >
+          <ChatToolbarAttachmentButton
+            onFilesSelected={(files) => {
+              setFiles((prev) => [...prev, ...files]);
+            }}
+          >
             <PlusIcon />
-          </ChatToolbarButton>
+          </ChatToolbarAttachmentButton>
+          <Popover open={emojiOpen} onOpenChange={setEmojiOpen}>
+            <PopoverTrigger asChild>
+              <ChatToolbarButton>
+                <SmileIcon />
+              </ChatToolbarButton>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start" side="top">
+              <EmojiPicker
+                theme={Theme.AUTO}
+                onEmojiClick={(emojiData: EmojiClickData) => {
+                  setInput((prev) => prev + emojiData.emoji);
+                  setEmojiOpen(false);
+                }}
+              />
+            </PopoverContent>
+          </Popover>
         </ChatToolbarAddon>
-        <ChatToolbarTextarea className="md:text-base" />
+
+        <div className="w-full min-w-0 order-1 pb-1 md:pb-0 md:flex-1 md:w-auto md:order-2">
+          <ChatToolbarTextarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+        </div>
+
         <ChatToolbarAddon align="inline-end">
-          <ChatToolbarButton>
-            <GiftIcon />
-          </ChatToolbarButton>
-          <ChatToolbarButton>
-            <CalendarDaysIcon />
-          </ChatToolbarButton>
-          <ChatToolbarButton>
-            <SquareChevronRightIcon />
+          <ChatToolbarButton
+            variant="default"
+            disabled={!input.trim() && files.length === 0}
+          >
+            <SendIcon />
           </ChatToolbarButton>
         </ChatToolbarAddon>
       </ChatToolbar>
@@ -63,27 +117,58 @@ export function ToolbarUsageExample() {
 }
 
 const codeString = `<ChatToolbar>
-  <ChatToolbarAddon align="inline-start">
-    <ChatToolbarButton>
+  {/* Attached files preview section */}
+  {files.length > 0 && (
+    <ChatToolbarAddon
+      align="block-start"
+      className="mb-2 overflow-x-auto gap-2"
+    >
+      {files.map((file, i) => (
+        <ChatToolbarAttachment
+          key={file.name + i}
+          fileName={file.name}
+          onRemove={() =>
+            setFiles((prev) => prev.filter((_, idx) => idx !== i))
+          }
+        />
+      ))}
+    </ChatToolbarAddon>
+  )}
+
+  {/* Additional action buttons */}
+  <ChatToolbarAddon
+    align="inline-start"
+    className="order-2 flex-1 @2xl/chat:order-1 @2xl/chat:flex-none"
+  >
+    {/* Attachment button */}
+    <ChatToolbarAttachmentButton
+      onFilesSelected={(files) => {
+        setFiles((prev) => [...prev, ...files]);
+      }}
+    >
       <PlusIcon />
-    </ChatToolbarButton>
+    </ChatToolbarAttachmentButton>
+    {/* Emoji picker popover */}
+    <EmojiPickerPopover />
   </ChatToolbarAddon>
 
-  <ChatToolbarTextarea
-    value={message}
-    onChange={(e) => setMessage(e.target.value)}
-    onSubmit={() => handleSendMessage()}
-  />
-  
+  {/* Textarea section */}
+  <div className="w-full min-w-0 order-1 pb-1 @2xl/chat:pb-0 @2xl/chat:flex-1 @2xl/chat:w-auto @2xl/chat:order-2">
+    <ChatToolbarTextarea
+      value={input}
+      onChange={(e) => setInput(e.target.value)}
+      onSubmit={() => handleSubmit()}
+    />
+  </div>
+
+  {/* Submit button */}
   <ChatToolbarAddon align="inline-end">
-    <ChatToolbarButton>
-      <GiftIcon />
-    </ChatToolbarButton>
-    <ChatToolbarButton>
-      <CalendarDaysIcon />
-    </ChatToolbarButton>
-    <ChatToolbarButton>
-      <SquareChevronRightIcon />
+    <ChatToolbarButton
+      variant="default"
+      disabled={!input.trim() && files.length === 0}
+      onClick={() => handleSubmit()}
+    >
+      <SendIcon />
     </ChatToolbarButton>
   </ChatToolbarAddon>
 </ChatToolbar>
