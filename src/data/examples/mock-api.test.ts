@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { searchEvents } from "./mock-api";
+import { getEvents, searchEvents } from "./mock-api";
 import { EVENTS } from "../messages";
 
 const INITIAL_EVENTS = structuredClone(EVENTS);
@@ -68,5 +68,26 @@ describe("searchEvents", () => {
     const result = await promise;
 
     expect(result).not.toHaveLength(0);
+  });
+});
+
+describe("getEvents", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    // Reset the EVENTS
+    EVENTS.length = 0;
+    EVENTS.push(...structuredClone(INITIAL_EVENTS));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("resolves with all events", async () => {
+    const promise = getEvents();
+    vi.runAllTimers();
+    const result = await promise;
+
+    expect(result).toEqual(EVENTS);
   });
 });
