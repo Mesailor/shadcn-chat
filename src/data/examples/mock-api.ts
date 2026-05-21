@@ -13,7 +13,7 @@ export const searchEvents = (query: string): Promise<Event[]> => {
 
 export const getEvents = () => {
   // Simulate fetching events from an API with a delay
-  return new Promise<typeof EVENTS>((resolve) => {
+  return new Promise<Event[]>((resolve) => {
     setTimeout(() => {
       resolve(EVENTS);
     }, 1000);
@@ -26,7 +26,7 @@ export const postEvent = ({
 }: {
   text?: string;
   files?: File[];
-}): Promise<(typeof EVENTS)[0]> => {
+}): Promise<Event> => {
   if (!text && (!files || files.length === 0)) {
     return Promise.reject(new Error("Either text or files must be provided"));
   }
