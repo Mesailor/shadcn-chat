@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { getEvents, searchEvents } from "./mock-api";
+import { getEvents, postEvent, searchEvents } from "./mock-api";
 import { EVENTS } from "../messages";
+import { CURRENT_USER } from "../users";
 
 const INITIAL_EVENTS = structuredClone(EVENTS);
 
@@ -89,5 +90,63 @@ describe("getEvents", () => {
     const result = await promise;
 
     expect(result).toEqual(EVENTS);
+  });
+});
+
+describe("postEvent", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    URL.createObjectURL = vi.fn(() => "blob:mock-url");
+    // Reset the EVENTS
+    EVENTS.length = 0;
+    EVENTS.push(...structuredClone(INITIAL_EVENTS));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+  });
+
+  it("rejects with error if no valid text or files were passed", async () => {
+    await expect(postEvent({})).rejects.toThrow(
+      "Either text or files must be provided",
+    );
+    await expect(postEvent({ files: [] })).rejects.toThrow(
+      "Either text or files must be provided",
+    );
+  });
+
+  it("resolves with event that has passed text and files", async () => {
+    const text = "Hello World!";
+    const files = [new File(["content"], "photo.png", { type: "image/png" })];
+
+    const promise = postEvent({ text, files });
+    vi.runAllTimers();
+    const result = await promise;
+
+    expect(result).toMatchObject({
+      status: "sent",
+      sender: CURRENT_USER,
+      content: {
+        text,
+        files: [
+          {
+            url: "blob:mock-url",
+            fileName: "photo.png",
+            mimeType: "image/png",
+          },
+        ],
+      },
+    });
+  });
+
+  it("adds newly created event to the beginning of EVENTS", async () => {
+    const text = "Hello World!";
+
+    const promise = postEvent({ text });
+    vi.runAllTimers();
+    const result = await promise;
+
+    expect(result).toEqual(EVENTS[0]);
   });
 });
