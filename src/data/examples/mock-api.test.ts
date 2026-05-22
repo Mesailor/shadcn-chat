@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { getEvents, postEvent, searchEvents } from "./mock-api";
+import { deleteEvent, getEvents, postEvent, searchEvents } from "./mock-api";
 import { EVENTS } from "../messages";
 import { CURRENT_USER } from "../users";
 
@@ -148,5 +148,74 @@ describe("postEvent", () => {
     const result = await promise;
 
     expect(result).toEqual(EVENTS[0]);
+  });
+});
+
+describe("deleteEvent", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    // Reset the EVENTS
+    EVENTS.length = 0;
+    EVENTS.push(...structuredClone(INITIAL_EVENTS));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("rejects if no event with passed ID found", async () => {
+    const promise = deleteEvent(999);
+    vi.runAllTimers();
+
+    await expect(promise).rejects.toThrow("Event not found");
+  });
+
+  it("removes event with passed ID from EVENTS and resolves with ID", async () => {
+    const idToDelete = 1;
+    EVENTS.length = 0;
+    EVENTS.push(
+      {
+        id: 1,
+        status: "sent",
+        sender: {
+          id: "annsmith-user-id",
+          name: "Ann Smith",
+          avatarUrl:
+            "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+          username: "@annsmith",
+        },
+        timestamp: 1234979120123,
+        content: {
+          type: "message",
+          text: "Hello",
+        },
+      },
+      {
+        id: 2,
+        status: "sent",
+        sender: {
+          id: "annsmith-user-id",
+          name: "Ann Smith",
+          avatarUrl:
+            "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+          username: "@annsmith",
+        },
+        timestamp: 1234979120123,
+        content: {
+          type: "message",
+          text: "Hello",
+        },
+      },
+    );
+
+    const promise = deleteEvent(idToDelete);
+    vi.runAllTimers();
+    const result = await promise;
+
+    expect(result).toBe(idToDelete);
+    expect(EVENTS).toHaveLength(1);
+    expect(EVENTS).not.toContainEqual(
+      expect.objectContaining({ id: idToDelete }),
+    );
   });
 });
