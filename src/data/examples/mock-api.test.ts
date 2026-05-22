@@ -3,6 +3,7 @@ import {
   deleteEvent,
   getEvents,
   postEvent,
+  reactToEvent,
   searchEvents,
   updateEvent,
 } from "./mock-api";
@@ -463,5 +464,87 @@ describe("updateEvent", () => {
     const result = await promise;
 
     expect(result.content.files).toBe(undefined);
+  });
+});
+
+describe("reactToEvent", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    // Reset the EVENTS
+    EVENTS.length = 0;
+    EVENTS.push(...structuredClone(INITIAL_EVENTS));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("rejects if no event with passed ID found", async () => {
+    const promise = reactToEvent(999, "❤️");
+    vi.runAllTimers();
+
+    await expect(promise).rejects.toThrow("Event not found");
+  });
+
+  it("resolves with event updated on EVENTS", async () => {
+    const promise = reactToEvent(1, "❤️");
+    vi.runAllTimers();
+    const result = await promise;
+
+    expect(result).toEqual(EVENTS.find((e) => e.id === result.id));
+  });
+
+  it("replaces the event.reactions with a passed reaction", async () => {
+    EVENTS.length = 0;
+    EVENTS.push({
+      id: 1,
+      status: "sent",
+      sender: {
+        id: "annsmith-user-id",
+        name: "Ann Smith",
+        avatarUrl:
+          "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+        username: "@annsmith",
+      },
+      timestamp: 1234979120123,
+      content: {
+        type: "message",
+        text: "Hello",
+      },
+      reactions: ["✅"],
+    });
+
+    const promise = reactToEvent(1, "❤️");
+    vi.runAllTimers();
+    const result = await promise;
+
+    expect(result.reactions).toEqual(["❤️"]);
+  });
+
+  it("removes passed emoji from event.reactions if it was there", async () => {
+    EVENTS.length = 0;
+    EVENTS.push({
+      id: 1,
+      status: "sent",
+      sender: {
+        id: "annsmith-user-id",
+        name: "Ann Smith",
+        avatarUrl:
+          "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+        username: "@annsmith",
+      },
+      timestamp: 1234979120123,
+      content: {
+        type: "message",
+        text: "Hello",
+      },
+      reactions: ["❤️"],
+    });
+
+    const promise = reactToEvent(1, "❤️");
+    vi.runAllTimers();
+    const result = await promise;
+
+    expect(result.reactions).toEqual([]);
   });
 });

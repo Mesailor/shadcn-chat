@@ -112,7 +112,10 @@ const unblockUser = (userId: string): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, 200));
 };
 
-const reactToEvent = (eventId: number, emoji: string): Promise<Event> => {
+export const reactToEvent = (
+  eventId: number,
+  emoji: string,
+): Promise<Event> => {
   const event = EVENTS.find((e) => e.id === eventId);
   if (!event) return Promise.reject(new Error("Event not found"));
 
