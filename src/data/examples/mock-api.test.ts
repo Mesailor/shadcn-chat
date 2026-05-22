@@ -1,5 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { deleteEvent, getEvents, postEvent, searchEvents } from "./mock-api";
+import {
+  deleteEvent,
+  getEvents,
+  postEvent,
+  searchEvents,
+  updateEvent,
+} from "./mock-api";
 import { EVENTS } from "../messages";
 import { CURRENT_USER } from "../users";
 
@@ -217,5 +223,245 @@ describe("deleteEvent", () => {
     expect(EVENTS).not.toContainEqual(
       expect.objectContaining({ id: idToDelete }),
     );
+  });
+});
+
+describe("updateEvent", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    URL.createObjectURL = vi.fn(() => "blob:mock-url");
+    // Reset the EVENTS
+    EVENTS.length = 0;
+    EVENTS.push(...structuredClone(INITIAL_EVENTS));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+  });
+
+  it("rejects if no event with passed ID found", async () => {
+    const promise = updateEvent(999, {});
+    vi.runAllTimers();
+
+    await expect(promise).rejects.toThrow("Event not found");
+  });
+
+  it("resolves with event that was updated in the EVENTS", async () => {
+    const promise = updateEvent(1, { text: "Updated" });
+    vi.runAllTimers();
+    const result = await promise;
+
+    expect(result).toEqual(EVENTS.find((e) => e.id === result.id));
+  });
+
+  it("sets isEdited to true after update", async () => {
+    const promise = updateEvent(1, {});
+    vi.runAllTimers();
+    const result = await promise;
+
+    expect(result).toMatchObject({ isEdited: true });
+  });
+
+  it("updates content.text when text is provided", async () => {
+    EVENTS.length = 0;
+    EVENTS.push({
+      id: 1,
+      status: "sent",
+      sender: {
+        id: "annsmith-user-id",
+        name: "Ann Smith",
+        avatarUrl:
+          "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+        username: "@annsmith",
+      },
+      timestamp: 1234979120123,
+      content: {
+        type: "message",
+        text: "Hello",
+      },
+    });
+
+    const promise = updateEvent(1, { text: "Updated" });
+    vi.runAllTimers();
+    const result = await promise;
+
+    expect(result.content.text).toBe("Updated");
+  });
+
+  it("does not change content.text when text is not provided", async () => {
+    EVENTS.length = 0;
+    EVENTS.push({
+      id: 1,
+      status: "sent",
+      sender: {
+        id: "annsmith-user-id",
+        name: "Ann Smith",
+        avatarUrl:
+          "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+        username: "@annsmith",
+      },
+      timestamp: 1234979120123,
+      content: {
+        type: "message",
+        text: "Hello",
+      },
+    });
+
+    const promise = updateEvent(1, {});
+    vi.runAllTimers();
+    const result = await promise;
+
+    expect(result.content.text).toBe("Hello");
+  });
+
+  it("converts uploadFiles to EventFiles using URL.createObjectURL", async () => {
+    EVENTS.length = 0;
+    EVENTS.push({
+      id: 1,
+      status: "sent",
+      sender: {
+        id: "annsmith-user-id",
+        name: "Ann Smith",
+        avatarUrl:
+          "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+        username: "@annsmith",
+      },
+      timestamp: 1234979120123,
+      content: {
+        type: "message",
+        text: "Hello",
+      },
+    });
+    const fileToUpload = new File(["content"], "image.png", {
+      type: "image/png",
+    });
+
+    const promise = updateEvent(1, { uploadFiles: [fileToUpload] });
+    vi.runAllTimers();
+    const result = await promise;
+
+    expect(result.content.files).toContainEqual(
+      expect.objectContaining({
+        url: "blob:mock-url",
+        fileName: "image.png",
+        mimeType: "image/png",
+      }),
+    );
+  });
+
+  it("keeps editedFiles as-is in content.files", async () => {
+    const existedFiles = [
+      {
+        url: "blob:mock-url",
+        fileName: "image.png",
+        mimeType: "image/png",
+      },
+    ];
+    EVENTS.length = 0;
+    EVENTS.push({
+      id: 1,
+      status: "sent",
+      sender: {
+        id: "annsmith-user-id",
+        name: "Ann Smith",
+        avatarUrl:
+          "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+        username: "@annsmith",
+      },
+      timestamp: 1234979120123,
+      content: {
+        type: "message",
+        text: "Hello",
+        files: existedFiles,
+      },
+    });
+
+    const promise = updateEvent(1, { editedFiles: existedFiles });
+    vi.runAllTimers();
+    const result = await promise;
+
+    expect(result.content.files).toEqual(existedFiles);
+  });
+
+  it("merges editedFiles and uploadFiles into content.files", async () => {
+    const existedFiles = [
+      {
+        url: "blob:mock-url",
+        fileName: "existed.png",
+        mimeType: "image/png",
+      },
+    ];
+    const fileToUpload = new File(["content"], "uploaded.png", {
+      type: "image/png",
+    });
+    EVENTS.length = 0;
+    EVENTS.push({
+      id: 1,
+      status: "sent",
+      sender: {
+        id: "annsmith-user-id",
+        name: "Ann Smith",
+        avatarUrl:
+          "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+        username: "@annsmith",
+      },
+      timestamp: 1234979120123,
+      content: {
+        type: "message",
+        text: "Hello",
+        files: existedFiles,
+      },
+    });
+
+    const promise = updateEvent(1, {
+      editedFiles: existedFiles,
+      uploadFiles: [fileToUpload],
+    });
+    vi.runAllTimers();
+    const result = await promise;
+
+    expect(result.content.files).toEqual([
+      ...existedFiles,
+      expect.objectContaining({
+        url: "blob:mock-url",
+        fileName: "uploaded.png",
+        mimeType: "image/png",
+      }),
+    ]);
+  });
+
+  it("sets content.files to undefined when no files are passed", async () => {
+    const existedFiles = [
+      {
+        url: "blob:mock-url",
+        fileName: "image.png",
+        mimeType: "image/png",
+      },
+    ];
+    EVENTS.length = 0;
+    EVENTS.push({
+      id: 1,
+      status: "sent",
+      sender: {
+        id: "annsmith-user-id",
+        name: "Ann Smith",
+        avatarUrl:
+          "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
+        username: "@annsmith",
+      },
+      timestamp: 1234979120123,
+      content: {
+        type: "message",
+        text: "Hello",
+        files: existedFiles,
+      },
+    });
+
+    const promise = updateEvent(1, {});
+    vi.runAllTimers();
+    const result = await promise;
+
+    expect(result.content.files).toBe(undefined);
   });
 });
