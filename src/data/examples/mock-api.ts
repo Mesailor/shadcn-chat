@@ -97,7 +97,7 @@ export const updateEvent = (
         ...(allFiles.length > 0 ? { files: allFiles } : { files: undefined }),
       };
       event.isEdited = true;
-      resolve({ ...event });
+      resolve(structuredClone(event));
     }, 500);
   });
 };
