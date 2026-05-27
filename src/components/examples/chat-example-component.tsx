@@ -9,6 +9,7 @@ import { useMessages } from "@/hooks/examples/messages";
 import { useMessageReactions } from "@/hooks/examples/message-reactions";
 import { useMessageSearch } from "@/hooks/examples/message-search";
 import { useMessageActions } from "@/hooks/examples/message-actions";
+import { useHighlightedMessageId } from "@/hooks/examples/use-highlighted-message-id";
 import { useProfile } from "@/hooks/examples/profile";
 import { useChatSidebar } from "@/hooks/examples/chat-sidebar";
 import { useIsWider } from "@/hooks/use-is-wider";
@@ -95,8 +96,6 @@ export function ChatExampleComponent() {
     setSearchQuery,
     activeSearchQuery,
     searchResults,
-    highlightedMessageId,
-    setHighlightedMessageId,
     handleSearch,
     handleClearSearch,
     openSearch,
@@ -105,6 +104,9 @@ export function ChatExampleComponent() {
     setSidebarView,
     onSearch: mockAPI.searchEvents,
   });
+
+  const { highlightedMessageId, setHighlightedMessageId } =
+    useHighlightedMessageId();
 
   const {
     openBlockDialog,
