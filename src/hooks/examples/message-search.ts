@@ -23,8 +23,6 @@ export const useMessageSearch = ({
       setActiveSearchQuery(trimmed);
       setSidebarView("search");
       setSidebarOpen(true);
-      const results = await onSearch(trimmed);
-      setSearchResults(results);
       try {
         const results = await onSearch(trimmed);
         // Only update if this is still the most recent search
