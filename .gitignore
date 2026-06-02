@@ -46,3 +46,10 @@ next-env.d.ts
 # claude settings
 .claude/*
 !.claude/commands/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
