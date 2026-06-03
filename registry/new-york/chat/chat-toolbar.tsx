@@ -66,6 +66,7 @@ export function ChatToolbar({
 }: ChatToolbarProps) {
   return (
     <div
+      data-slot="chat-toolbar"
       className={cn("sticky bottom-0 p-2 pt-0 bg-background", className)}
       {...props}
     >
@@ -129,7 +130,7 @@ export function ChatToolbarTextarea({
   };
 
   return (
-    <div className="flex-1 min-w-0 order-2 grid">
+    <div data-slot="chat-toolbar-textarea" className="flex-1 min-w-0 order-2 grid">
       <Textarea
         id="toolbar-input"
         placeholder="Type your message..."
@@ -195,6 +196,7 @@ export function ChatToolbarAddon({
 }: ChatToolbarAddonProps) {
   return (
     <div
+      data-slot="chat-toolbar-addon"
       className={cn(
         "h-10 flex items-center gap-1.5",
         chatToolbarAddonAlignStyles[align],
@@ -231,6 +233,7 @@ export function ChatToolbarButton({
 }: ChatToolbarButtonProps) {
   return (
     <Button
+      data-slot="chat-toolbar-button"
       variant="ghost"
       className={cn(
         "size-9 @md/chat:size-9 [&_svg:not([class*='size-'])]:size-5 [&_svg:not([class*='size-'])]:@md/chat:size-5 [&_svg]:stroke-[1.7px]",
@@ -302,6 +305,7 @@ export function ChatToolbarAttachment({
 }: ChatToolbarAttachmentProps) {
   return (
     <div
+      data-slot="chat-toolbar-attachment"
       className={cn(
         "relative group size-20 @md/chat:size-30 rounded-md border bg-muted flex flex-col items-center justify-center gap-1 shrink-0",
         className,
@@ -316,6 +320,7 @@ export function ChatToolbarAttachment({
         <button
           type="button"
           onClick={onRemove}
+          aria-label={`Remove ${fileName}`}
           className="absolute top-0 right-0 size-4 @md/chat:size-5 rounded-full bg-foreground text-background flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
         >
           <XIcon className="size-2.5 @md/chat:size-3" />
