@@ -52,6 +52,9 @@ export function ChatMessages({
 }: ChatMessagesProps) {
   return (
     <div
+      data-slot="chat-messages"
+      role="log"
+      aria-label="Chat messages"
       className={cn(
         "flex-1 flex flex-col-reverse overflow-auto py-2",
         className,

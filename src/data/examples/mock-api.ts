@@ -13,7 +13,7 @@ export const searchEvents = (query: string): Promise<Event[]> => {
 
 export const getEvents = () => {
   // Simulate fetching events from an API with a delay
-  return new Promise<typeof EVENTS>((resolve) => {
+  return new Promise<Event[]>((resolve) => {
     setTimeout(() => {
       resolve(EVENTS);
     }, 1000);
@@ -26,7 +26,7 @@ export const postEvent = ({
 }: {
   text?: string;
   files?: File[];
-}): Promise<(typeof EVENTS)[0]> => {
+}): Promise<Event> => {
   if (!text && (!files || files.length === 0)) {
     return Promise.reject(new Error("Either text or files must be provided"));
   }
@@ -97,7 +97,7 @@ export const updateEvent = (
         ...(allFiles.length > 0 ? { files: allFiles } : { files: undefined }),
       };
       event.isEdited = true;
-      resolve({ ...event });
+      resolve(structuredClone(event));
     }, 500);
   });
 };
@@ -112,7 +112,10 @@ const unblockUser = (userId: string): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, 200));
 };
 
-const reactToEvent = (eventId: number, emoji: string): Promise<Event> => {
+export const reactToEvent = (
+  eventId: number,
+  emoji: string,
+): Promise<Event> => {
   const event = EVENTS.find((e) => e.id === eventId);
   if (!event) return Promise.reject(new Error("Event not found"));
 

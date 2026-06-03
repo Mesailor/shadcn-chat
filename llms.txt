@@ -15,8 +15,8 @@ Prerequisites: React, Tailwind CSS 4.x, and shadcn/ui configured (avatar, button
 - `chat.tsx`: Root container — `Chat`
 - `chat-header.tsx`: Header — `ChatHeader`, `ChatHeaderMain`, `ChatHeaderAddon`, `ChatHeaderAvatar`, `ChatHeaderButton`
 - `chat-messages.tsx`: Message area — `ChatMessages`
-- `chat-event.tsx`: Message row — `ChatEvent`, `ChatEventAddon`, `ChatEventBody`, `ChatEventTitle`, `ChatEventContent`, `ChatEventAvatar`, `ChatEventTime`
-- `chat-toolbar.tsx`: Input area — `ChatToolbar`, `ChatToolbarTextarea`, `ChatToolbarAddon`, `ChatToolbarButton`
+- `chat-event.tsx`: Message row — `ChatEvent`, `ChatEventAddon`, `ChatEventBody`, `ChatEventTitle`, `ChatEventContent`, `ChatEventAvatar`, `ChatEventTime`, `ChatEventHoverActions`, `ChatEventHoverActionsButton`
+- `chat-toolbar.tsx`: Input area — `ChatToolbar`, `ChatToolbarTextarea`, `ChatToolbarAddon`, `ChatToolbarButton`, `ChatToolbarAttachmentButton`, `ChatToolbarAttachment`
 
 ## Component Hierarchy
 
@@ -34,15 +34,19 @@ Chat (root — give it a height, e.g. className="h-screen")
 │       ├── ChatEventAddon     ← side column (avatar or hover timestamp)
 │       │   ├── ChatEventAvatar (primary messages)
 │       │   └── ChatEventTime  (follow-up messages, visible on hover)
-│       └── ChatEventBody      ← main content (flex-1)
-│           ├── ChatEventTitle
-│           │   ├── sender name
-│           │   └── ChatEventTime
-│           └── ChatEventContent
+│       ├── ChatEventBody      ← main content (flex-1)
+│       │   ├── ChatEventTitle
+│       │   │   ├── sender name
+│       │   │   └── ChatEventTime
+│       │   └── ChatEventContent
+│       └── ChatEventHoverActions (optional, absolute overlay — top-right of row, on hover)
+│           └── ChatEventHoverActionsButton (×N)
 │
 └── ChatToolbar (sticky bottom)
+    ├── ChatToolbarAddon (align="block-start") ← optional full-width attachments row
+    │   └── ChatToolbarAttachment (×N)
     ├── ChatToolbarAddon (align="inline-start") ← left buttons
-    │   └── ChatToolbarButton
+    │   └── ChatToolbarAttachmentButton / ChatToolbarButton
     ├── ChatToolbarTextarea                      ← Enter to submit, Shift+Enter for newline
     └── ChatToolbarAddon (align="inline-end")    ← right buttons
         └── ChatToolbarButton (×N)
@@ -55,6 +59,9 @@ Chat (root — give it a height, e.g. className="h-screen")
 - **ChatToolbarTextarea submit**: Enter fires `onSubmit()`, Shift+Enter inserts a newline. It is a controlled component — pass `value` and `onChange`.
 - **ChatToolbarAddon `align` prop**: `"inline-start"` (left), `"inline-end"` (right), `"block-start"` (above), `"block-end"` (below) — positions buttons relative to the textarea via CSS `order`.
 - **ChatEventTime formats**: `"time"`, `"date"`, `"dateTime"` (default), `"longDate"`, `"relative"` — locale-aware via `Intl.DateTimeFormat`.
+- **ChatEventHoverActions**: Positioned absolutely at `right-2 -top-4` on the `ChatEvent` row. Hidden by default (`opacity-0`), revealed on row hover via `group/event`. Stays visible when a child element has `[data-state=open]` (e.g. an open dropdown or popover).
+- **ChatToolbarAttachmentButton**: Renders a hidden `<input type="file">` and opens the native file picker on click. Accepts `onFilesSelected(files: File[])`, `accept` (MIME types), and `multiple` (default `true`).
+- **ChatToolbarAttachment**: File preview card displaying a filename and remove button. Required prop `fileName`; optional `onRemove`. Use inside a `ChatToolbarAddon` with `align="block-start"` to render an attachments row above the textarea.
 - **All components are presentational**: State (messages, input value, etc.) must be managed by the parent.
 
 ## Common Patterns
@@ -157,5 +164,5 @@ Chat (root — give it a height, e.g. className="h-screen")
 From `chat.tsx`: `ChatProps`
 From `chat-header.tsx`: `ChatHeaderProps`, `ChatHeaderMainProps`, `ChatHeaderAddonProps`, `ChatHeaderAvatarProps`, `ChatHeaderButtonProps`
 From `chat-messages.tsx`: `ChatMessagesProps`
-From `chat-event.tsx`: `ChatEventProps`, `ChatEventAddonProps`, `ChatEventBodyProps`, `ChatEventTitleProps`, `ChatEventContentProps`, `ChatEventAvatarProps`, `ChatEventTimeProps`, `ChatEventTimeFormat`
-From `chat-toolbar.tsx`: `ChatToolbarProps`, `ChatToolbarTextareaProps`, `ChatToolbarAddonProps`, `ChatToolbarButtonProps`
+From `chat-event.tsx`: `ChatEventProps`, `ChatEventAddonProps`, `ChatEventBodyProps`, `ChatEventTitleProps`, `ChatEventContentProps`, `ChatEventAvatarProps`, `ChatEventTimeProps`, `ChatEventTimeFormat`, `ChatEventHoverActionsProps`, `ChatEventHoverActionsButtonProps`
+From `chat-toolbar.tsx`: `ChatToolbarProps`, `ChatToolbarTextareaProps`, `ChatToolbarAddonProps`, `ChatToolbarButtonProps`, `ChatToolbarAttachmentButtonProps`, `ChatToolbarAttachmentProps`

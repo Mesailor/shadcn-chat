@@ -55,6 +55,7 @@ export interface ChatHeaderProps extends React.ComponentProps<"div"> {
 export function ChatHeader({ children, className, ...props }: ChatHeaderProps) {
   return (
     <div
+      data-slot="chat-header"
       className={cn(
         "sticky top-0 z-10 p-2 bg-background flex items-center gap-2",
         className,
@@ -90,7 +91,7 @@ export function ChatHeaderMain({
   ...props
 }: ChatHeaderMainProps) {
   return (
-    <div className={cn("flex-1 flex items-center gap-2", className)} {...props}>
+    <div data-slot="chat-header-main" className={cn("flex-1 flex items-center gap-2", className)} {...props}>
       {children}
     </div>
   );
@@ -125,7 +126,7 @@ export function ChatHeaderAddon({
   ...props
 }: ChatHeaderAddonProps) {
   return (
-    <div className={cn("flex items-center gap-2", className)} {...props}>
+    <div data-slot="chat-header-addon" className={cn("flex items-center gap-2", className)} {...props}>
       {children}
     </div>
   );
@@ -168,7 +169,7 @@ export function ChatHeaderAvatar({
   ...props
 }: ChatHeaderAvatarProps) {
   return (
-    <Avatar className={cn("rounded-full", className)} {...props}>
+    <Avatar data-slot="chat-header-avatar" className={cn("rounded-full", className)} {...props}>
       <AvatarImage src={src} alt={alt} {...imageProps} />
       {fallback && (
         <AvatarFallback {...fallbackProps}>{fallback}</AvatarFallback>
@@ -200,7 +201,7 @@ export function ChatHeaderButton({
   ...props
 }: ChatHeaderButtonProps) {
   return (
-    <Button variant="ghost" size="icon-sm" className={cn(className)} {...props}>
+    <Button data-slot="chat-header-button" variant="ghost" size="icon-sm" className={cn(className)} {...props}>
       {children}
     </Button>
   );

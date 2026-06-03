@@ -142,6 +142,8 @@ export type ChatEventProps = React.ComponentProps<"div">;
 export function ChatEvent({ children, className, ...props }: ChatEventProps) {
   return (
     <div
+      data-slot="chat-event"
+      role="article"
       className={cn(
         "flex gap-2 px-2 relative group/event hover:z-10",
         className,
@@ -174,6 +176,7 @@ export function ChatEventAddon({
 }: ChatEventAddonProps) {
   return (
     <div
+      data-slot="chat-event-addon"
       className={cn(
         "w-10 @md/chat:w-12 h-full flex justify-center pt-1 shrink-0",
         className,
@@ -209,7 +212,7 @@ export function ChatEventBody({
   ...props
 }: ChatEventBodyProps) {
   return (
-    <div className={cn("flex-1 flex flex-col", className)} {...props}>
+    <div data-slot="chat-event-body" className={cn("flex-1 flex flex-col", className)} {...props}>
       {children}
     </div>
   );
@@ -233,6 +236,7 @@ export function ChatEventContent({
 }: ChatEventContentProps) {
   return (
     <div
+      data-slot="chat-event-content"
       className={cn(
         "text-sm @md/chat:text-base whitespace-pre-wrap",
         className,
@@ -265,6 +269,7 @@ export function ChatEventTitle({
 }: ChatEventTitleProps) {
   return (
     <div
+      data-slot="chat-event-title"
       className={cn("flex items-center gap-2 text-sm", className)}
       {...props}
     >
@@ -312,6 +317,7 @@ export function ChatEventAvatar({
 }: ChatEventAvatarProps) {
   return (
     <Avatar
+      data-slot="chat-event-avatar"
       className={cn("rounded-full size-8 @md/chat:size-10", className)}
       {...props}
     >
@@ -414,6 +420,7 @@ export function ChatEventTime({
 
   return (
     <time
+      data-slot="chat-event-time"
       dateTime={isoString}
       className={cn("text-xs text-muted-foreground", className)}
       {...props}
@@ -455,6 +462,7 @@ export function ChatEventHoverActions({
 }: ChatEventHoverActionsProps) {
   return (
     <div
+      data-slot="chat-event-hover-actions"
       className={cn(
         "opacity-0 group-hover/event:opacity-100 pointer-events-none group-hover/event:pointer-events-auto",
         "[&:has([data-state=open])]:opacity-100 [&:has([data-state=open])]:pointer-events-auto",
@@ -496,6 +504,7 @@ export function ChatEventHoverActionsButton({
 }: ChatEventHoverActionsButtonProps) {
   return (
     <Button
+      data-slot="chat-event-hover-actions-button"
       variant="ghost"
       size="icon"
       className={cn("size-7 [&_svg]:size-3.5", className)}

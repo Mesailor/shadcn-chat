@@ -9,6 +9,7 @@ import { useMessages } from "@/hooks/examples/messages";
 import { useMessageReactions } from "@/hooks/examples/message-reactions";
 import { useMessageSearch } from "@/hooks/examples/message-search";
 import { useMessageActions } from "@/hooks/examples/message-actions";
+import { useHighlightedMessageId } from "@/hooks/examples/use-highlighted-message-id";
 import { useProfile } from "@/hooks/examples/profile";
 import { useChatSidebar } from "@/hooks/examples/chat-sidebar";
 import { useIsWider } from "@/hooks/use-is-wider";
@@ -95,8 +96,6 @@ export function ChatExampleComponent() {
     setSearchQuery,
     activeSearchQuery,
     searchResults,
-    highlightedMessageId,
-    setHighlightedMessageId,
     handleSearch,
     handleClearSearch,
     openSearch,
@@ -105,6 +104,9 @@ export function ChatExampleComponent() {
     setSidebarView,
     onSearch: mockAPI.searchEvents,
   });
+
+  const { highlightedMessageId, setHighlightedMessageId } =
+    useHighlightedMessageId();
 
   const {
     openBlockDialog,
@@ -231,6 +233,7 @@ export function ChatExampleComponent() {
             <InputGroup className="@2xl/chat:flex hidden">
               <InputGroupInput
                 placeholder="Search..."
+                aria-label="Search messages"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => {
@@ -252,7 +255,7 @@ export function ChatExampleComponent() {
             </ChatHeaderButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <ChatHeaderButton>
+                <ChatHeaderButton aria-label="More options">
                   <MoreHorizontalIcon />
                 </ChatHeaderButton>
               </DropdownMenuTrigger>
@@ -307,7 +310,7 @@ export function ChatExampleComponent() {
           className="flex-1 min-h-0"
         >
           <SidebarInset className="min-h-0 overflow-hidden">
-            <ChatMessages ref={chatMessagesRef} className="scrollbar-hidden">
+            <ChatMessages ref={chatMessagesRef} className="scrollbar-hidden" aria-busy={loading}>
               {loading &&
                 Array.from({ length: 20 }).map((_, i) => {
                   if (i % 6 === 0) {
@@ -560,6 +563,7 @@ function Toolbar({
         className="order-2 flex-1 @2xl/chat:order-1 @2xl/chat:flex-none"
       >
         <ChatToolbarAttachmentButton
+          aria-label="Attach files"
           onFilesSelected={(files) => {
             setFiles((prev) => [...prev, ...files]);
           }}
@@ -568,7 +572,7 @@ function Toolbar({
         </ChatToolbarAttachmentButton>
         <Popover open={emojiOpen} onOpenChange={setEmojiOpen}>
           <PopoverTrigger asChild>
-            <ChatToolbarButton>
+            <ChatToolbarButton aria-label="Insert emoji">
               <SmileIcon />
             </ChatToolbarButton>
           </PopoverTrigger>
@@ -595,10 +599,11 @@ function Toolbar({
       <ChatToolbarAddon align="inline-end">
         {messageToEdit && (
           <>
-            <ChatToolbarButton onClick={onCancelEdit}>
+            <ChatToolbarButton aria-label="Cancel edit" onClick={onCancelEdit}>
               <XIcon />
             </ChatToolbarButton>
             <ChatToolbarButton
+              aria-label="Save edit"
               variant="default"
               disabled={
                 !input.trim() && files.length === 0 && filesToEdit.length === 0
@@ -611,6 +616,7 @@ function Toolbar({
         )}
         {!messageToEdit && (
           <ChatToolbarButton
+            aria-label="Send message"
             variant="default"
             disabled={!input.trim() && files.length === 0}
             onClick={() => handleSubmit()}
