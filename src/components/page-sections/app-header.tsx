@@ -5,7 +5,7 @@ import { ThemeToggle } from "./theme-toggle";
 
 export function AppHeader() {
   return (
-    <header className="px-4 py-3 fixed top-0 left-0 w-full backdrop-blur-lg border-b z-50">
+    <header className="px-4 py-3 fixed top-0 left-0 w-full backdrop-blur-lg z-50">
       <div className="mx-auto max-w-7xl flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Image
