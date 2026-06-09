@@ -14,25 +14,16 @@ import { useProfile } from "@/hooks/examples/profile";
 import { useChatSidebar } from "@/hooks/examples/chat-sidebar";
 import { useIsWider } from "@/hooks/use-is-wider";
 import {
-  BanIcon,
   CheckIcon,
-  MoreHorizontalIcon,
   PhoneIcon,
   PlusIcon,
   SearchIcon,
   SendIcon,
   SmileIcon,
-  UserIcon,
   VideoIcon,
   XIcon,
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ChatHeaderActions } from "@/components/examples/chat-header-actions";
 import {
   InputGroup,
   InputGroupAddon,
@@ -253,52 +244,14 @@ export function ChatExampleComponent() {
             <ChatHeaderButton className="@2xl/chat:inline-flex hidden">
               <VideoIcon />
             </ChatHeaderButton>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <ChatHeaderButton aria-label="More options">
-                  <MoreHorizontalIcon />
-                </ChatHeaderButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {!isChatWide && (
-                  <>
-                    <DropdownMenuItem onSelect={openSearch}>
-                      <SearchIcon />
-                      Search
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <PhoneIcon />
-                      Start call
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <VideoIcon />
-                      Start video
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                  </>
-                )}
-                <DropdownMenuItem onSelect={openProfile}>
-                  <UserIcon />
-                  Show profile
-                </DropdownMenuItem>
-                {isBlocked ? (
-                  <DropdownMenuItem
-                    onSelect={() => handleUnblock(OTHER_USER.id)}
-                  >
-                    <BanIcon />
-                    Unblock
-                  </DropdownMenuItem>
-                ) : (
-                  <DropdownMenuItem
-                    variant="destructive"
-                    onSelect={() => setOpenBlockDialog(true)}
-                  >
-                    <BanIcon />
-                    Block
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <ChatHeaderActions
+              isChatWide={isChatWide}
+              openSearch={openSearch}
+              openProfile={openProfile}
+              isBlocked={isBlocked}
+              onUnblock={() => handleUnblock(OTHER_USER.id)}
+              onBlock={() => setOpenBlockDialog(true)}
+            />
           </ChatHeaderAddon>
         </ChatHeader>
 
