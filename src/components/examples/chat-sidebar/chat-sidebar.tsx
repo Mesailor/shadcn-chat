@@ -48,13 +48,18 @@ export function ChatSidebar({
     <div
       data-slot="sidebar"
       className={cn(
-        "flex flex-col border-l bg-sidebar text-sidebar-foreground overflow-hidden",
-        open ? "@3xl/chat:w-96 @2xl/chat:w-80 w-0" : "w-0",
+        "flex flex-col bg-sidebar text-sidebar-foreground overflow-hidden",
+        open ? "@3xl/chat:w-96 @2xl/chat:w-80 w-0 border-l" : "w-0",
       )}
     >
       <SidebarHeader className="border-b flex-row items-center justify-between">
         <span className="text-sm font-medium truncate">{title}</span>
-        <Button variant="ghost" size="icon-sm" aria-label="Close" onClick={onClose}>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          aria-label="Close"
+          onClick={onClose}
+        >
           <XIcon />
         </Button>
       </SidebarHeader>
