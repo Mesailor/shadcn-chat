@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { EventContent } from "@/data/messages";
 import { cn } from "@/lib/utils";
 import {
@@ -13,7 +14,9 @@ import {
 } from "@/registry/new-york/chat/chat-event";
 import { MessageContent } from "./message-content";
 import { MessageActionsDropdown } from "@/components/examples/message-actions/message-actions-dropdown";
+import { MessageActionsDialog } from "@/components/examples/message-actions/message-actions-dialog";
 import { ReactionsPopover } from "@/components/examples/message-reactions/reactions-popover";
+import { useLongPress } from "@/hooks/use-long-press";
 import { MoreHorizontalIcon, SmilePlusIcon } from "lucide-react";
 
 interface PrimaryMessageProps {
@@ -51,7 +54,11 @@ export function PrimaryMessage({
   id,
   highlighted,
 }: PrimaryMessageProps) {
+  const [actionsDialogOpen, setActionsDialogOpen] = useState(false);
+  const longPressHandlers = useLongPress(() => setActionsDialogOpen(true));
+
   return (
+    <>
     <ChatEvent
       id={id}
       className={cn(
@@ -59,6 +66,7 @@ export function PrimaryMessage({
         highlighted && "animate-message-highlight",
         className,
       )}
+      {...longPressHandlers}
     >
       <ChatEventAddon>
         <ChatEventAvatar
@@ -111,5 +119,13 @@ export function PrimaryMessage({
         </MessageActionsDropdown>
       </ChatEventHoverActions>
     </ChatEvent>
+    <MessageActionsDialog
+      open={actionsDialogOpen}
+      onOpenChange={setActionsDialogOpen}
+      onReaction={onReaction}
+      onEdit={onEdit}
+      onDelete={onDelete}
+    />
+    </>
   );
 }
