@@ -263,7 +263,11 @@ export function ChatExampleComponent() {
           className="flex-1 min-h-0"
         >
           <SidebarInset className="min-h-0 overflow-hidden">
-            <ChatMessages ref={chatMessagesRef} className="scrollbar-hidden" aria-busy={loading}>
+            <ChatMessages
+              ref={chatMessagesRef}
+              className="scrollbar-hidden"
+              aria-busy={loading}
+            >
               {loading &&
                 Array.from({ length: 20 }).map((_, i) => {
                   if (i % 6 === 0) {
@@ -573,6 +577,9 @@ function Toolbar({
             variant="default"
             disabled={!input.trim() && files.length === 0}
             onClick={() => handleSubmit()}
+            onMouseDown={(e) => {
+              e.preventDefault();
+            }}
           >
             <SendIcon />
           </ChatToolbarButton>
