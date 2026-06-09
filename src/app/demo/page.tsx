@@ -2,7 +2,7 @@ import { ChatExampleComponent } from "@/components/examples/chat-example-compone
 
 export default function DemoPage() {
   return (
-    <div className="h-svh overflow-hidden">
+    <div className="h-dvh overflow-hidden">
       <ChatExampleComponent />
     </div>
   );
