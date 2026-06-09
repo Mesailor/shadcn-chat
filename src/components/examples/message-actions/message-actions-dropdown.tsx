@@ -4,20 +4,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { PencilIcon, Trash2Icon } from "lucide-react";
+import { CopyIcon, PencilIcon, Trash2Icon } from "lucide-react";
 
 interface MessageActionsDropdownProps {
   children: React.ReactNode;
+  onCopy?: () => void;
   onDelete?: () => void;
   onEdit?: () => void;
 }
 
 export function MessageActionsDropdown({
   children,
+  onCopy,
   onDelete,
   onEdit,
 }: MessageActionsDropdownProps) {
-  const hasAdditionalActions = !!onEdit || !!onDelete;
+  const hasAdditionalActions = !!onCopy || !!onEdit || !!onDelete;
 
   if (!hasAdditionalActions) return null;
 
@@ -25,6 +27,12 @@ export function MessageActionsDropdown({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
       <DropdownMenuContent align="end" onCloseAutoFocus={(e) => e.preventDefault()}>
+        {onCopy && (
+          <DropdownMenuItem onSelect={onCopy}>
+            <CopyIcon />
+            Copy
+          </DropdownMenuItem>
+        )}
         {onEdit && (
           <DropdownMenuItem onSelect={onEdit}>
             <PencilIcon />

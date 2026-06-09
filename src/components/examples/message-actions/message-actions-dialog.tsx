@@ -6,13 +6,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { PencilIcon, Trash2Icon } from "lucide-react";
+import { CopyIcon, PencilIcon, Trash2Icon } from "lucide-react";
 import { DEFAULT_REACTIONS } from "@/components/examples/message-reactions/reactions-popover";
 
 interface MessageActionsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onReaction?: (emoji: string) => void;
+  onCopy?: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
 }
@@ -21,10 +22,11 @@ export function MessageActionsDialog({
   open,
   onOpenChange,
   onReaction,
+  onCopy,
   onEdit,
   onDelete,
 }: MessageActionsDialogProps) {
-  const hasActions = !!onEdit || !!onDelete;
+  const hasActions = !!onCopy || !!onEdit || !!onDelete;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -57,6 +59,19 @@ export function MessageActionsDialog({
           <>
             {onReaction && <div className="border-t" />}
             <div className="flex flex-col">
+              {onCopy && (
+                <Button
+                  variant="ghost"
+                  className="justify-start gap-2"
+                  onClick={() => {
+                    onCopy();
+                    onOpenChange(false);
+                  }}
+                >
+                  <CopyIcon className="size-4" />
+                  Copy
+                </Button>
+              )}
               {onEdit && (
                 <Button
                   variant="ghost"

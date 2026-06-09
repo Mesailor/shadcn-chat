@@ -98,7 +98,11 @@ export function AdditionalMessage({
             <SmilePlusIcon />
           </ChatEventHoverActionsButton>
         </ReactionsPopover>
-        <MessageActionsDropdown onEdit={onEdit} onDelete={onDelete}>
+        <MessageActionsDropdown
+          onCopy={content.text ? () => navigator.clipboard.writeText(content.text!) : undefined}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        >
           <ChatEventHoverActionsButton aria-label="More options">
             <MoreHorizontalIcon />
           </ChatEventHoverActionsButton>
@@ -109,6 +113,7 @@ export function AdditionalMessage({
       open={actionsDialogOpen}
       onOpenChange={setActionsDialogOpen}
       onReaction={onReaction}
+      onCopy={content.text ? () => navigator.clipboard.writeText(content.text!) : undefined}
       onEdit={onEdit}
       onDelete={onDelete}
     />
