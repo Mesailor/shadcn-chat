@@ -33,7 +33,7 @@ export function PackageManagerCodeBlock({
           </button>
         ))}
       </div>
-      <CodeBlock language="bash" code={commands[pm]} />
+      <CodeBlock className="mt-2" language="bash" code={commands[pm]} />
     </div>
   );
 }

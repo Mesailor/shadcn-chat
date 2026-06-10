@@ -42,7 +42,7 @@ export function EventUsageExample() {
       </div>
 
       <h4 className="font-semibold">Primary Message</h4>
-      <ChatEvent className="hover:bg-accent py-2 border-y">
+      <ChatEvent className="hover:bg-accent bg-background py-2 border-y">
         <ChatEventAddon>
           <ChatEventAvatar
             src={PRIMARY_MSG.sender.avatarUrl}
@@ -67,7 +67,7 @@ export function EventUsageExample() {
       />
 
       <h4 className="font-semibold mt-4">Additional Message</h4>
-      <ChatEvent className="hover:bg-accent py-2 border-y">
+      <ChatEvent className="hover:bg-accent bg-background py-2 border-y">
         <ChatEventAddon>
           <ChatEventTime
             timestamp={ADDITIONAL_MSG.timestamp}
@@ -88,7 +88,10 @@ export function EventUsageExample() {
       />
 
       <h4 className="font-semibold mt-4">Date Item</h4>
-      <DateItem timestamp={PRIMARY_MSG.timestamp} className="py-3" />
+      <DateItem
+        timestamp={PRIMARY_MSG.timestamp}
+        className="py-3 bg-background"
+      />
       <CodeBlock language="jsx" code={dateItemCodeString} showLineNumbers />
     </div>
   );

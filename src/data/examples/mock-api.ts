@@ -14,9 +14,7 @@ export const searchEvents = (query: string): Promise<Event[]> => {
 export const getEvents = () => {
   // Simulate fetching events from an API with a delay
   return new Promise<Event[]>((resolve) => {
-    setTimeout(() => {
-      resolve(EVENTS);
-    }, 1000);
+    resolve(EVENTS);
   });
 };
 

@@ -135,9 +135,29 @@
           "target": "hooks/chat/use-chat-sidebar.ts"
         },
         {
+          "path": "registry/new-york/blocks/chat-basic/hooks/use-highlighted-message-id.ts",
+          "type": "registry:hook",
+          "target": "hooks/chat/use-highlighted-message-id.ts"
+        },
+        {
           "path": "registry/new-york/blocks/chat-basic/hooks/use-is-wider.ts",
           "type": "registry:hook",
           "target": "hooks/use-is-wider.ts"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/hooks/use-is-viewport-wider.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-is-viewport-wider.ts"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/hooks/use-long-press.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-long-press.ts"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/chat-header-actions.tsx",
+          "type": "registry:component",
+          "target": "components/chat/chat-header-actions.tsx"
         },
         {
           "path": "registry/new-york/blocks/chat-basic/components/message-items/primary-message.tsx",
@@ -183,6 +203,11 @@
           "path": "registry/new-york/blocks/chat-basic/components/message-actions/message-actions-dropdown.tsx",
           "type": "registry:component",
           "target": "components/chat/message-actions/message-actions-dropdown.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/message-actions/message-actions-dialog.tsx",
+          "type": "registry:component",
+          "target": "components/chat/message-actions/message-actions-dialog.tsx"
         },
         {
           "path": "registry/new-york/blocks/chat-basic/components/message-actions/delete-dialog.tsx",
@@ -308,9 +333,29 @@
           "target": "hooks/chat/use-chat-sidebar.ts"
         },
         {
+          "path": "registry/new-york/blocks/chat-basic/hooks/use-highlighted-message-id.ts",
+          "type": "registry:hook",
+          "target": "hooks/chat/use-highlighted-message-id.ts"
+        },
+        {
           "path": "registry/new-york/blocks/chat-basic/hooks/use-is-wider.ts",
           "type": "registry:hook",
           "target": "hooks/use-is-wider.ts"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/hooks/use-is-viewport-wider.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-is-viewport-wider.ts"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/hooks/use-long-press.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-long-press.ts"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/chat-header-actions.tsx",
+          "type": "registry:component",
+          "target": "components/chat/chat-header-actions.tsx"
         },
         {
           "path": "registry/new-york/blocks/chat-basic/components/message-items/primary-message.tsx",
@@ -356,6 +401,11 @@
           "path": "registry/new-york/blocks/chat-basic/components/message-actions/message-actions-dropdown.tsx",
           "type": "registry:component",
           "target": "components/chat/message-actions/message-actions-dropdown.tsx"
+        },
+        {
+          "path": "registry/new-york/blocks/chat-basic/components/message-actions/message-actions-dialog.tsx",
+          "type": "registry:component",
+          "target": "components/chat/message-actions/message-actions-dialog.tsx"
         },
         {
           "path": "registry/new-york/blocks/chat-basic/components/message-actions/delete-dialog.tsx",

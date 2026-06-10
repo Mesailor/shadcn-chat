@@ -2,7 +2,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useState } from "react";
-import { useMessageActions } from "../message-actions";
+import { useMessageActions } from "../use-message-actions";
 import { Event } from "@/data/messages";
 
 const makeEvent = (id: number, text = "Hello"): Event => ({

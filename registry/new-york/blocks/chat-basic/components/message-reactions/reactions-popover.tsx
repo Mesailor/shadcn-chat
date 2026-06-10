@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 
-const DEFAULT_REACTIONS = ["👍", "❤️", "😂", "😮", "😢", "🙏", "🎉"];
+export const DEFAULT_REACTIONS = ["👍", "❤️", "😂", "😮", "😢", "🙏", "🎉"];
 
 export function ReactionsPopover({
   children,

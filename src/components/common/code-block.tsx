@@ -1,14 +1,8 @@
 "use client";
 
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import {
-  oneLight,
-  oneDark,
-} from "react-syntax-highlighter/dist/esm/styles/prism";
+import { useShikiHighlighter } from "react-shiki/web";
 import { CopyButton } from "@/components/common/copy-button";
 import { cn } from "@/lib/utils";
-import { useTheme } from "next-themes";
-import { useMounted } from "@/hooks/use-mounted";
 
 export function CodeBlock({
   code,
@@ -21,29 +15,65 @@ export function CodeBlock({
   showLineNumbers?: boolean;
   className?: string;
 }) {
-  const { resolvedTheme } = useTheme();
-  const mounted = useMounted();
-
-  let style = oneLight;
-
-  // Fix hydration errors by checking if the component is mounted
-  if (mounted) {
-    style = resolvedTheme === "dark" ? oneDark : oneLight;
-  }
+  const highlighted = useShikiHighlighter(
+    code,
+    language,
+    {
+      light: "github-light",
+      dark: "github-dark",
+    },
+    {
+      defaultColor: "light-dark()",
+      showLineNumbers,
+    },
+  );
 
   return (
     <div className={cn("relative", className)}>
       <CopyButton className="absolute top-2 right-2 z-10" text={code} />
-      <SyntaxHighlighter
-        language={language}
-        style={style}
-        customStyle={{
-          borderRadius: "8px",
-        }}
-        showLineNumbers={showLineNumbers}
-      >
-        {code}
-      </SyntaxHighlighter>
+      {highlighted === null ? (
+        <CodeBlockSkeleton code={code} />
+      ) : (
+        <div className="rs-root not-prose rs-default-styles">{highlighted}</div>
+      )}
+    </div>
+  );
+}
+
+function CodeBlockSkeleton({ code }: { code: string }) {
+  const lines = code.split("\n");
+  const maxLen = Math.max(...lines.map((l) => l.trimEnd().length), 1);
+
+  return (
+    <div
+      className="rounded-md bg-muted overflow-hidden"
+      style={{ height: `calc(${lines.length} * 1.5rem + 2.5rem)` }}
+    >
+      <div className="pl-16 pr-8 py-5">
+        {lines.map((line, i) => {
+          const trimmed = line.trimEnd();
+          const indent = line.length - line.trimStart().length;
+          const widthPct =
+            trimmed.length === 0
+              ? 0
+              : Math.max(12, (trimmed.length / maxLen) * 100);
+
+          return (
+            <div
+              key={i}
+              className="flex items-center h-6"
+              style={{ paddingLeft: `${indent * 0.55}rem` }}
+            >
+              {widthPct > 0 && (
+                <div
+                  className="h-[0.7rem] rounded-sm bg-primary/15 animate-pulse"
+                  style={{ width: `${widthPct}%` }}
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

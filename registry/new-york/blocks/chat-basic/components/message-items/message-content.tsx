@@ -10,7 +10,7 @@ export function MessageContent({ content }: { content: EventContent }) {
 
   return (
     <>
-      {hasText && <span>{content.text}</span>}
+      {hasText && <span className="select-none">{content.text}</span>}
       {hasFiles && (
         <div className="flex flex-col gap-2 mt-1">
           {content.files!.map((file, i) => (

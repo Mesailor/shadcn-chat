@@ -31,7 +31,7 @@
     "radix-ui": "^1.4.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-syntax-highlighter": "^16.1.0",
+    "react-shiki": "^0.10.1",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
@@ -44,7 +44,6 @@
     "@types/node": "^20.19.32",
     "@types/react": "^19.2.13",
     "@types/react-dom": "^19.2.3",
-    "@types/react-syntax-highlighter": "^15.5.13",
     "baseline-browser-mapping": "^2.9.19",
     "eslint": "^9.39.2",
     "eslint-config-next": "16.0.0",

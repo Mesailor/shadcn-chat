@@ -1,5 +1,5 @@
 import { Event } from "@/registry/new-york/blocks/chat-basic/data/messages";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 export const useMessageSearch = ({
   setSidebarOpen,
@@ -15,16 +15,6 @@ export const useMessageSearch = ({
   const [activeSearchQuery, setActiveSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Event[]>([]);
 
-  const [highlightedMessageId, setHighlightedMessageId] = useState<
-    number | null
-  >(null);
-
-  useEffect(() => {
-    if (highlightedMessageId === null) return;
-    const timer = setTimeout(() => setHighlightedMessageId(null), 3000);
-    return () => clearTimeout(timer);
-  }, [highlightedMessageId]);
-
   const handleSearch = useCallback(
     async (query: string) => {
       const trimmed = query.trim();
@@ -35,6 +25,7 @@ export const useMessageSearch = ({
       setSidebarOpen(true);
       try {
         const results = await onSearch(trimmed);
+        // Only update if this is still the most recent search
         if (currentSearchId === searchIdRef.current) {
           setSearchResults(results);
         }
@@ -64,8 +55,6 @@ export const useMessageSearch = ({
     setSearchQuery,
     activeSearchQuery,
     searchResults,
-    highlightedMessageId,
-    setHighlightedMessageId,
     handleSearch,
     handleClearSearch,
     openSearch,

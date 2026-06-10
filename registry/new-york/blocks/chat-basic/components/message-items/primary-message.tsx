@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { EventContent } from "@/registry/new-york/blocks/chat-basic/data/messages";
 import { cn } from "@/lib/utils";
 import {
@@ -13,7 +14,9 @@ import {
 } from "@/registry/new-york/chat/chat-event";
 import { MessageContent } from "@/registry/new-york/blocks/chat-basic/components/message-items/message-content";
 import { MessageActionsDropdown } from "@/registry/new-york/blocks/chat-basic/components/message-actions/message-actions-dropdown";
+import { MessageActionsDialog } from "@/registry/new-york/blocks/chat-basic/components/message-actions/message-actions-dialog";
 import { ReactionsPopover } from "@/registry/new-york/blocks/chat-basic/components/message-reactions/reactions-popover";
+import { useLongPress } from "@/registry/new-york/blocks/chat-basic/hooks/use-long-press";
 import { MoreHorizontalIcon, SmilePlusIcon } from "lucide-react";
 
 interface PrimaryMessageProps {
@@ -51,65 +54,91 @@ export function PrimaryMessage({
   id,
   highlighted,
 }: PrimaryMessageProps) {
+  const [actionsDialogOpen, setActionsDialogOpen] = useState(false);
+  const longPressHandlers = useLongPress(() => setActionsDialogOpen(true));
+
   return (
-    <ChatEvent
-      id={id}
-      className={cn(
-        "hover:bg-accent",
-        highlighted && "animate-message-highlight",
-        className,
-      )}
-    >
-      <ChatEventAddon>
-        <ChatEventAvatar
-          src={avatarSrc}
-          alt={avatarAlt}
-          fallback={avatarFallback}
-        />
-      </ChatEventAddon>
-      <ChatEventBody>
-        <ChatEventTitle>
-          <span className="font-medium">{senderName}</span>
-          <ChatEventTime timestamp={timestamp} />
-        </ChatEventTitle>
-        <ChatEventContent
-          className={cn({
-            "opacity-70": status === "sending",
-          })}
-        >
-          <MessageContent content={content} />
-        </ChatEventContent>
-        {isEdited && (
-          <span className="text-muted-foreground text-sm">(edited)</span>
+    <>
+      <ChatEvent
+        id={id}
+        className={cn(
+          "hover:bg-accent",
+          highlighted && "animate-message-highlight",
+          className,
         )}
-        {reactions && reactions.length > 0 && (
-          <div className="flex gap-1 flex-wrap mt-1">
-            {reactions.map((emoji, i) => (
-              <button
-                key={`${emoji}-${i}`}
-                type="button"
-                onClick={() => onReaction?.(emoji)}
-                className="text-sm bg-accent border rounded-full px-2 py-0.5 select-none hover:bg-destructive/10 hover:border-destructive/40 transition-colors"
-                aria-label={`Toggle ${emoji} reaction`}
-              >
-                {emoji}
-              </button>
-            ))}
-          </div>
-        )}
-      </ChatEventBody>
-      <ChatEventHoverActions>
-        <ReactionsPopover onReaction={onReaction}>
-          <ChatEventHoverActionsButton aria-label="Add reaction">
-            <SmilePlusIcon />
-          </ChatEventHoverActionsButton>
-        </ReactionsPopover>
-        <MessageActionsDropdown onEdit={onEdit} onDelete={onDelete}>
-          <ChatEventHoverActionsButton aria-label="More options">
-            <MoreHorizontalIcon />
-          </ChatEventHoverActionsButton>
-        </MessageActionsDropdown>
-      </ChatEventHoverActions>
-    </ChatEvent>
+        {...longPressHandlers}
+      >
+        <ChatEventAddon>
+          <ChatEventAvatar
+            src={avatarSrc}
+            alt={avatarAlt}
+            fallback={avatarFallback}
+          />
+        </ChatEventAddon>
+        <ChatEventBody>
+          <ChatEventTitle>
+            <span className="font-medium">{senderName}</span>
+            <ChatEventTime timestamp={timestamp} />
+          </ChatEventTitle>
+          <ChatEventContent
+            className={cn({
+              "opacity-70": status === "sending",
+            })}
+          >
+            <MessageContent content={content} />
+          </ChatEventContent>
+          {isEdited && (
+            <span className="text-muted-foreground text-sm">(edited)</span>
+          )}
+          {reactions && reactions.length > 0 && (
+            <div className="flex gap-1 flex-wrap mt-1">
+              {reactions.map((emoji, i) => (
+                <button
+                  key={`${emoji}-${i}`}
+                  type="button"
+                  onClick={() => onReaction?.(emoji)}
+                  className="text-sm bg-accent border rounded-full px-2 py-0.5 select-none hover:bg-destructive/10 hover:border-destructive/40 transition-colors"
+                  aria-label={`Toggle ${emoji} reaction`}
+                >
+                  {emoji}
+                </button>
+              ))}
+            </div>
+          )}
+        </ChatEventBody>
+        <ChatEventHoverActions>
+          <ReactionsPopover onReaction={onReaction}>
+            <ChatEventHoverActionsButton aria-label="Add reaction">
+              <SmilePlusIcon />
+            </ChatEventHoverActionsButton>
+          </ReactionsPopover>
+          <MessageActionsDropdown
+            onCopy={
+              content.text
+                ? () => navigator.clipboard.writeText(content.text!)
+                : undefined
+            }
+            onEdit={onEdit}
+            onDelete={onDelete}
+          >
+            <ChatEventHoverActionsButton aria-label="More options">
+              <MoreHorizontalIcon />
+            </ChatEventHoverActionsButton>
+          </MessageActionsDropdown>
+        </ChatEventHoverActions>
+      </ChatEvent>
+      <MessageActionsDialog
+        open={actionsDialogOpen}
+        onOpenChange={setActionsDialogOpen}
+        onReaction={onReaction}
+        onCopy={
+          content.text
+            ? () => navigator.clipboard.writeText(content.text!)
+            : undefined
+        }
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
+    </>
   );
 }

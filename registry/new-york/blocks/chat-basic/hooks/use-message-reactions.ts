@@ -17,6 +17,7 @@ export const useMessageReactions = ({
         );
       } catch (error) {
         console.error("Failed to add reaction:", error);
+        // Optionally show a toast or other user feedback
       }
     },
     [setMessages, onReact],

@@ -5,34 +5,25 @@ import { Fragment } from "react/jsx-runtime";
 import { Event, EventFile } from "@/data/messages";
 import { mockAPI } from "@/data/examples/mock-api";
 import { CURRENT_USER, OTHER_USER } from "@/data/users";
-import { useMessages } from "@/hooks/examples/messages";
-import { useMessageReactions } from "@/hooks/examples/message-reactions";
-import { useMessageSearch } from "@/hooks/examples/message-search";
-import { useMessageActions } from "@/hooks/examples/message-actions";
+import { useMessages } from "@/hooks/examples/use-messages";
+import { useMessageReactions } from "@/hooks/examples/use-message-reactions";
+import { useMessageSearch } from "@/hooks/examples/use-message-search";
+import { useMessageActions } from "@/hooks/examples/use-message-actions";
 import { useHighlightedMessageId } from "@/hooks/examples/use-highlighted-message-id";
-import { useProfile } from "@/hooks/examples/profile";
-import { useChatSidebar } from "@/hooks/examples/chat-sidebar";
+import { useProfile } from "@/hooks/examples/use-profile";
+import { useChatSidebar } from "@/hooks/examples/use-chat-sidebar";
 import { useIsWider } from "@/hooks/use-is-wider";
 import {
-  BanIcon,
   CheckIcon,
-  MoreHorizontalIcon,
   PhoneIcon,
   PlusIcon,
   SearchIcon,
   SendIcon,
   SmileIcon,
-  UserIcon,
   VideoIcon,
   XIcon,
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ChatHeaderActions } from "@/components/examples/chat-header-actions";
 import {
   InputGroup,
   InputGroupAddon,
@@ -247,58 +238,20 @@ export function ChatExampleComponent() {
                 <SearchIcon />
               </InputGroupAddon>
             </InputGroup>
-            <ChatHeaderButton className="@2xl/chat:inline-flex hidden">
+            <ChatHeaderButton aria-label="Start call" className="@2xl/chat:inline-flex hidden">
               <PhoneIcon />
             </ChatHeaderButton>
-            <ChatHeaderButton className="@2xl/chat:inline-flex hidden">
+            <ChatHeaderButton aria-label="Start video call" className="@2xl/chat:inline-flex hidden">
               <VideoIcon />
             </ChatHeaderButton>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <ChatHeaderButton aria-label="More options">
-                  <MoreHorizontalIcon />
-                </ChatHeaderButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {!isChatWide && (
-                  <>
-                    <DropdownMenuItem onSelect={openSearch}>
-                      <SearchIcon />
-                      Search
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <PhoneIcon />
-                      Start call
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <VideoIcon />
-                      Start video
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                  </>
-                )}
-                <DropdownMenuItem onSelect={openProfile}>
-                  <UserIcon />
-                  Show profile
-                </DropdownMenuItem>
-                {isBlocked ? (
-                  <DropdownMenuItem
-                    onSelect={() => handleUnblock(OTHER_USER.id)}
-                  >
-                    <BanIcon />
-                    Unblock
-                  </DropdownMenuItem>
-                ) : (
-                  <DropdownMenuItem
-                    variant="destructive"
-                    onSelect={() => setOpenBlockDialog(true)}
-                  >
-                    <BanIcon />
-                    Block
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <ChatHeaderActions
+              isChatWide={isChatWide}
+              openSearch={openSearch}
+              openProfile={openProfile}
+              isBlocked={isBlocked}
+              onUnblock={() => handleUnblock(OTHER_USER.id)}
+              onBlock={() => setOpenBlockDialog(true)}
+            />
           </ChatHeaderAddon>
         </ChatHeader>
 
@@ -310,7 +263,11 @@ export function ChatExampleComponent() {
           className="flex-1 min-h-0"
         >
           <SidebarInset className="min-h-0 overflow-hidden">
-            <ChatMessages ref={chatMessagesRef} className="scrollbar-hidden" aria-busy={loading}>
+            <ChatMessages
+              ref={chatMessagesRef}
+              className="scrollbar-hidden"
+              aria-busy={loading}
+            >
               {loading &&
                 Array.from({ length: 20 }).map((_, i) => {
                   if (i % 6 === 0) {
@@ -620,6 +577,9 @@ function Toolbar({
             variant="default"
             disabled={!input.trim() && files.length === 0}
             onClick={() => handleSubmit()}
+            onMouseDown={(e) => {
+              e.preventDefault();
+            }}
           >
             <SendIcon />
           </ChatToolbarButton>

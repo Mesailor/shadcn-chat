@@ -47,7 +47,7 @@ export function ToolbarUsageExample() {
         </p>
       </div>
 
-      <ChatToolbar className="p-0 static">
+      <ChatToolbar className="p-0 static rounded-md">
         {files.length > 0 && (
           <ChatToolbarAddon
             align="block-start"

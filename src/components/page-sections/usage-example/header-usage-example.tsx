@@ -117,6 +117,5 @@ const codeString = `<ChatHeader className="border-b">
       <MoreHorizontalIcon />
     </ChatHeaderButton>
   </ChatHeaderAddon>
-  </ChatHeader>
 </ChatHeader>
     `;

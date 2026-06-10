@@ -34,7 +34,7 @@ export function ChatSidebar({
           if (!o) onClose();
         }}
       >
-        <SheetContent side="right" className="flex flex-col gap-0 p-0">
+        <SheetContent side="right" className="w-full flex flex-col gap-0 p-0">
           <SheetHeader className="border-b px-4 py-3 flex-row items-center space-y-0">
             <SheetTitle className="text-sm font-medium">{title}</SheetTitle>
           </SheetHeader>
@@ -46,9 +46,10 @@ export function ChatSidebar({
 
   return (
     <div
+      data-slot="sidebar"
       className={cn(
-        "flex flex-col border-l bg-sidebar text-sidebar-foreground overflow-hidden",
-        open ? "@3xl/chat:w-96 @2xl/chat:w-80 w-0" : "w-0",
+        "flex flex-col bg-sidebar text-sidebar-foreground overflow-hidden",
+        open ? "@3xl/chat:w-96 @2xl/chat:w-80 w-0 border-l" : "w-0",
       )}
     >
       <SidebarHeader className="border-b flex-row items-center justify-between">
@@ -56,13 +57,13 @@ export function ChatSidebar({
         <Button
           variant="ghost"
           size="icon-sm"
+          aria-label="Close"
           onClick={onClose}
-          aria-label="Close sidebar"
         >
           <XIcon />
         </Button>
       </SidebarHeader>
-      <SidebarContent className="gap-2">{children}</SidebarContent>
+      <SidebarContent className="gap-0">{children}</SidebarContent>
     </div>
   );
 }

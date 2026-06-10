@@ -6,24 +6,46 @@ test.describe.configure({ mode: "serial" });
 
 test.describe("Loading state", () => {
   test.beforeEach(async ({ chatPage }) => {
-    // Navigate but do NOT wait for messages so we can observe loading state
-    await chatPage.goto();
+    // The loading state is server-rendered (useMessages starts with
+    // loading=true) and clears during hydration, which completes before the
+    // `load` event in this app. Navigate with waitUntil: "commit" so the
+    // assertions run against the pre-hydration HTML instead of racing it.
+    await chatPage.page.goto("/", { waitUntil: "commit" });
   });
+
+  // Both tests use waitForFunction because it polls every animation frame
+  // (~16ms); expect()'s polling backs off to ~500ms gaps, which can straddle
+  // the short window between HTML arrival and hydration completing.
 
   test("shows aria-busy=true on the message log before messages are fetched", async ({
     chatPage,
   }) => {
-    await expect(chatPage.messageLog).toHaveAttribute("aria-busy", "true");
+    await chatPage.page.waitForFunction(
+      () =>
+        document
+          .querySelector('[data-slot="chat-messages"]')
+          ?.getAttribute("aria-busy") === "true",
+      undefined,
+      { timeout: 5000 },
+    );
   });
 
   test("shows skeleton placeholders during loading", async ({ chatPage }) => {
-    // Skeletons render as articles; real messages are absent (no id^="message-")
-    await expect(chatPage.messageLog.getByRole("article").first()).toBeVisible({
-      timeout: 2000,
-    });
-    await expect(
-      chatPage.messageLog.locator('[id^="message-"]').first(),
-    ).not.toBeAttached();
+    // Skeletons render as articles; real messages are absent (no id^="message-").
+    // Checked atomically in one poll — hydration could finish between two
+    // separate assertions.
+    await chatPage.page.waitForFunction(
+      () => {
+        const log = document.querySelector('[data-slot="chat-messages"]');
+        if (!log) return false;
+        return (
+          !!log.querySelector('[role="article"]') &&
+          !log.querySelector('[id^="message-"]')
+        );
+      },
+      undefined,
+      { timeout: 5000 },
+    );
   });
 });
 
@@ -44,9 +66,9 @@ test.describe("Messages loaded", () => {
   }) => {
     const msg = chatPage.getMessageById(17);
     await expect(msg).toBeAttached();
-    await expect(
-      msg.locator('[data-slot="chat-event-content"]'),
-    ).toContainText("dashboard design looks fantastic");
+    await expect(msg.locator('[data-slot="chat-event-content"]')).toContainText(
+      "dashboard design looks fantastic",
+    );
   });
 
   test("renders John Doe messages in the list", async ({ chatPage }) => {
@@ -227,9 +249,11 @@ test.describe("Reactions", () => {
     const msg = chatPage.getMessageById(17);
     await chatPage.hoverMessage(msg);
     await expect(
-      msg.locator('[data-slot="chat-event-hover-actions"]').getByRole("button", {
-        name: "Add reaction",
-      }),
+      msg
+        .locator('[data-slot="chat-event-hover-actions"]')
+        .getByRole("button", {
+          name: "Add reaction",
+        }),
     ).toBeVisible();
   });
 
@@ -291,9 +315,10 @@ test.describe("Search", () => {
   }) => {
     await chatPage.searchMessages("dashboard");
     await chatPage.waitForSearchSidebar();
-    await expect(
-      chatPage.getSearchResults().first(),
-    ).toContainText("dashboard", { timeout: 2000 });
+    await expect(chatPage.getSearchResults().first()).toContainText(
+      "dashboard",
+      { timeout: 2000 },
+    );
   });
 
   test("clicking a search result applies the highlight animation to the message", async ({
@@ -398,7 +423,9 @@ test.describe("Block / Unblock", () => {
     await chatPage.confirmBlockDialog();
     // Wait for the Blocked badge — this confirms isBlocked=true is in the React tree
     await expect(
-      chatPage.demo.locator('[data-slot="chat-header-main"]').getByText("Blocked"),
+      chatPage.demo
+        .locator('[data-slot="chat-header-main"]')
+        .getByText("Blocked"),
     ).toBeVisible({ timeout: 1500 });
 
     await chatPage.openHeaderMenu();
@@ -423,7 +450,9 @@ test.describe("Block / Unblock", () => {
     await chatPage.openHeaderMenu();
     await chatPage.clickHeaderMenuItem("Unblock");
     await expect(
-      chatPage.page.locator('[data-slot="chat-header-main"]').getByText("Blocked"),
+      chatPage.page
+        .locator('[data-slot="chat-header-main"]')
+        .getByText("Blocked"),
     ).not.toBeVisible({ timeout: 1500 });
   });
 });
