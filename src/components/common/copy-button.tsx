@@ -31,9 +31,13 @@ export function CopyButton({
       variant="ghost"
       size="icon-sm"
       className={className}
+      aria-label={copied ? "Copied" : "Copy code"}
       onClick={handleCopy}
     >
-      {copied ? <CheckIcon /> : <CopyIcon />}
+      {copied ? <CheckIcon aria-hidden="true" /> : <CopyIcon aria-hidden="true" />}
+      <span className="sr-only" aria-live="polite" aria-atomic="true">
+        {copied ? "Copied to clipboard" : ""}
+      </span>
     </Button>
   );
 }

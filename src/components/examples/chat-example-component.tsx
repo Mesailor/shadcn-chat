@@ -238,10 +238,10 @@ export function ChatExampleComponent() {
                 <SearchIcon />
               </InputGroupAddon>
             </InputGroup>
-            <ChatHeaderButton className="@2xl/chat:inline-flex hidden">
+            <ChatHeaderButton aria-label="Start call" className="@2xl/chat:inline-flex hidden">
               <PhoneIcon />
             </ChatHeaderButton>
-            <ChatHeaderButton className="@2xl/chat:inline-flex hidden">
+            <ChatHeaderButton aria-label="Start video call" className="@2xl/chat:inline-flex hidden">
               <VideoIcon />
             </ChatHeaderButton>
             <ChatHeaderActions

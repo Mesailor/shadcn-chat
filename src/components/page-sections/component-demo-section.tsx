@@ -20,11 +20,11 @@ const SCREEN_SIZES: { [key: string]: CSSProperties } = {
   chatbox: { width: "100%", maxWidth: 344, height: 344 },
 };
 
-const BUTTONS: { icon: ReactNode; size: keyof typeof SCREEN_SIZES }[] = [
-  { icon: <MonitorIcon />, size: "desktop" },
-  { icon: <TabletIcon />, size: "tablet" },
-  { icon: <SmartphoneIcon />, size: "smartphone" },
-  { icon: <MessageCircleIcon />, size: "chatbox" },
+const BUTTONS: { icon: ReactNode; size: keyof typeof SCREEN_SIZES; label: string }[] = [
+  { icon: <MonitorIcon />, size: "desktop", label: "Desktop view" },
+  { icon: <TabletIcon />, size: "tablet", label: "Tablet view" },
+  { icon: <SmartphoneIcon />, size: "smartphone", label: "Smartphone view" },
+  { icon: <MessageCircleIcon />, size: "chatbox", label: "Chatbox view" },
 ];
 
 export function ComponentDemoSection() {
@@ -50,6 +50,8 @@ export function ComponentDemoSection() {
               key={button.size}
               size="icon-sm"
               variant={screenSize === button.size ? "default" : "outline"}
+              aria-label={button.label}
+              aria-pressed={screenSize === button.size}
               onClick={() => handleSetScreenSize(button.size)}
             >
               {button.icon}
@@ -57,9 +59,9 @@ export function ComponentDemoSection() {
           ))}
         </ButtonGroup>
         <Button className="sm:size-8" variant="outline" asChild>
-          <Link href="/demo">
-            <span className="sm:hidden">Full-screen demo</span>
-            <Maximize2Icon />
+          <Link href="/demo" aria-label="Full-screen demo">
+            <span className="sm:hidden" aria-hidden="true">Full-screen demo</span>
+            <Maximize2Icon aria-hidden="true" />
           </Link>
         </Button>
       </div>
