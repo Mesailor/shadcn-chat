@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import { useMessageSearch } from "../message-search";
+import { useMessageSearch } from "../use-message-search";
 import { Event } from "@/data/messages";
 
 const makeEvent = (id: number): Event => ({

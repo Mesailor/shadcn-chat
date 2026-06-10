@@ -5,13 +5,13 @@ import { Fragment } from "react/jsx-runtime";
 import { Event, EventFile } from "@/data/messages";
 import { mockAPI } from "@/data/examples/mock-api";
 import { CURRENT_USER, OTHER_USER } from "@/data/users";
-import { useMessages } from "@/hooks/examples/messages";
-import { useMessageReactions } from "@/hooks/examples/message-reactions";
-import { useMessageSearch } from "@/hooks/examples/message-search";
-import { useMessageActions } from "@/hooks/examples/message-actions";
+import { useMessages } from "@/hooks/examples/use-messages";
+import { useMessageReactions } from "@/hooks/examples/use-message-reactions";
+import { useMessageSearch } from "@/hooks/examples/use-message-search";
+import { useMessageActions } from "@/hooks/examples/use-message-actions";
 import { useHighlightedMessageId } from "@/hooks/examples/use-highlighted-message-id";
-import { useProfile } from "@/hooks/examples/profile";
-import { useChatSidebar } from "@/hooks/examples/chat-sidebar";
+import { useProfile } from "@/hooks/examples/use-profile";
+import { useChatSidebar } from "@/hooks/examples/use-chat-sidebar";
 import { useIsWider } from "@/hooks/use-is-wider";
 import {
   CheckIcon,
