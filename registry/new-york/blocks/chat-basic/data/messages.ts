@@ -1,3 +1,7 @@
+import { User } from "@/registry/new-york/blocks/chat-basic/data/users";
+
+export type EventType = "message" | "system";
+
 export interface EventFile {
   url: string;
   fileName: string;
@@ -5,21 +9,16 @@ export interface EventFile {
 }
 
 export interface EventContent {
-  type: "message" | "system";
+  type: EventType;
   text?: string;
   files?: EventFile[];
 }
 
 export interface Event {
   id: number;
-  tempId?: number;
+  tempId?: number; // Temporary ID for optimistic UI updates
   status: "sending" | "sent" | "failed";
-  sender: {
-    id: string;
-    name: string;
-    avatarUrl: string;
-    username: string;
-  };
+  sender: User;
   timestamp: number;
   content: EventContent;
   reactions?: string[];

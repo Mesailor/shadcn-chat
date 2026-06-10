@@ -96,7 +96,7 @@ export function SearchSidebarContent({
           <span className="truncate">{label}</span>
         </div>
       )}
-      <div className="overflow-y-auto flex-1 space-y-2 px-2">
+      <div className="overflow-y-auto flex-1 space-y-2 p-2">
         {query && (results.length === 0 ? emptyState : resultItems)}
       </div>
     </>

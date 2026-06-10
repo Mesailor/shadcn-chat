@@ -6,7 +6,7 @@ export const useMessages = ({
 }: {
   onFetch: () => Promise<Event[]>;
 }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState<Event[]>([]);
 
   useEffect(() => {

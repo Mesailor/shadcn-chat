@@ -15,29 +15,21 @@ import { useMessages } from "@/registry/new-york/blocks/chat-basic/hooks/use-mes
 import { useMessageReactions } from "@/registry/new-york/blocks/chat-basic/hooks/use-message-reactions";
 import { useMessageSearch } from "@/registry/new-york/blocks/chat-basic/hooks/use-message-search";
 import { useMessageActions } from "@/registry/new-york/blocks/chat-basic/hooks/use-message-actions";
+import { useHighlightedMessageId } from "@/registry/new-york/blocks/chat-basic/hooks/use-highlighted-message-id";
 import { useProfile } from "@/registry/new-york/blocks/chat-basic/hooks/use-profile";
 import { useChatSidebar } from "@/registry/new-york/blocks/chat-basic/hooks/use-chat-sidebar";
 import { useIsWider } from "@/registry/new-york/blocks/chat-basic/hooks/use-is-wider";
 import {
-  BanIcon,
   CheckIcon,
-  MoreHorizontalIcon,
   PhoneIcon,
   PlusIcon,
   SearchIcon,
   SendIcon,
   SmileIcon,
-  UserIcon,
   VideoIcon,
   XIcon,
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ChatHeaderActions } from "@/registry/new-york/blocks/chat-basic/components/chat-header-actions";
 import {
   InputGroup,
   InputGroupAddon,
@@ -101,8 +93,6 @@ export default function ChatExampleComponent() {
     setSearchQuery,
     activeSearchQuery,
     searchResults,
-    highlightedMessageId,
-    setHighlightedMessageId,
     handleSearch,
     handleClearSearch,
     openSearch,
@@ -111,6 +101,9 @@ export default function ChatExampleComponent() {
     setSidebarView,
     onSearch: mockAPI.searchEvents,
   });
+
+  const { highlightedMessageId, setHighlightedMessageId } =
+    useHighlightedMessageId();
 
   const {
     openBlockDialog,
@@ -144,6 +137,7 @@ export default function ChatExampleComponent() {
 
   const handleSubmit = useCallback(
     async (submitData: { text: string; files: File[] }) => {
+      // Optimistically add the new message to the UI with a temporary ID and "sending" status
       const tempId = Date.now();
       const newMessage: Event = {
         id: tempId,
@@ -165,6 +159,7 @@ export default function ChatExampleComponent() {
       };
       setMessages((prev) => [newMessage, ...prev]);
 
+      // Replace the temporary message with the posted message
       const postedMessage = await mockAPI.postEvent({
         text: submitData.text,
         files: submitData.files,
@@ -235,6 +230,7 @@ export default function ChatExampleComponent() {
             <InputGroup className="@2xl/chat:flex hidden">
               <InputGroupInput
                 placeholder="Search..."
+                aria-label="Search messages"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => {
@@ -248,58 +244,26 @@ export default function ChatExampleComponent() {
                 <SearchIcon />
               </InputGroupAddon>
             </InputGroup>
-            <ChatHeaderButton className="@2xl/chat:inline-flex hidden">
+            <ChatHeaderButton
+              aria-label="Start call"
+              className="@2xl/chat:inline-flex hidden"
+            >
               <PhoneIcon />
             </ChatHeaderButton>
-            <ChatHeaderButton className="@2xl/chat:inline-flex hidden">
+            <ChatHeaderButton
+              aria-label="Start video call"
+              className="@2xl/chat:inline-flex hidden"
+            >
               <VideoIcon />
             </ChatHeaderButton>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <ChatHeaderButton>
-                  <MoreHorizontalIcon />
-                </ChatHeaderButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {!isChatWide && (
-                  <>
-                    <DropdownMenuItem onSelect={openSearch}>
-                      <SearchIcon />
-                      Search
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <PhoneIcon />
-                      Start call
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <VideoIcon />
-                      Start video
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                  </>
-                )}
-                <DropdownMenuItem onSelect={openProfile}>
-                  <UserIcon />
-                  Show profile
-                </DropdownMenuItem>
-                {isBlocked ? (
-                  <DropdownMenuItem
-                    onSelect={() => handleUnblock(OTHER_USER.id)}
-                  >
-                    <BanIcon />
-                    Unblock
-                  </DropdownMenuItem>
-                ) : (
-                  <DropdownMenuItem
-                    variant="destructive"
-                    onSelect={() => setOpenBlockDialog(true)}
-                  >
-                    <BanIcon />
-                    Block
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <ChatHeaderActions
+              isChatWide={isChatWide}
+              openSearch={openSearch}
+              openProfile={openProfile}
+              isBlocked={isBlocked}
+              onUnblock={() => handleUnblock(OTHER_USER.id)}
+              onBlock={() => setOpenBlockDialog(true)}
+            />
           </ChatHeaderAddon>
         </ChatHeader>
 
@@ -311,7 +275,11 @@ export default function ChatExampleComponent() {
           className="flex-1 min-h-0"
         >
           <SidebarInset className="min-h-0 overflow-hidden">
-            <ChatMessages ref={chatMessagesRef} className="scrollbar-hidden">
+            <ChatMessages
+              ref={chatMessagesRef}
+              className="scrollbar-hidden"
+              aria-busy={loading}
+            >
               {loading &&
                 Array.from({ length: 20 }).map((_, i) => {
                   if (i % 6 === 0) {
@@ -330,6 +298,7 @@ export default function ChatExampleComponent() {
               {!loading &&
                 messages.map((msg, i, msgs) => {
                   const isOwnMessage = msg.sender.id === CURRENT_USER.id;
+                  // If date changed, show date item
                   if (
                     new Date(msg.timestamp).toDateString() !==
                     new Date(msgs[i + 1]?.timestamp).toDateString()
@@ -365,6 +334,7 @@ export default function ChatExampleComponent() {
                     );
                   }
 
+                  // If next item is same user, show additional
                   if (msg.sender.id === msgs[i + 1]?.sender.id) {
                     return (
                       <AdditionalMessage
@@ -388,7 +358,9 @@ export default function ChatExampleComponent() {
                         }
                       />
                     );
-                  } else {
+                  }
+                  // Else, show primary
+                  else {
                     return (
                       <PrimaryMessage
                         id={`message-${msg.id}`}
@@ -496,7 +468,7 @@ function Toolbar({
 
   const handleSubmit = useCallback(() => {
     const trimmedContent = input.trim();
-    if (!trimmedContent && files.length === 0) return;
+    if (!trimmedContent && files.length === 0) return; // Don't submit empty messages
 
     onSubmit?.({
       text: trimmedContent,
@@ -505,6 +477,7 @@ function Toolbar({
 
     setInput("");
     setFiles([]);
+    // Scroll to top (newest message) when a new message is sent
     setTimeout(() => {
       onScrollToBottom?.();
     });
@@ -513,7 +486,7 @@ function Toolbar({
   const handleSubmitEdit = useCallback(() => {
     const trimmedContent = input.trim();
     if (!trimmedContent && files.length === 0 && filesToEdit.length === 0) {
-      return;
+      return; // Don't submit empty messages
     }
 
     onSubmitEdit?.({
@@ -559,6 +532,7 @@ function Toolbar({
         className="order-2 flex-1 @2xl/chat:order-1 @2xl/chat:flex-none"
       >
         <ChatToolbarAttachmentButton
+          aria-label="Attach files"
           onFilesSelected={(files) => {
             setFiles((prev) => [...prev, ...files]);
           }}
@@ -567,7 +541,7 @@ function Toolbar({
         </ChatToolbarAttachmentButton>
         <Popover open={emojiOpen} onOpenChange={setEmojiOpen}>
           <PopoverTrigger asChild>
-            <ChatToolbarButton>
+            <ChatToolbarButton aria-label="Insert emoji">
               <SmileIcon />
             </ChatToolbarButton>
           </PopoverTrigger>
@@ -594,10 +568,11 @@ function Toolbar({
       <ChatToolbarAddon align="inline-end">
         {messageToEdit && (
           <>
-            <ChatToolbarButton onClick={onCancelEdit}>
+            <ChatToolbarButton aria-label="Cancel edit" onClick={onCancelEdit}>
               <XIcon />
             </ChatToolbarButton>
             <ChatToolbarButton
+              aria-label="Save edit"
               variant="default"
               disabled={
                 !input.trim() && files.length === 0 && filesToEdit.length === 0
@@ -610,9 +585,13 @@ function Toolbar({
         )}
         {!messageToEdit && (
           <ChatToolbarButton
+            aria-label="Send message"
             variant="default"
             disabled={!input.trim() && files.length === 0}
             onClick={() => handleSubmit()}
+            onMouseDown={(e) => {
+              e.preventDefault();
+            }}
           >
             <SendIcon />
           </ChatToolbarButton>

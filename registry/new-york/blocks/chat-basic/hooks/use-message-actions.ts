@@ -51,6 +51,7 @@ export const useMessageActions = ({
     }) => {
       if (!messageToEdit) return;
 
+      // Client-side mapping only for the optimistic update
       const optimisticNewFiles: EventFile[] = data.uploadFiles.map((file) => ({
         url: URL.createObjectURL(file),
         fileName: file.name,
@@ -63,6 +64,7 @@ export const useMessageActions = ({
         ...(optimisticAllFiles.length > 0 && { files: optimisticAllFiles }),
       };
 
+      // Optimistic update
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === messageToEdit.id
